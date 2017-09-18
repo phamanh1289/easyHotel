@@ -15,22 +15,20 @@ import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseActivity;
-import com.example.phamanh.easyhotel.fragment.maps.MapFragment;
 import com.example.phamanh.easyhotel.fragment.home.HomeFragment;
-import com.example.phamanh.easyhotel.fragment.other.OtherFragment;
-import com.example.phamanh.easyhotel.fragment.settings.SettingFragment;
+import com.example.phamanh.easyhotel.fragment.nearby.NearbyFragment;
 import com.example.phamanh.easyhotel.fragment.news.NewsFragment;
+import com.example.phamanh.easyhotel.fragment.settings.SettingFragment;
 import com.example.phamanh.easyhotel.other.enums.TabsEnum;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.phamanh.easyhotel.other.enums.TabsEnum.ADD;
-import static com.example.phamanh.easyhotel.other.enums.TabsEnum.DISCOVER;
+import static com.example.phamanh.easyhotel.other.enums.TabsEnum.NEARBY;
 import static com.example.phamanh.easyhotel.other.enums.TabsEnum.HOME;
 import static com.example.phamanh.easyhotel.other.enums.TabsEnum.SETTING;
-import static com.example.phamanh.easyhotel.other.enums.TabsEnum.SHARE;
+import static com.example.phamanh.easyhotel.other.enums.TabsEnum.NEWS;
 
 public class MainActivity extends BaseActivity implements View.OnTouchListener {
 
@@ -43,6 +41,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        KeyboardUtils.hideSoftKeyboard(this);
         ButterKnife.bind(this);
         init();
     }
@@ -50,9 +49,8 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
     private void init() {
         tabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         tabHost.addTab(createTabSpec(HOME), HomeFragment.class, null);
-        tabHost.addTab(createTabSpec(DISCOVER), MapFragment.class, null);
-        tabHost.addTab(createTabSpec(ADD), OtherFragment.class, null);
-        tabHost.addTab(createTabSpec(SHARE), NewsFragment.class, null);
+        tabHost.addTab(createTabSpec(NEARBY), NearbyFragment.class, null);
+        tabHost.addTab(createTabSpec(NEWS), NewsFragment.class, null);
         tabHost.addTab(createTabSpec(SETTING), SettingFragment.class, null);
         setTabsColor();
         tabHost.setOnTabChangedListener(s -> {

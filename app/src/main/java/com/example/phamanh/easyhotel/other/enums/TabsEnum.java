@@ -5,11 +5,10 @@ import com.example.phamanh.easyhotel.R;
 
 public enum TabsEnum {
 
-    HOME(1,"Trang Chủ", R.drawable.selector_home),
-    DISCOVER(2, "Bản Đồ", R.drawable.selector_discover),
-    ADD(3, "Quanh Đây", R.drawable.selector_plus),
-    SHARE(4, "Tin Tức", R.drawable.selector_share),
-    SETTING(5, "Cài Đặt", R.drawable.selector_setting);
+    HOME(1,"Home", R.drawable.selector_home),
+    NEARBY(2, "Nearby", R.drawable.selector_plus),
+    NEWS(3, "News", R.drawable.selector_share),
+    SETTING(4, "Settings", R.drawable.selector_setting);
 
     private String title;
     private int idIcon;

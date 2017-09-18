@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteThree"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_action_bar_home" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/_16sdp"
+                android:paddingRight="@dimen/_16sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/fragProfile_tvUserName"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:hint="@string/first_name"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp" />
+
+                        <include layout="@layout/base_line" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/fragProfile_tvDOB"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:hint="@string/dob"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp" />
+
+                        <include layout="@layout/base_line" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/fragProfile_tvMobilePhone"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:hint="@string/mobi_phone"
+                            android:inputType="number"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp" />
+
+                        <include layout="@layout/base_line" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/fragProfile_llMale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_20sdp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/fragProfile_ivMale"
+                                android:layout_width="@dimen/_14sdp"
+                                android:layout_height="@dimen/_14sdp"
+                                android:src="@drawable/selector_male" />
+
+                            <TextView
+                                android:id="@+id/fragProfile_tvMale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_8sdp"
+                                android:gravity="bottom"
+                                android:text="@string/male"
+                                android:textColor="@drawable/selector_text"
+                                android:textSize="@dimen/_9sdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/fragProfile_llFemale"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/fragProfile_ivFemale"
+                                android:layout_width="@dimen/_14sdp"
+                                android:layout_height="@dimen/_14sdp"
+                                android:src="@drawable/selector_female" />
+
+                            <TextView
+                                android:id="@+id/fragProfile_tvFemale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_8sdp"
+                                android:gravity="bottom"
+                                android:text="@string/female"
+                                android:textColor="@drawable/selector_text"
+                                android:textSize="@dimen/_9sdp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/fragProfile_tvAddress"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+
+                        android:hint="@string/address"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp" />
+
+                    <include layout="@layout/base_line" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <EditText
+
+                        android:id="@+id/fragProfile_tvEmail"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:hint="@string/email"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:textSize="13.5sp" />
+
+                    <include layout="@layout/base_line" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/fragProfile_tvSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:layout_marginLeft="@dimen/_40sdp"
+                    android:layout_marginRight="@dimen/_40sdp"
+                    android:layout_marginTop="@dimen/_24sdp"
+                    android:background="@drawable/selector_text_view_red"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/submit"
+                    android:textColor="@color/whiteThree"
+                    android:textSize="17sp" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

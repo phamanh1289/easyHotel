@@ -34,8 +34,7 @@ public class NewsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_share, container, false);
-        KeyboardUtils.hideSoftKeyboard(getActivity());
+        View view = inflater.inflate(R.layout.fragment_news, container, false);
         KeyboardUtils.setupUI(view, getActivity());
         setActionBar(view, getString(R.string.page_news));
         unbinder = ButterKnife.bind(this, view);

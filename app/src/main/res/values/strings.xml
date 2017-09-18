@@ -6,22 +6,42 @@
 
 
     <string name="accept">Accept</string>
-    <string name="title_activity_login">Sign in</string>
 
-    <string name="new_member">New member? </string>
+    <string name="new_member">New member ? </string>
     <string name="sign_up">Sign Up</string>
-    <string name="or_connect_with">OR CONNECT WITH</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="or_connect_with">OR</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="login">Login</string>
-    <string name="already_a_member">Already a member? </string>
+    <string name="already_a_member">Already a member ? </string>
 
-    <string name="page_home">Trang Chủ</string>
-    <string name="page_maps">Bản Đồ</string>
-    <string name="page_other">Các Địa Điểm Quanh Đây</string>
-    <string name="page_news">Tin Tức Về Du Lịch</string>
-    <string name="page_setting">Cài Đặt</string>
+    <string name="page_home">Home</string>
+    <string name="my_profile">Edit Profile</string>
+    <string name="faq">FAQ</string>
+    <string name="faq_1">FAQ 1</string>
+    <string name="submit">Submit</string>
+    <string name="logout">Logout</string>
+    <string name="page_maps">Search Hotel</string>
+    <string name="page_other">Other</string>
+    <string name="page_news">News</string>
+    <string name="page_setting">Setting</string>
+    <string name="google_maps_key">AIzaSyAJcr3XOh_QLsrPLcTAUUd8eRkMd9nuuL8</string>
+    <string name="search_place">Cafe, ATM, Bank, Hospital....</string>
+
+    <string name="first_name">User Name</string>
+    <string name="female">Female</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone">Home Number</string>
+    <string name="mobi_phone">Mobile Number</string>
+    <string name="dob">Date of Birth</string>
+    <string name="nric">NRIC</string>
+    <string name="postal">Postal Code</string>
+    <string name="address">Address</string>
+
+    <string name="male">Male</string>
+    <string name="error">Error</string>
+    <string name="complete">Complete</string>
+    <string name="warning">Warning</string>
 
 </resources>

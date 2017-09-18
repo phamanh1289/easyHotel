@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_action_bar_home" />
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/fragmentMap_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="RtlCompat">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/_5sdp"
+
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:id="@+id/fragMap_llSearch"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/fragOther_tvPlace"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/search_place"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:src="@drawable/ic_down" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <fragment
+                android:id="@+id/fragmentMap_map"
+                class="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

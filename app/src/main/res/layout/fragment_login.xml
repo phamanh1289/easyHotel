@@ -14,7 +14,6 @@
             android:layout_width="@dimen/_140sdp"
             android:layout_height="@dimen/_100sdp"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_40sdp"
             android:src="@drawable/ic_icons_login" />
 
         <LinearLayout
@@ -29,8 +28,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_8sdp"
-                android:background="@drawable/shape_boder_text_view">
+                android:background="@drawable/shape_boder_text_view"
+                android:padding="@dimen/_8sdp">
 
                 <ImageView
                     android:layout_width="@dimen/_16sdp"
@@ -59,9 +58,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_14sdp"
                 android:background="@drawable/shape_boder_text_view"
-                android:padding="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_14sdp">
+                android:padding="@dimen/_8sdp">
 
 
                 <EditText
@@ -108,7 +107,7 @@
                 android:layout_height="@dimen/_42sdp"
                 android:layout_marginBottom="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_24sdp"
-                android:background="@drawable/shape_boder_text_view"
+                android:background="@drawable/selector_text_view"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/login"
@@ -116,7 +115,7 @@
                 android:textSize="17sp" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/_16sdp"
@@ -125,9 +124,10 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="@dimen/_40sdp"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginRight="@dimen/_4sdp"
+                    android:layout_weight="1"
                     android:background="@color/whiteThree" />
 
                 <TextView
@@ -138,12 +138,13 @@
                     android:padding="@dimen/_2sdp"
                     android:text="@string/or_connect_with"
                     android:textColor="@color/whiteThree"
-                    android:textSize="@dimen/_9sdp" />
+                    android:textSize="@dimen/_15sdp" />
 
                 <TextView
-                    android:layout_width="@dimen/_40sdp"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_weight="1"
                     android:background="@color/whiteThree" />
             </LinearLayout>
 

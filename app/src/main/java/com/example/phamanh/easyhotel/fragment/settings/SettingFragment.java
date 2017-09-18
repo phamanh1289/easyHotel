@@ -13,6 +13,7 @@ import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -38,5 +39,19 @@ public class SettingFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick({R.id.fragSetting_llProfile, R.id.fragSetting_llFAQ, R.id.fragSetting_llLogout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fragSetting_llProfile:
+                addFragment(new ProfileFragment(), true);
+                break;
+            case R.id.fragSetting_llFAQ:
+                addFragment(new FAQFragment(), true);
+                break;
+            case R.id.fragSetting_llLogout:
+                break;
+        }
     }
 }
