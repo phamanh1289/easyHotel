@@ -64,8 +64,13 @@ public class BaseActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (isReplace)
                 fragmentTransaction.replace(this instanceof MainActivity ? android.R.id.tabcontent : R.id.frmContainer, fragment);
-            else
+            else {
+                android.support.v4.app.Fragment currentFragment = getSupportFragmentManager().findFragmentById(this instanceof MainActivity ? android.R.id.tabcontent : R.id.frmContainer);
+                if (currentFragment != null) {
+                    fragmentTransaction.hide(currentFragment);
+                }
                 fragmentTransaction.add(this instanceof MainActivity ? android.R.id.tabcontent : R.id.frmContainer, fragment, fragment.getClass().getSimpleName());
+            }
             if (isAddToBackStack) {
                 fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
             }

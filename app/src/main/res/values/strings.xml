@@ -5,7 +5,7 @@
     <string name="Helvetica_bold">fonts/Helvetica-Bold.ttf</string>
 
 
-    <string name="accept">Accept</string>
+    <string name="accept">Submit</string>
 
     <string name="new_member">New member ? </string>
     <string name="sign_up">Sign Up</string>
@@ -17,6 +17,7 @@
     <string name="already_a_member">Already a member ? </string>
 
     <string name="page_home">Home</string>
+    <string name="page_home_detail">Detail Hotel</string>
     <string name="my_profile">Edit Profile</string>
     <string name="faq">FAQ</string>
     <string name="faq_1">FAQ 1</string>
@@ -27,11 +28,11 @@
     <string name="page_news">News</string>
     <string name="page_setting">Setting</string>
     <string name="google_maps_key">AIzaSyAJcr3XOh_QLsrPLcTAUUd8eRkMd9nuuL8</string>
+    <string name="facebook_app_id">117766158898188</string>
     <string name="search_place">Cafe, ATM, Bank, Hospital....</string>
 
     <string name="first_name">User Name</string>
     <string name="female">Female</string>
-    <string name="last_name">Last Name</string>
     <string name="phone">Home Number</string>
     <string name="mobi_phone">Mobile Number</string>
     <string name="dob">Date of Birth</string>
@@ -43,5 +44,14 @@
     <string name="error">Error</string>
     <string name="complete">Complete</string>
     <string name="warning">Warning</string>
+    <string name="signup_ok">Thank you for signing up. Please log in to your email to verify your account.</string>
+    <string name="descrip_hotel_demo">Với trung tâm spa và phòng xông hơi khô, Muong Thanh Saigon Centre Hotel nằm ở Thành phố Hồ Chí Minh. Nơi nghỉ có quán bar trong khuôn viên và cung cấp Wi-Fi miễn phí.
+
+Các phòng được trang bị TV màn hình phẳng. Một số phòng có khu vực tiếp khách, nơi quý khách có thể thư giãn. Các phòng có phòng tắm riêng kèm bồn tắm hoặc vòi sen. Nơi nghỉ cũng cung cấp áo choàng tắm, dép và máy sấy tóc nhằm mang lại thuận tiện cho quý khách.
+
+Nơi đây có quầy lễ tân 24 giờ.
+
+Trung tâm mua sắm Diamond Plaza cách Muong Thanh Saigon Centre Hotel 500 m, trong khi Nhà thờ Đức Bà cách đó 600 m. Sân bay Quốc tế Tân Sơn Nhất cách chỗ nghỉ này 6 km. </string>
+    <string name="booking_now">Booking Now</string>
 
 </resources>

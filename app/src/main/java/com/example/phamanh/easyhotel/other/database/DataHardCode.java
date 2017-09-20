@@ -19,4 +19,12 @@ public class DataHardCode {
         return rs;
     }
 
+    public static List<String> getListRoom() {
+        List<String> rs = new ArrayList<>();
+        rs.add("Single");
+        rs.add("Double");
+        rs.add("Group");
+        return rs;
+    }
+
 }

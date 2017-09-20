@@ -3,7 +3,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-
     <color name="darkSlateBlue">#20325a</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="denimBlueTwo">#deff0004</color>
@@ -13,4 +12,5 @@
     <color name="blur_background">#a9878787</color>
     <color name="denimBlue">#3d6098</color>
     <color name="greyishBrownThree">#555555</color>
+    <color name="ground_main">#9e878787</color>
 </resources>

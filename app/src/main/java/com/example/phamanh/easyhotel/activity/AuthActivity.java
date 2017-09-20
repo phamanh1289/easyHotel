@@ -36,7 +36,6 @@ public class AuthActivity extends BaseActivity {
 
     private void toChangeActivity() {
         if (SharedPrefUtils.getString(this, Constant.TYPE_LOGIN).equals(Constant.LOGIN_NORMAL) || SharedPrefUtils.getString(this, Constant.TYPE_LOGIN).equals(Constant.LOGIN_SOCIAL)) {
-
             StartActivityUtils.toMain(this, null);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         } else{

@@ -11,7 +11,7 @@ package com.example.phamanh.easyhotel.utils;
 
 public class Constant {
 
-    public static final String GOOGLE_API_URL  = "https://maps.googleapis.com/maps/";
+    public static final String GOOGLE_API_URL = "https://maps.googleapis.com/maps/";
     public static final String TYPE_LOGIN = "type_login";
     public static final String LOGIN_NORMAL = "normal";
     public static final String LOGIN_SOCIAL = "social";
@@ -24,4 +24,6 @@ public class Constant {
     public static final String BASE_MODEL = "base_model";
     public static final String TITLE_INTRO = "title_intro";
     public static final String IMAGE_INTRO = "image_intro";
+    public static final String SIGNUP_EMAIL = "signup_email";
+    public static final String SIGNUP_PASSWORD = "signup_password";
 }

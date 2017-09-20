@@ -7,8 +7,11 @@ import android.view.View;
 
 import com.example.phamanh.easyhotel.activity.MainActivity;
 import com.example.phamanh.easyhotel.utils.Constant;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class BaseFragment extends Fragment {
+
+    public FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public void setActionBar(View view, String title) {
         if (getActivity() instanceof BaseActivity) {

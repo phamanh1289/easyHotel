@@ -251,7 +251,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
 
         @Override
         public void onProviderDisabled(String s) {
-            AppUtils.showAlert(getContext(),getString(R.string.warning),"Please enable location !", null);
+            AppUtils.showAlert(getContext(), getString(R.string.warning), "Please enable location !", null);
         }
     };
 
@@ -442,7 +442,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length == 1 && grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                openTabLocation(1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         } else
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }

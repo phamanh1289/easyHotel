@@ -127,7 +127,7 @@
                                 android:id="@+id/fragProfile_ivMale"
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/selector_male" />
+                                android:src="@drawable/selector_male_while" />
 
                             <TextView
                                 android:id="@+id/fragProfile_tvMale"

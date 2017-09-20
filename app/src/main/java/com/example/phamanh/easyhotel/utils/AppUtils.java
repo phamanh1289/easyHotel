@@ -249,6 +249,7 @@ public class AppUtils {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(context,
                 (view, year, monthOfYear, dayOfMonth) -> tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(monthOfYear + 1)) + "-" + year), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 
@@ -265,7 +266,7 @@ public class AppUtils {
         SelectSinglePopup finalSinglePopup = singlePopup;
         singlePopup.setOnItemListener(pos -> {
             textView.setText(mData.get(pos));
-            textView.setTextColor(ContextCompat.getColor(context, R.color.denimBlueTwo));
+            textView.setTextColor(ContextCompat.getColor(context, R.color.denimBlue));
             finalSinglePopup.dismiss();
         });
         singlePopup.showAsDropDown(view);
