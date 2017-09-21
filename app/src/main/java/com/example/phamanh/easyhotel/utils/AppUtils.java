@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
@@ -244,16 +245,19 @@ public class AppUtils {
         }
     }
 
-    public static void showPickTime(Context context, final TextView tvDate, boolean isCheck) {
+    public static void showPickTime(Context context, final EditText tvDate, boolean isCheck) {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 Calendar now = Calendar.getInstance();
                 int yearCurrent = now.get(Calendar.YEAR);
-                if ((yearCurrent - year < 18))
-                    showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
-                else
+                if (!isCheck) {
+                    if ((yearCurrent - year < 18))
+                        showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
+                    else
+                        tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
+                } else
                     tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
             }
         }, calendar.get(Calendar.YEAR),
@@ -264,6 +268,7 @@ public class AppUtils {
             datePickerDialog.updateDate(Integer.parseInt(arrUpdateDatePicker[2]), Integer.parseInt(arrUpdateDatePicker[1]) - 1, Integer.parseInt(arrUpdateDatePicker[0]));
         } else
             datePickerDialog.updateDate(calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
         if (isCheck)
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         else

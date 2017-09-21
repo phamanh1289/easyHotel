@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,9 +50,9 @@ public class HomeDetailFragment extends BaseFragment {
     @BindView(R.id.fragHomeDetail_tvRoom)
     TextView tvRoom;
     @BindView(R.id.fragHomeDetail_tvFormDate)
-    TextView tvFormDate;
+    EditText tvFormDate;
     @BindView(R.id.fragHomeDetail_tvToDate)
-    TextView tvToDate;
+    EditText tvToDate;
     @BindView(R.id.fragHomeDetail_tvNext)
     TextView tvNext;
 

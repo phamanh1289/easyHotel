@@ -17,6 +17,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/fragProfile_ivBanner"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_no_image"
+                android:layout_marginTop="@dimen/_16sdp"
+                app:riv_corner_radius="@dimen/_90sdp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,13 +84,15 @@
                             app:fletPaddingBottom="@dimen/_8sdp"
                             app:fletTextAppearance="@color/greyishBrownThree">
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/fragProfile_tvDOB"
                                 fontPath="@string/Helvetica_light"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_16sdp"
                                 android:background="@null"
+                                android:inputType="date"
+                                android:focusable="false"
                                 android:hint="@string/dob"
                                 android:textColor="@color/denimBlue"
                                 android:textColorHint="@color/denimBlue"

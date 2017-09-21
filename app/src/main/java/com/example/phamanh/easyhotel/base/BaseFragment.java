@@ -8,10 +8,19 @@ import android.view.View;
 import com.example.phamanh.easyhotel.activity.MainActivity;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class BaseFragment extends Fragment {
 
     public FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    public FirebaseUser mUser = mAuth.getCurrentUser();
+    public FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    public DatabaseReference refMember = firebaseDatabase.getReference("member");
+    public DatabaseReference refBooking = firebaseDatabase.getReference("booking");
+    public DatabaseReference refHotel = firebaseDatabase.getReference("hotel");
+
 
     public void setActionBar(View view, String title) {
         if (getActivity() instanceof BaseActivity) {
