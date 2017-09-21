@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +32,7 @@ public class ProfileFragment extends BaseFragment {
     @BindView(R.id.fragProfile_tvUserName)
     EditText tvUserName;
     @BindView(R.id.fragProfile_tvDOB)
-    EditText tvDOB;
+    TextView tvDOB;
     @BindView(R.id.fragProfile_tvEmail)
     EditText tvEmail;
     @BindView(R.id.fragProfile_tvMale)
@@ -77,7 +78,7 @@ public class ProfileFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fragProfile_llMale, R.id.fragProfile_llFemale, R.id.fragProfile_tvSubmit})
+    @OnClick({R.id.fragProfile_llMale, R.id.fragProfile_llFemale, R.id.fragProfile_tvSubmit, R.id.fragProfile_tvDOB})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragProfile_llMale:
@@ -87,6 +88,10 @@ public class ProfileFragment extends BaseFragment {
                 handleSexSelected(false);
                 break;
             case R.id.fragProfile_tvSubmit:
+
+                break;
+            case R.id.fragProfile_tvDOB:
+                AppUtils.showPickTime(getContext(), tvDOB, false);
                 break;
         }
     }

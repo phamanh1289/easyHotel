@@ -103,10 +103,10 @@ public class HomeDetailFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragHomeDetail_tvFormDate:
-                AppUtils.showPickTime(getContext(), tvFormDate);
+                AppUtils.showPickTime(getContext(), tvFormDate, true);
                 break;
             case R.id.fragHomeDetail_tvToDate:
-                AppUtils.showPickTime(getContext(), tvToDate);
+                AppUtils.showPickTime(getContext(), tvToDate, true);
                 break;
             case R.id.fragHomeDetail_tvRoom:
                 AppUtils.toGetPopup(getContext(), view, popupRoom, mDataRoom, tvRoom);
@@ -123,7 +123,7 @@ public class HomeDetailFragment extends BaseFragment {
     DialogListener toClickDialogCheckDate = new DialogListener() {
         @Override
         public void onConfirmClicked() {
-            AppUtils.showPickTime(getContext(), tvFormDate);
+            AppUtils.showPickTime(getContext(), tvFormDate, true);
         }
 
         @Override

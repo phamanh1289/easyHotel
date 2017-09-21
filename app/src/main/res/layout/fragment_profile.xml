@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whiteThree"
@@ -37,18 +38,25 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/fragProfile_tvUserName"
-                            fontPath="@string/Helvetica_light"
+                        <com.wrapp.floatlabelededittext.FloatLabeledEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:background="@null"
-                            android:hint="@string/first_name"
-                            android:inputType="textCapWords"
-                            android:textColor="@color/denimBlue"
-                            android:textColorHint="@color/denimBlue"
-                            android:textSize="13.5sp" />
+                            app:fletPaddingBottom="@dimen/_8sdp"
+                            app:fletTextAppearance="@color/greyishBrownThree">
+
+                            <EditText
+                                android:id="@+id/fragProfile_tvUserName"
+                                fontPath="@string/Helvetica_light"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_16sdp"
+                                android:background="@null"
+                                android:hint="@string/first_name"
+                                android:inputType="textCapWords"
+                                android:textColor="@color/denimBlue"
+                                android:textColorHint="@color/denimBlue"
+                                android:textSize="13.5sp" />
+                        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                         <include layout="@layout/base_line" />
                     </LinearLayout>
@@ -60,18 +68,24 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/fragProfile_tvDOB"
-                            fontPath="@string/Helvetica_light"
+                        <com.wrapp.floatlabelededittext.FloatLabeledEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:background="@null"
-                            android:hint="@string/dob"
-                            android:inputType="textCapWords"
-                            android:textColor="@color/denimBlue"
-                            android:textColorHint="@color/denimBlue"
-                            android:textSize="13.5sp" />
+                            app:fletPaddingBottom="@dimen/_8sdp"
+                            app:fletTextAppearance="@color/greyishBrownThree">
+
+                            <TextView
+                                android:id="@+id/fragProfile_tvDOB"
+                                fontPath="@string/Helvetica_light"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_16sdp"
+                                android:background="@null"
+                                android:hint="@string/dob"
+                                android:textColor="@color/denimBlue"
+                                android:textColorHint="@color/denimBlue"
+                                android:textSize="13.5sp" />
+                        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                         <include layout="@layout/base_line" />
                     </LinearLayout>
@@ -92,18 +106,25 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/fragProfile_tvMobilePhone"
-                            fontPath="@string/Helvetica_light"
+                        <com.wrapp.floatlabelededittext.FloatLabeledEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:background="@null"
-                            android:hint="@string/mobi_phone"
-                            android:inputType="number"
-                            android:textColor="@color/denimBlue"
-                            android:textColorHint="@color/denimBlue"
-                            android:textSize="13.5sp" />
+                            app:fletPaddingBottom="@dimen/_8sdp"
+                            app:fletTextAppearance="@color/greyishBrownThree">
+
+                            <EditText
+                                android:id="@+id/fragProfile_tvMobilePhone"
+                                fontPath="@string/Helvetica_light"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_16sdp"
+                                android:background="@null"
+                                android:hint="@string/mobi_phone"
+                                android:inputType="number"
+                                android:textColor="@color/denimBlue"
+                                android:textColorHint="@color/denimBlue"
+                                android:textSize="13.5sp" />
+                        </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                         <include layout="@layout/base_line" />
                     </LinearLayout>
@@ -113,7 +134,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginRight="@dimen/_16sdp"
                         android:layout_weight="1"
-                        android:gravity="center_vertical"
+                        android:gravity="bottom"
                         android:orientation="horizontal">
 
                         <LinearLayout
@@ -127,7 +148,7 @@
                                 android:id="@+id/fragProfile_ivMale"
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/selector_male_while" />
+                                android:src="@drawable/selector_male" />
 
                             <TextView
                                 android:id="@+id/fragProfile_tvMale"
@@ -174,19 +195,26 @@
                     android:layout_marginTop="@dimen/_16sdp"
                     android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/fragProfile_tvAddress"
-                        fontPath="@string/Helvetica_light"
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:background="@null"
+                        app:fletPaddingBottom="@dimen/_8sdp"
+                        app:fletTextAppearance="@color/greyishBrownThree">
 
-                        android:hint="@string/address"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/denimBlue"
-                        android:textColorHint="@color/denimBlue"
-                        android:textSize="13.5sp" />
+                        <EditText
+                            android:id="@+id/fragProfile_tvAddress"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+
+                            android:hint="@string/address"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp" />
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                     <include layout="@layout/base_line" />
                 </LinearLayout>
@@ -200,20 +228,27 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <EditText
-
-                        android:id="@+id/fragProfile_tvEmail"
-                        fontPath="@string/Helvetica_light"
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:background="@null"
-                        android:hint="@string/email"
-                        android:inputType="textCapWords"
-                        android:textColor="@color/denimBlue"
-                        android:textColorHint="@color/denimBlue"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:textSize="13.5sp" />
+                        app:fletPaddingBottom="@dimen/_8sdp"
+                        app:fletTextAppearance="@color/greyishBrownThree">
+
+                        <EditText
+
+                            android:id="@+id/fragProfile_tvEmail"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:hint="@string/email"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp" />
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                     <include layout="@layout/base_line" />
                 </LinearLayout>

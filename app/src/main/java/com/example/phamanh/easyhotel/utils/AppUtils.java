@@ -1,7 +1,4 @@
 package com.example.phamanh.easyhotel.utils;
-/*
- * Created by HoangDong on 25/07/2017.
- */
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
@@ -33,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -245,13 +244,45 @@ public class AppUtils {
         }
     }
 
-    public static void showPickTime(Context context, TextView tvDate) {
+    public static void showPickTime(Context context, final TextView tvDate, boolean isCheck) {
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
-                (view, year, monthOfYear, dayOfMonth) -> tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(monthOfYear + 1)) + "-" + year), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                Calendar now = Calendar.getInstance();
+                int yearCurrent = now.get(Calendar.YEAR);
+                if ((yearCurrent - year < 18))
+                    showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
+                else
+                    tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
+            }
+        }, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        if (!TextUtils.isEmpty(tvDate.getText().toString())) {
+            String[] arrUpdateDatePicker = tvDate.getText().toString().split("-");
+            datePickerDialog.updateDate(Integer.parseInt(arrUpdateDatePicker[2]), Integer.parseInt(arrUpdateDatePicker[1]) - 1, Integer.parseInt(arrUpdateDatePicker[0]));
+        } else
+            datePickerDialog.updateDate(calendar.get(Calendar.YEAR) - 18, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        if (isCheck)
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        else
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
+
     }
+
+    public static boolean toCheck18YearOld(Context context, int year, int month, int day) {
+        Calendar userAge = new GregorianCalendar(year, month, day);
+        Calendar minAdultAge = new GregorianCalendar();
+        minAdultAge.add(Calendar.YEAR, -18);
+        if (minAdultAge.before(userAge)) {
+            showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
+            return false;
+        }
+        return true;
+    }
+
 
     private static String toConveMonth(int month) {
         if (month < 10)
