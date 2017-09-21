@@ -251,7 +251,7 @@ public class ProfileFragment extends BaseFragment {
             }
         }
     }
-    
+
     @OnClick({R.id.fragProfile_llMale, R.id.fragProfile_llFemale, R.id.fragProfile_tvSubmit, R.id.fragProfile_tvDOB, R.id.fragProfile_ivBanner})
     public void onViewClicked(View view) {
         switch (view.getId()) {

@@ -8,88 +8,106 @@
 
     <include layout="@layout/base_action_bar_home" />
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/fragSetting_llProfile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_16sdp"
+        android:paddingRight="@dimen/_16sdp"
+        android:paddingTop="@dimen/_26sdp">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/my_profile"
+            android:textColor="@color/denimBlue"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_arrow_right" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragSetting_llChangePass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_16sdp"
+        android:paddingRight="@dimen/_16sdp"
+        android:paddingTop="@dimen/_26sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/change_password"
+            android:textColor="@color/denimBlue"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_arrow_right" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragSetting_llFAQ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_16sdp"
+        android:paddingRight="@dimen/_16sdp"
+        android:paddingTop="@dimen/_26sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/faq"
+            android:textColor="@color/denimBlue"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_arrow_right" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/fragSetting_llLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_16sdp"
+        android:paddingRight="@dimen/_16sdp"
+        android:paddingTop="@dimen/_26sdp">
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/_40sdp"
+            android:layout_marginRight="@dimen/_40sdp"
+            android:background="@drawable/selector_text_view_red"
+            android:gravity="center_horizontal"
+            android:paddingBottom="@dimen/_16sdp"
+            android:paddingTop="@dimen/_16sdp"
+            android:text="@string/logout"
+            android:textColor="@color/whiteThree"
+            android:textSize="17sp" />
 
-            <FrameLayout
-                android:id="@+id/fragSetting_llProfile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:paddingBottom="@dimen/_10sdp"
-                android:paddingLeft="@dimen/_16sdp"
-                android:paddingRight="@dimen/_16sdp"
-                android:paddingTop="@dimen/_26sdp">
+    </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/my_profile"
-                    android:textColor="@color/denimBlue"
-                    android:textSize="17sp" />
-
-                <ImageView
-                    android:layout_width="@dimen/_16sdp"
-                    android:layout_height="@dimen/_16sdp"
-                    android:layout_gravity="right|center_vertical"
-                    android:src="@drawable/ic_arrow_right" />
-            </FrameLayout>
-
-
-
-            <FrameLayout
-                android:id="@+id/fragSetting_llFAQ"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:paddingBottom="@dimen/_10sdp"
-                android:paddingLeft="@dimen/_16sdp"
-                android:paddingRight="@dimen/_16sdp"
-                android:paddingTop="@dimen/_26sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/faq"
-                    android:textColor="@color/denimBlue"
-                    android:textSize="17sp" />
-
-                <ImageView
-                    android:layout_width="@dimen/_16sdp"
-                    android:layout_height="@dimen/_16sdp"
-                    android:layout_gravity="right|center_vertical"
-                    android:src="@drawable/ic_arrow_right" />
-            </FrameLayout>
-
-
-            <FrameLayout
-                android:id="@+id/fragSetting_llLogout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:paddingBottom="@dimen/_10sdp"
-                android:paddingLeft="@dimen/_16sdp"
-                android:paddingRight="@dimen/_16sdp"
-                android:paddingTop="@dimen/_26sdp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/logout"
-                    android:textColor="@color/denimBlueTwo"
-                    android:textSize="17sp" />
-
-            </FrameLayout>
-
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>

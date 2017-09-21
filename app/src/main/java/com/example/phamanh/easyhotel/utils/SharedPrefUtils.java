@@ -55,10 +55,19 @@ public class SharedPrefUtils {
         edit.apply();
     }
 
-    public static void saveLogin(Context context, String deviceToken) {
+    public static void saveLogin(Context context, String mail, String pass) {
         SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context)
                 .edit();
         edit.putString(Constant.TYPE_LOGIN, Constant.LOGIN_NORMAL);
+        edit.putString(Constant.DEVICE_TOKEN, mail);
+        edit.putString(Constant.PASSWORD, pass);
+        edit.apply();
+    }
+
+    public static void saveLoginSocial(Context context, String deviceToken) {
+        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context)
+                .edit();
+        edit.putString(Constant.TYPE_LOGIN, Constant.LOGIN_SOCIAL);
         edit.putString(Constant.DEVICE_TOKEN, deviceToken);
         edit.apply();
     }

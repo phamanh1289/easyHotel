@@ -301,7 +301,7 @@ public class SignUpFragment extends BaseFragment {
     }
 
     private void toAddReLogin() {
-        SharedPrefUtils.saveLogin(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+        SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
         StartActivityUtils.toMain(getActivity(), null);
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }

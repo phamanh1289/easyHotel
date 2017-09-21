@@ -213,8 +213,8 @@ public class LoginFragment extends BaseFragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 
-    private void toProcessLogin() {
-        toAddReLogin();
+    private void toProcessLogin(boolean check) {
+        toAddReLogin(check);
         dismissLoading();
         StartActivityUtils.toMain(getActivity(), null);
     }
@@ -224,7 +224,7 @@ public class LoginFragment extends BaseFragment {
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
                         if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
-                            toProcessLogin();
+                            toProcessLogin(true);
                         } else {
                             dismissLoading();
                             AppUtils.showAlert(getContext(), getString(R.string.error), "Email not activated", null);
@@ -245,7 +245,7 @@ public class LoginFragment extends BaseFragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
-                        toProcessLogin();
+                        toProcessLogin(false);
                     } else {
                         AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
                         dismissLoading();
@@ -259,7 +259,7 @@ public class LoginFragment extends BaseFragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
-                        toProcessLogin();
+                        toProcessLogin(false);
                     } else {
                         AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
                         dismissLoading();
@@ -267,8 +267,11 @@ public class LoginFragment extends BaseFragment {
                 });
     }
 
-    private void toAddReLogin() {
-        SharedPrefUtils.saveLogin(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+    private void toAddReLogin(boolean check) {
+        if (check)
+            SharedPrefUtils.saveLogin(getActivity(), etEmail.getText().toString(), etPassword.getText().toString());
+        else
+            SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
         StartActivityUtils.toMain(getActivity(), null);
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }

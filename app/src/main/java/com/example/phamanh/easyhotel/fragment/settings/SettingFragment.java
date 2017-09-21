@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.activity.LoginActivity;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
 import com.example.phamanh.easyhotel.utils.StartActivityUtils;
@@ -33,6 +34,8 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
 
     @BindView(R.id.actionbar_imgBack)
     FrameLayout ivBack;
+    @BindView(R.id.fragSetting_llChangePass)
+    FrameLayout llChangePass;
 
     private LoginActivity loginActivity;
     private GoogleApiClient mGoogleApiClient;
@@ -62,6 +65,8 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
         }
+        if (SharedPrefUtils.getString(getContext(), Constant.LOGIN_SOCIAL).length() != 0)
+            llChangePass.setVisibility(View.GONE);
     }
 
     public void LogOutAndLoginHere() {
@@ -95,7 +100,7 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fragSetting_llProfile, R.id.fragSetting_llFAQ, R.id.fragSetting_llLogout})
+    @OnClick({R.id.fragSetting_llProfile, R.id.fragSetting_llFAQ, R.id.fragSetting_llLogout,R.id.fragSetting_llChangePass})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragSetting_llProfile:
@@ -111,6 +116,9 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
 //                mApiClient.getLogout(getUser().getAccessToken());
 //                BaseApplication application = (BaseApplication) getActivity().getApplication();
 //                application.setCustomer(null);
+                break;
+            case R.id.fragSetting_llChangePass:
+                addFragment(new ChangePasswordFragment(), true);
                 break;
         }
     }

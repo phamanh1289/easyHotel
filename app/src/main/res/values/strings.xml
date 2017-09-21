@@ -13,6 +13,8 @@
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
     <string name="login">Login</string>
     <string name="already_a_member">Already a member ? </string>
 
@@ -20,6 +22,7 @@
     <string name="page_home_detail">Detail Hotel</string>
     <string name="my_profile">Edit Profile</string>
     <string name="faq">FAQ</string>
+    <string name="change_password">Change password</string>
     <string name="faq_1">FAQ 1</string>
     <string name="submit">Submit</string>
     <string name="logout">Logout</string>
