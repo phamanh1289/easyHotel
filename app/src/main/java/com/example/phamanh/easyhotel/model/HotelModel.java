@@ -2,39 +2,64 @@ package com.example.phamanh.easyhotel.model;
 
 import com.example.phamanh.easyhotel.base.BaseModel;
 
-/**
- * *******************************************
- * * Created by Simon on 18/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class HotelModel extends BaseModel {
-    private String title, address, description;
-    private int image;
+    private String id;
+    public int room;
+    public List<CommentModel> comment = new ArrayList<>();
+    public List<RatingModel> rating = new ArrayList<>();
+    public List<ServiceDetailModel> service;
+    private InfomationModel infomation;
 
-    public HotelModel(String title, String address, String description, int image) {
-        this.title = title;
-        this.address = address;
-        this.description = description;
-        this.image = image;
+    public int getRoom() {
+        return room;
     }
 
-    public String getTitle() {
-        return title;
+    public List<CommentModel> getDataComment() {
+        return comment;
     }
 
-    public String getAddress() {
-        return address;
+    public List<RatingModel> getDataRating() {
+        return rating;
     }
 
-    public int getImage() {
-        return image;
+
+    public void setRoom(int room) {
+        this.room = room;
     }
 
-    public String getDescription() {
-        return description;
+    public void setDataComment(List<CommentModel> dataComment) {
+        comment = dataComment;
+    }
+
+    public void setDataRating(List<RatingModel> dataRating) {
+        rating = dataRating;
+    }
+
+    public InfomationModel getInfomation() {
+        return infomation;
+    }
+
+    public void setInfomation(InfomationModel infomation) {
+        this.infomation = infomation;
+    }
+
+    public void setInfomationModel(InfomationModel infomationModel) {
+        infomation = infomationModel;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public InfomationModel getInfomationModel() {
+        return infomation;
     }
 }

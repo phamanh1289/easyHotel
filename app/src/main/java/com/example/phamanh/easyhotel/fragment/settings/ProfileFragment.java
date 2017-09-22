@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -48,14 +49,6 @@ import butterknife.Unbinder;
 
 import static com.example.phamanh.easyhotel.utils.AppUtils.calculateInSampleSize;
 
-/**
- * *******************************************
- * * Created by Simon on 18/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class ProfileFragment extends BaseFragment {
 
@@ -117,12 +110,15 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void toPostUpdateProfile() {
-        refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(tvEmail.getText().toString(),
-                tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(), tvDOB.getText().toString(), tvAddress.getText().toString(), tvMobilePhone.getText().toString(), imgBitMap)));
+        refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(tvEmail.getText().toString(), tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(),
+                tvDOB.getText().toString(), tvAddress.getText().toString(), tvMobilePhone.getText().toString(), imgBitMap)));
         dismissLoading();
+        AppUtils.showAlert(getContext(), getString(R.string.complete), "Update successfully.", null);
     }
 
     private void toGetProfile() {
+        if (mUser != null)
+            tvEmail.setText(mUser.getEmail());
         refMember.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -134,10 +130,9 @@ public class ProfileFragment extends BaseFragment {
                         tvUserName.setText(userModel.getFullName());
                         tvDOB.setText(userModel.getDob());
                         tvAddress.setText(userModel.getAddress());
-                        tvEmail.setText(userModel.getEmail());
                         tvMobilePhone.setText(userModel.getPhone());
-                        byte[] imgBanner = Base64.decode(userModel.getAvatar(), Base64.DEFAULT);
-                        ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(imgBanner, 0, imgBanner.length));
+                        if (userModel.getAvatar() != null)
+                            ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(userModel.getAvatar(), Base64.DEFAULT), 0, Base64.decode(userModel.getAvatar(), Base64.DEFAULT).length));
                         handleSexSelected(userModel.getGender().equals(getString(R.string.male)));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -264,7 +259,16 @@ public class ProfileFragment extends BaseFragment {
             case R.id.fragProfile_tvSubmit:
                 if (isValidate()) {
                     showLoading();
-                    toPostUpdateProfile();
+                    new CountDownTimer(2000, 1000) {
+                        @Override
+                        public void onTick(long l) {
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            toPostUpdateProfile();
+                        }
+                    }.start();
                 } else checkValidInput();
                 break;
             case R.id.fragProfile_tvDOB:

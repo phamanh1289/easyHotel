@@ -15,6 +15,13 @@ import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.HotelModel;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * *******************************************
- * * Created by Simon on 14/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class HomeFragment extends BaseFragment {
 
@@ -40,9 +39,9 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rvMain;
     Unbinder unbinder;
 
-    private HotelModel model;
     private List<HotelModel> mDataHotel = new ArrayList<>();
     private HotelMainAdapter adapter;
+    private HotelModel item = new HotelModel();
 
     @Nullable
     @Override
@@ -68,10 +67,42 @@ public class HomeFragment extends BaseFragment {
     private void toAddData() {
         if (mDataHotel.size() != 0)
             mDataHotel.clear();
-        mDataHotel.add(new HotelModel("Đệ Nhất", "123/3 CMT8", getString(R.string.descrip_hotel_demo), R.drawable.ic_demo_1));
-        mDataHotel.add(new HotelModel("Mường Thanh", "45 Lê Văn Sỹ", "", R.drawable.ic_demo_2));
-        mDataHotel.add(new HotelModel("While Place", "112 Lê Đại Hành", "", R.drawable.ic_demo_3));
-        adapter.notifyDataSetChanged();
+        refHotel.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                item.setId(dataSnapshot.getKey());
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    item = gson.fromJson(jsonObject.toString(), HotelModel.class);
+                    mDataHotel.add(item);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     ItemListener toClickItem = pos -> addFragment(HomeDetailFragment.newInstance(mDataHotel.get(pos)), true);

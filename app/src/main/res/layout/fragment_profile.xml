@@ -256,6 +256,7 @@
                             android:layout_marginTop="@dimen/_16sdp"
                             android:background="@null"
                             android:hint="@string/email"
+                            android:focusable="false"
                             android:inputType="textCapWords"
                             android:textColor="@color/denimBlue"
                             android:textColorHint="@color/denimBlue"

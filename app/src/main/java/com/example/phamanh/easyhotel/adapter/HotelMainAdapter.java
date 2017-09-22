@@ -1,13 +1,14 @@
 package com.example.phamanh.easyhotel.adapter;
 
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.HotelModel;
@@ -17,14 +18,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * *******************************************
- * * Created by Simon on 18/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.HotelHolder> {
 
@@ -49,9 +42,9 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
     @Override
     public void onBindViewHolder(HotelHolder holder, int position) {
         model = mData.get(position);
-        holder.tvAddress.setText(model.getAddress());
-        holder.tvTitle.setText(model.getTitle());
-        Glide.with(holder.itemView.getContext()).load(model.getImage()).into(holder.ivBanner);
+        holder.tvAddress.setText(model.getInfomation().getAddress());
+        holder.tvTitle.setText(model.getInfomation().getName());
+        holder.ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(model.getInfomation().getLogo(), Base64.DEFAULT), 0, Base64.decode(model.getInfomation().getLogo(), Base64.DEFAULT).length));
     }
 
     @Override

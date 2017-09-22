@@ -1,7 +1,7 @@
 package com.example.phamanh.easyhotel.fragment.settings;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,20 +15,14 @@ import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-/**
- * *******************************************
- * * Created by Simon on 21/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class ChangePasswordFragment extends BaseFragment {
 
@@ -83,21 +77,18 @@ public class ChangePasswordFragment extends BaseFragment {
     public void onViewClicked() {
         if (checkValidInput()) {
             showLoading();
-            new CountDownTimer(2000, 1000) {
-                @Override
-                public void onTick(long l) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    mUser.updatePassword(etNewPass.getText().toString());
-                    SharedPrefUtils.setString(getContext(), Constant.PASSWORD, etNewPass.getText().toString());
-                    AppUtils.showAlert(getContext(), getString(R.string.complete), "Change password successfully.", null);
-                    getActivity().onBackPressed();
-                    dismissLoading();
-                }
-            }.start();
+            mUser.updatePassword(etNewPass.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                SharedPrefUtils.setString(getContext(), Constant.PASSWORD, etNewPass.getText().toString());
+                                AppUtils.showAlert(getContext(), getString(R.string.complete), "Change password successfully.", null);
+                                getActivity().onBackPressed();
+                                dismissLoading();
+                            }
+                        }
+                    });
         }
     }
 }

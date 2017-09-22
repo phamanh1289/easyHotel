@@ -14,12 +14,19 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.base.BaseModel;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.CommentModel;
+import com.example.phamanh.easyhotel.model.HotelDemoModel;
 import com.example.phamanh.easyhotel.model.HotelModel;
+import com.example.phamanh.easyhotel.model.InfomationModel;
+import com.example.phamanh.easyhotel.model.Location;
+import com.example.phamanh.easyhotel.model.RatingModel;
+import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.example.phamanh.easyhotel.other.database.DataHardCode;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +36,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-/**
- * *******************************************
- * * Created by Simon on 18/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class HomeDetailFragment extends BaseFragment {
 
@@ -84,7 +83,7 @@ public class HomeDetailFragment extends BaseFragment {
     private void init() {
         Bundle bundle = getArguments();
         if (bundle != null) {
-            HotelModel item = (HotelModel) bundle.getSerializable(Constant.BASE_MODEL);
+            HotelDemoModel item = (HotelDemoModel) bundle.getSerializable(Constant.BASE_MODEL);
             if (item != null) {
                 tvTitle.setText(item.getTitle());
                 tvDescription.setText(item.getDescription());
@@ -92,6 +91,44 @@ public class HomeDetailFragment extends BaseFragment {
             }
         }
         mDataRoom.addAll(DataHardCode.getListRoom());
+        toAddDataDemo();
+    }
+
+    private void toAddDataDemo() {
+        HotelModel hotel = new HotelModel();
+        List<CommentModel> mDataComment = new ArrayList<>();
+        List<RatingModel> mDataRating = new ArrayList<>();
+        List<ServiceDetailModel> mDataServiceDetail = new ArrayList<>();
+        InfomationModel info = new InfomationModel();
+        List<String> mDataImage = new ArrayList<>();
+        Location location = new Location("100", "200");
+
+        mDataComment.add(new CommentModel("300", "email_1", "nice"));
+        mDataComment.add(new CommentModel("100", "email_2", "bad"));
+
+        mDataRating.add(new RatingModel("email_1", "1"));
+        mDataRating.add(new RatingModel("email_2", "2"));
+
+        mDataServiceDetail.add(new ServiceDetailModel("spa"));
+        mDataServiceDetail.add(new ServiceDetailModel("eat"));
+
+        info.setAddress("123/123");
+        info.setDescription("demo add");
+        info.setLogo("demo logo");
+        info.setName("De Nhat Demo");
+        info.setPrice("1200");
+
+        hotel.setDataComment(mDataComment);
+        hotel.setDataRating(mDataRating);
+        hotel.setInfomationModel(info);
+        hotel.setRoom(12);
+        hotel.service = mDataServiceDetail;
+        mDataImage.add("image_1");
+        mDataImage.add("image_2");
+        info.setDataImage(mDataImage);
+        info.setLocation(location);
+        hotel.setInfomationModel(info);
+        refHotel.push().setValue(new Gson().toJson(hotel));
     }
 
     @Override
