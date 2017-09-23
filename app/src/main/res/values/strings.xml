@@ -16,6 +16,7 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="login">Login</string>
+    <string name="cancel">Cancel</string>
     <string name="already_a_member">Already a member ? </string>
 
     <string name="page_home">Home</string>
@@ -56,5 +57,7 @@ Nơi đây có quầy lễ tân 24 giờ.
 
 Trung tâm mua sắm Diamond Plaza cách Muong Thanh Saigon Centre Hotel 500 m, trong khi Nhà thờ Đức Bà cách đó 600 m. Sân bay Quốc tế Tân Sơn Nhất cách chỗ nghỉ này 6 km. </string>
     <string name="booking_now">Booking Now</string>
+    <string name="enter_comment">Enter comment</string>
+    <string name="enter">Enter</string>
 
 </resources>

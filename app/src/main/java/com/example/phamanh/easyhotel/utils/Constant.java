@@ -26,4 +26,5 @@ public class Constant {
     public static final String IMAGE_INTRO = "image_intro";
     public static final String SIGNUP_EMAIL = "signup_email";
     public static final String SIGNUP_PASSWORD = "signup_password";
+    public static final String CHILD_KEY = "child_key";
 }

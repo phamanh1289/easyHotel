@@ -40,6 +40,7 @@ public class ChangePasswordFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_change_password, container, false);
         unbinder = ButterKnife.bind(this, view);
         KeyboardUtils.setupUI(view, getActivity());
+        setVisibilityTabBottom(View.GONE);
         return view;
     }
 

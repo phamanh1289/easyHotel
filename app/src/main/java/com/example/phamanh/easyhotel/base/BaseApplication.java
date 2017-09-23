@@ -3,21 +3,15 @@ package com.example.phamanh.easyhotel.base;
 import android.app.Application;
 
 import com.example.phamanh.easyhotel.R;
+import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.other.enums.RoleEnum;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-/**
- * *******************************************
- * * Created by Simon on 14/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class BaseApplication extends Application {
     public int currentTab;
+    private UserModel user;
     private RoleEnum role = RoleEnum.USER;
 
     @Override
@@ -36,5 +30,13 @@ public class BaseApplication extends Application {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setCustomer(UserModel model) {
+        this.user = model;
     }
 }

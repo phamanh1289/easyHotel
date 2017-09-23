@@ -2,7 +2,6 @@ package com.example.phamanh.easyhotel.activity;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -19,16 +18,18 @@ import com.example.phamanh.easyhotel.fragment.home.HomeFragment;
 import com.example.phamanh.easyhotel.fragment.nearby.NearbyFragment;
 import com.example.phamanh.easyhotel.fragment.news.NewsFragment;
 import com.example.phamanh.easyhotel.fragment.settings.SettingFragment;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.other.enums.TabsEnum;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.phamanh.easyhotel.other.enums.TabsEnum.NEARBY;
 import static com.example.phamanh.easyhotel.other.enums.TabsEnum.HOME;
-import static com.example.phamanh.easyhotel.other.enums.TabsEnum.SETTING;
+import static com.example.phamanh.easyhotel.other.enums.TabsEnum.NEARBY;
 import static com.example.phamanh.easyhotel.other.enums.TabsEnum.NEWS;
+import static com.example.phamanh.easyhotel.other.enums.TabsEnum.SETTING;
 
 public class MainActivity extends BaseActivity implements View.OnTouchListener {
 
@@ -36,6 +37,8 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
     public FragmentTabHost tabHost;
     @BindView(R.id.activityMain_llTabBottom)
     public LinearLayout llTabBottom;
+
+    private boolean isCheckBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +98,29 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0)
+            isCheckBack = false;
         KeyboardUtils.hideSoftKeyboard(this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        int stackCount = fragmentManager.getBackStackEntryCount();
-        if (stackCount <= 0) {
-            llTabBottom.setVisibility(View.VISIBLE);
+        if (isCheckBack || (getSupportFragmentManager().getBackStackEntryCount() == 0 && !isCheckBack)) {
+            AppUtils.showAlert(this, getString(R.string.warning), "Are you want exit ?", toExitApp);
+        } else if (!isCheckBack) {
+            super.onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() <= 0) {
+                llTabBottom.setVisibility(View.VISIBLE);
+                isCheckBack = true;
+            }
         }
     }
+
+    DialogListener toExitApp = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            finish();
+        }
+
+        @Override
+        public void onCancelClicked() {
+
+        }
+    };
 }

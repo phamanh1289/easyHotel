@@ -4,21 +4,32 @@ import com.example.phamanh.easyhotel.base.BaseModel;
 
 
 public class CommentModel extends BaseModel {
-    private String time;
+    private long time;
     private String email;
     private String content;
+    private String image;
 
-    public CommentModel(String time, String email, String content) {
+    public CommentModel(long time, String email, String content, String image) {
         this.time = time;
         this.email = email;
         this.content = content;
+        this.image = image;
     }
 
-    public String getTime() {
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

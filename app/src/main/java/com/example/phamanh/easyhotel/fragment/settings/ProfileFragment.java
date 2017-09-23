@@ -29,14 +29,8 @@ import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.ImageOrientation;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -117,50 +111,15 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void toGetProfile() {
-        if (mUser != null)
-            tvEmail.setText(mUser.getEmail());
-        refMember.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getKey().equals(mUser.getUid())) {
-                    try {
-                        Gson gson = new Gson();
-                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
-                        tvUserName.setText(userModel.getFullName());
-                        tvDOB.setText(userModel.getDob());
-                        tvAddress.setText(userModel.getAddress());
-                        tvMobilePhone.setText(userModel.getPhone());
-                        if (userModel.getAvatar() != null)
-                            ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(userModel.getAvatar(), Base64.DEFAULT), 0, Base64.decode(userModel.getAvatar(), Base64.DEFAULT).length));
-                        handleSexSelected(userModel.getGender().equals(getString(R.string.male)));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                dismissLoading();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        tvEmail.setText(getUser().getEmail());
+        tvUserName.setText(getUser().getFullName());
+        tvDOB.setText(getUser().getDob());
+        tvAddress.setText(getUser().getAddress());
+        tvMobilePhone.setText(getUser().getPhone());
+        if (getUser().getAvatar() != null)
+            ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(getUser().getAvatar(), Base64.DEFAULT), 0, Base64.decode(getUser().getAvatar(), Base64.DEFAULT).length));
+        handleSexSelected(getUser().getGender().equals(getString(R.string.male)));
+        dismissLoading();
     }
 
     public byte[] ImageView_byte(Bitmap bm) {

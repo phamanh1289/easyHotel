@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_250sdp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/whiteThree"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/actionbar_tvTitle"
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/denimBlue"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="Rating Detail"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_15sdp"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/viewRating_rvRating"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="@dimen/_8sdp">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <include layout="@layout/base_line"/>
+
+    <TextView
+        android:id="@+id/viewRating_tvCancel"
+        fontPath="@string/Helvetica_bold"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/selector_text_view_red"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/cancel"
+        android:textColor="@color/whiteThree"
+        android:textSize="20sp"/>
+
+</LinearLayout>

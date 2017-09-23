@@ -8,13 +8,13 @@ import java.util.List;
 
 public class HotelModel extends BaseModel {
     private String id;
-    public int room;
+    public RoomModel room = new RoomModel();
     public List<CommentModel> comment = new ArrayList<>();
     public List<RatingModel> rating = new ArrayList<>();
-    public List<ServiceDetailModel> service;
-    private InfomationModel infomation;
+    public List<ServiceDetailModel> service = new ArrayList<>();
+    private InfomationModel infomation = new InfomationModel();
 
-    public int getRoom() {
+    public RoomModel getRoom() {
         return room;
     }
 
@@ -27,7 +27,7 @@ public class HotelModel extends BaseModel {
     }
 
 
-    public void setRoom(int room) {
+    public void setRoom(RoomModel room) {
         this.room = room;
     }
 
@@ -47,9 +47,6 @@ public class HotelModel extends BaseModel {
         this.infomation = infomation;
     }
 
-    public void setInfomationModel(InfomationModel infomationModel) {
-        infomation = infomationModel;
-    }
 
     public String getId() {
         return id;

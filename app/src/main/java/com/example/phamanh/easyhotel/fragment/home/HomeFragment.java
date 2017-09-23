@@ -11,10 +11,20 @@ import android.widget.FrameLayout;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.HotelMainAdapter;
+import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
+import com.example.phamanh.easyhotel.model.CommentModel;
 import com.example.phamanh.easyhotel.model.HotelModel;
+import com.example.phamanh.easyhotel.model.InfomationModel;
+import com.example.phamanh.easyhotel.model.Location;
+import com.example.phamanh.easyhotel.model.RatingModel;
+import com.example.phamanh.easyhotel.model.RoomModel;
+import com.example.phamanh.easyhotel.model.ServiceDetailModel;
+import com.example.phamanh.easyhotel.model.UserModel;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
+import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,26 +71,28 @@ public class HomeFragment extends BaseFragment {
         adapter.setItemListener(toClickItem);
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new LinearLayoutManager(getContext()));
-        toAddData();
+        toGetProfile();
+        toAddDataDemo();
+        toGetDataHotel();
     }
 
-    private void toAddData() {
-        if (mDataHotel.size() != 0)
-            mDataHotel.clear();
-        refHotel.addChildEventListener(new ChildEventListener() {
+    private void toGetProfile() {
+        showLoading();
+        refMember.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                item.setId(dataSnapshot.getKey());
-                try {
-                    Gson gson = new Gson();
-                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                    item = gson.fromJson(jsonObject.toString(), HotelModel.class);
-                    mDataHotel.add(item);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (dataSnapshot.getKey().equals(mUser.getUid())) {
+                    try {
+                        Gson gson = new Gson();
+                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                        UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
+                        BaseApplication application = (BaseApplication) getActivity().getApplication();
+                        application.setCustomer(userModel);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                adapter.notifyDataSetChanged();
+                dismissLoading();
             }
 
             @Override
@@ -105,11 +117,99 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    ItemListener toClickItem = pos -> addFragment(HomeDetailFragment.newInstance(mDataHotel.get(pos)), true);
+    private void toGetDataHotel() {
+        if (mDataHotel.size() != 0)
+            mDataHotel.clear();
+        refHotel.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                item.setId(dataSnapshot.getKey());
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    if (jsonObject != null)
+                        item = gson.fromJson(jsonObject.toString(), HotelModel.class);
+                    mDataHotel.add(item);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                adapter.notifyDataSetChanged();
+                dismissLoading();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    ItemListener toClickItem = new ItemListener() {
+        @Override
+        public void onItemClicked(int pos) {
+            addFragment(BookingCommentParrent.newInstance(mDataHotel.get(pos)), true);
+
+        }
+    };
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void toAddDataDemo() {
+        SharedPrefUtils.setString(getContext(), Constant.CHILD_KEY, String.valueOf(System.currentTimeMillis()));
+        HotelModel hotel = new HotelModel();
+        List<CommentModel> mDataComment = new ArrayList<>();
+        List<RatingModel> mDataRating = new ArrayList<>();
+        List<ServiceDetailModel> mDataServiceDetail = new ArrayList<>();
+        InfomationModel info = new InfomationModel();
+        List<String> mDataImage = new ArrayList<>();
+        Location location = new Location("100", "200");
+
+        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_1", "nice", ""));
+        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_2", "bad", ""));
+
+        mDataRating.add(new RatingModel("email_1", "1", System.currentTimeMillis()));
+        mDataRating.add(new RatingModel("email_2", "2", System.currentTimeMillis()));
+        mDataRating.add(new RatingModel("email_3", "3", System.currentTimeMillis()));
+        mDataRating.add(new RatingModel("email_4", "4", System.currentTimeMillis()));
+        mDataRating.add(new RatingModel("email_5", "5", System.currentTimeMillis()));
+        mDataRating.add(new RatingModel("email_6", "6", System.currentTimeMillis()));
+        mDataRating.add(new RatingModel("email_7", "7", System.currentTimeMillis()));
+        mDataRating.add(new RatingModel("email_8", "8", System.currentTimeMillis()));
+
+        mDataServiceDetail.add(new ServiceDetailModel("spa"));
+        mDataServiceDetail.add(new ServiceDetailModel("eat"));
+
+        info.setAddress("123/123");
+        info.setDescription("demo add");
+        info.setLogo("demo logo");
+        info.setName("De Nhat Demo");
+        info.setPrice("1200");
+        info.setLocation(location);
+        hotel.setRoom(new RoomModel(12, 8));
+
+
+        hotel.setDataComment(mDataComment);
+        hotel.setDataRating(mDataRating);
+        hotel.service = mDataServiceDetail;
+        mDataImage.add("image_1");
+        mDataImage.add("image_2");
+        info.setDataImage(mDataImage);
+        hotel.setInfomation(info);
+        refHotel.child(String.valueOf(System.currentTimeMillis())).setValue(new Gson().toJson(hotel));
     }
 }

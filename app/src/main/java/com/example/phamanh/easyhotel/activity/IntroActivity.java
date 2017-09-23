@@ -17,9 +17,9 @@ public class IntroActivity extends AppIntro2 {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(IntroFragment.newInstance("Dễ dàng tìm khách sạn.", R.drawable.ic_search));
-        addSlide(IntroFragment.newInstance("Dễ dàng đặt phòng.", R.drawable.ic_booking));
-        addSlide(IntroFragment.newInstance("Dễ dàng so sánh giá cả/dịch vụ.", R.drawable.ic_compare));
+        addSlide(IntroFragment.newInstance("Easy search hotel.", R.drawable.ic_search));
+        addSlide(IntroFragment.newInstance("Easy booking.", R.drawable.ic_booking));
+        addSlide(IntroFragment.newInstance("Easy compare service.", R.drawable.ic_compare));
     }
 
     @Override

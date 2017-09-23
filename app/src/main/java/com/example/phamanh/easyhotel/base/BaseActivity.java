@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.activity.MainActivity;
+import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.other.view.LodingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 
@@ -98,6 +99,14 @@ public class BaseActivity extends AppCompatActivity {
         for (int i = 0; i < count; ++i) {
             fm.popBackStack();
         }
+    }
+
+    public UserModel getUser() {
+        if (AppUtils.isNetworkAvailable(this)) {
+            BaseApplication application = (BaseApplication) this.getApplication();
+            return application.getUser();
+        } else
+            return new UserModel();
     }
 
     @Override

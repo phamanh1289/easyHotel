@@ -2,14 +2,6 @@ package com.example.phamanh.easyhotel.model;
 
 import com.example.phamanh.easyhotel.base.BaseModel;
 
-/**
- * *******************************************
- * * Created by Simon on 21/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class UserModel extends BaseModel {
     String email, gender, fullName, dob, address, phone, avatar;

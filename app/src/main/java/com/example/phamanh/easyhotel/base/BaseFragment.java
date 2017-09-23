@@ -6,6 +6,8 @@ import android.support.v4.content.IntentCompat;
 import android.view.View;
 
 import com.example.phamanh.easyhotel.activity.MainActivity;
+import com.example.phamanh.easyhotel.model.UserModel;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,5 +72,13 @@ public class BaseFragment extends Fragment {
         if (getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).dismissLoading();
         }
+    }
+
+    public UserModel getUser() {
+        if (getActivity() != null && AppUtils.isNetworkAvailable(getActivity())) {
+            BaseApplication application = (BaseApplication) getActivity().getApplication();
+            return application.getUser();
+        } else
+            return new UserModel();
     }
 }
