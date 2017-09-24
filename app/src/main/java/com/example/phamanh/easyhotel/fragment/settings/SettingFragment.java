@@ -113,9 +113,6 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
                 showLoading();
                 logoutAccount();
                 LogOutAndLoginHere();
-//                mApiClient.getLogout(getUser().getAccessToken());
-//                BaseApplication application = (BaseApplication) getActivity().getApplication();
-//                application.setCustomer(null);
                 break;
             case R.id.fragSetting_llChangePass:
                 addFragment(new ChangePasswordFragment(), true);

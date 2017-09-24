@@ -19,9 +19,15 @@ public class BaseFragment extends Fragment {
     public FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public FirebaseUser mUser = mAuth.getCurrentUser();
     public FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    public DatabaseReference refMember = firebaseDatabase.getReference("member");
-    public DatabaseReference refBooking = firebaseDatabase.getReference("booking");
-    public DatabaseReference refHotel = firebaseDatabase.getReference("hotel");
+    public DatabaseReference refMember = firebaseDatabase.getReference("member").child(Constant.INFOMATION);
+    public DatabaseReference refMember_booking = firebaseDatabase.getReference("member").child(Constant.BOOKING);
+    public DatabaseReference refMember_comment = firebaseDatabase.getReference("member").child(Constant.COMMENT);
+    public DatabaseReference refMember_rating = firebaseDatabase.getReference("member").child(Constant.RATING);
+    public DatabaseReference refHotel = firebaseDatabase.getReference("hotel").child(Constant.INFOMATION);
+    public DatabaseReference refHotel_service = firebaseDatabase.getReference("hotel").child(Constant.SERVICE);
+    public DatabaseReference refHotel_room = firebaseDatabase.getReference("hotel").child(Constant.ROOM);
+    public DatabaseReference refHotel_comment = firebaseDatabase.getReference("hotel").child(Constant.COMMENT);
+    public DatabaseReference refHotel_rating = firebaseDatabase.getReference("hotel").child(Constant.RATING);
 
 
     public void setActionBar(View view, String title) {

@@ -22,9 +22,7 @@ import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.model.RoomModel;
 import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.example.phamanh.easyhotel.model.UserModel;
-import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
-import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,7 +70,7 @@ public class HomeFragment extends BaseFragment {
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new LinearLayoutManager(getContext()));
         toGetProfile();
-        toAddDataDemo();
+//        toAddDataDemo();
         toGetDataHotel();
     }
 
@@ -159,7 +157,6 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void onItemClicked(int pos) {
             addFragment(BookingCommentParrent.newInstance(mDataHotel.get(pos)), true);
-
         }
     };
 
@@ -170,7 +167,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void toAddDataDemo() {
-        SharedPrefUtils.setString(getContext(), Constant.CHILD_KEY, String.valueOf(System.currentTimeMillis()));
         HotelModel hotel = new HotelModel();
         List<CommentModel> mDataComment = new ArrayList<>();
         List<RatingModel> mDataRating = new ArrayList<>();

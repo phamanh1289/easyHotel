@@ -2,7 +2,6 @@ package com.example.phamanh.easyhotel.fragment.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,10 @@ import android.widget.EditText;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.activity.LoginActivity;
+import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
@@ -29,14 +30,18 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -45,14 +50,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-/**
- * *******************************************
- * * Created by Simon on 14/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class SignUpFragment extends BaseFragment {
 
@@ -118,10 +115,6 @@ public class SignUpFragment extends BaseFragment {
                 accessToken,
                 (object, response) -> {
                     showLoading();
-//                    String id = accessToken.getUserId();
-//                    String name = object.has("name") ? object.optString("name") : "";
-//                    String image = "https://graph.facebook.com/" + id + "/picture?type=large";
-//                    String email = object.has("email") ? object.optString("email") : "";
                 });
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,email,gender,birthday");
@@ -141,11 +134,6 @@ public class SignUpFragment extends BaseFragment {
             assert signInAccount != null;
             String id = signInAccount.getId();
             SharedPrefUtils.setString(getContext(), Constant.ID, id);
-//            String name = signInAccount.getDisplayName();
-//            String email = signInAccount.getEmail();
-//            String token = signInAccount.getIdToken();
-//            String image = String.valueOf(signInAccount.getPhotoUrl());
-            showLoading();
         }
     }
 
@@ -200,7 +188,6 @@ public class SignUpFragment extends BaseFragment {
             case R.id.fragSignUp_tvLogin:
                 if (checkValidInput())
                     toCreateNewUser();
-//                addFragment(new SignUpStep2Fragment(), true);
                 break;
             case R.id.fragSignUp_ivFacebook:
                 showLoading();
@@ -231,15 +218,12 @@ public class SignUpFragment extends BaseFragment {
     private void toCreateNewUser() {
         showLoading();
         mAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            toSendMailVerify();
-                        } else {
-                            AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
-                            dismissLoading();
-                        }
+                .addOnCompleteListener(getActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        toSendMailVerify();
+                    } else {
+                        AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
+                        dismissLoading();
                     }
                 });
     }
@@ -259,12 +243,9 @@ public class SignUpFragment extends BaseFragment {
 
     private void toSendMailVerify() {
         FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            AppUtils.showAlert(getContext(), getString(R.string.complete), "Thank you for signing up. Please log in to your email to verify your account.", toCLickMoveLogin);
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        AppUtils.showAlert(getContext(), getString(R.string.complete), "Thank you for signing up. Please log in to your email to verify your account.", toCLickMoveLogin);
                     }
                 });
     }
@@ -278,6 +259,7 @@ public class SignUpFragment extends BaseFragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
+                        mUser = FirebaseAuth.getInstance().getCurrentUser();
                         toProcessLogin();
                     } else {
                         AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
@@ -292,6 +274,7 @@ public class SignUpFragment extends BaseFragment {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
+                        mUser = FirebaseAuth.getInstance().getCurrentUser();
                         toProcessLogin();
                     } else {
                         AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
@@ -302,9 +285,51 @@ public class SignUpFragment extends BaseFragment {
 
     private void toAddReLogin() {
         SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+        toGetDataProfile();
         StartActivityUtils.toMain(getActivity(), null);
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
+    private void toGetDataProfile() {
+        final boolean[] isCheckUser = new boolean[1];
+        refMember.child(mUser.getUid()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                UserModel userModel;
+                BaseApplication application = (BaseApplication) getActivity().getApplication();
+                if (mUser.getUid().equals(dataSnapshot.getKey())) {
+                    try {
+                        Gson gson = new Gson();
+                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                        userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
+                        application.setCustomer(userModel);
+                        isCheckUser[0] = true;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        if (!isCheckUser[0]) {
+            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", "")));
+        }
+    }
 
 }

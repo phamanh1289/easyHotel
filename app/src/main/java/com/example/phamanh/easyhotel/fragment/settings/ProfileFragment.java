@@ -32,7 +32,6 @@ import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -116,16 +115,10 @@ public class ProfileFragment extends BaseFragment {
         tvDOB.setText(getUser().getDob());
         tvAddress.setText(getUser().getAddress());
         tvMobilePhone.setText(getUser().getPhone());
-        if (getUser().getAvatar() != null)
+        if (!getUser().getAvatar().equals(""))
             ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(getUser().getAvatar(), Base64.DEFAULT), 0, Base64.decode(getUser().getAvatar(), Base64.DEFAULT).length));
         handleSexSelected(getUser().getGender().equals(getString(R.string.male)));
         dismissLoading();
-    }
-
-    public byte[] ImageView_byte(Bitmap bm) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
     }
 
     public boolean isValidate() {
@@ -199,7 +192,7 @@ public class ProfileFragment extends BaseFragment {
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri), null, options);
                 Bitmap bitmapNew = ImageOrientation.modifyOrientation(getActivity(), bitmap, uri);
                 ivBanner.setImageBitmap(AppUtils.getResizedBitmap(bitmapNew, 1080));
-                imgBitMap = Base64.encodeToString(ImageView_byte(AppUtils.getResizedBitmap(bitmapNew, 1080)), Base64.DEFAULT);
+                imgBitMap = AppUtils.toChangeBitmap(bitmapNew);
             } catch (IOException e) {
                 e.printStackTrace();
             }

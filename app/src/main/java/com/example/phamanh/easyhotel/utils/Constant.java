@@ -1,13 +1,5 @@
 package com.example.phamanh.easyhotel.utils;
 
-/**
- * *******************************************
- * * Created by Simon on 14/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class Constant {
 
@@ -26,5 +18,10 @@ public class Constant {
     public static final String IMAGE_INTRO = "image_intro";
     public static final String SIGNUP_EMAIL = "signup_email";
     public static final String SIGNUP_PASSWORD = "signup_password";
-    public static final String CHILD_KEY = "child_key";
+    public static final String INFOMATION = "infomation";
+    public static final String SERVICE = "service";
+    public static final String ROOM = "room";
+    public static final String RATING = "rating";
+    public static final String COMMENT = "comment";
+    public static final String BOOKING = "booking";
 }

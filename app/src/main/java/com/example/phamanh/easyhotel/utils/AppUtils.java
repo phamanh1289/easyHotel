@@ -12,6 +12,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.DatePicker;
@@ -22,6 +23,7 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -338,9 +340,20 @@ public class AppUtils {
         }
     }
 
-    public static String convertTime(long time){
+    public static String convertTime(long time) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
         return format.format(date);
     }
+
+    public static byte[] ImageView_byte(Bitmap bm) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public static String toChangeBitmap(Bitmap bitmap) {
+        return Base64.encodeToString(AppUtils.ImageView_byte(AppUtils.getResizedBitmap(bitmap, 1080)), Base64.DEFAULT);
+    }
+
 }
