@@ -49,7 +49,7 @@ public class BookingFragment extends BaseFragment {
     }
 
     private void init() {
-        mHotelModel = ((BookingCommentParrent) getParentFragment()).mHotelModel;
+//        mHotelModel = ((BookingCommentParrent) getParentFragment()).mHotelModel;
         mDataRoom.addAll(DataHardCode.getListRoom());
     }
 

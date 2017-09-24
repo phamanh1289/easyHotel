@@ -356,4 +356,7 @@ public class AppUtils {
         return Base64.encodeToString(AppUtils.ImageView_byte(AppUtils.getResizedBitmap(bitmap, 1080)), Base64.DEFAULT);
     }
 
+    public static Bitmap toChangeString(String s){
+        return BitmapFactory.decodeByteArray(Base64.decode(s, Base64.DEFAULT), 0, Base64.decode(s, Base64.DEFAULT).length);
+    }
 }

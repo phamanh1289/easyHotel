@@ -14,8 +14,9 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.CommentAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.CommentModel;
-import com.example.phamanh.easyhotel.model.HotelModel;
+import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +36,10 @@ public class CommentFragment extends BaseFragment {
     @BindView(R.id.fragComment_tvEnter)
     TextView tvEnter;
     Unbinder unbinder;
-    private HotelModel mHotelModel;
-    private List<CommentModel> mDataComment = new ArrayList<>();
+
     private CommentAdapter adapter;
+    private List<CommentModel> mDataComment = new ArrayList<>();
+    private String mKey;
 
     @Nullable
     @Override
@@ -49,8 +51,10 @@ public class CommentFragment extends BaseFragment {
     }
 
     private void init() {
-        mHotelModel = ((BookingCommentParrent) getParentFragment()).mHotelModel;
-        mDataComment = mHotelModel.getDataComment();
+        mKey = ((BookingCommentParrent) getParentFragment()).mKey;
+        if (mDataComment.size() != 0)
+            mDataComment.clear();
+        mDataComment.addAll(((BookingCommentParrent) getParentFragment()).mCommentModel.comment);
         adapter = new CommentAdapter(mDataComment);
         rvComment.setAdapter(adapter);
         rvComment.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -75,6 +79,9 @@ public class CommentFragment extends BaseFragment {
         if (toValidate()) {
             mDataComment.add(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString(), getUser().getAvatar()));
             adapter.notifyDataSetChanged();
+            ListComment item = new ListComment(mDataComment);
+            refHotel_comment.child(mKey).setValue(new Gson().toJson(item));
+            etContent.setText("");
         }
     }
 }

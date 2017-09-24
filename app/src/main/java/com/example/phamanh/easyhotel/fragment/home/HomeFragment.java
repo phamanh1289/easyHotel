@@ -17,6 +17,9 @@ import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.CommentModel;
 import com.example.phamanh.easyhotel.model.HotelModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
+import com.example.phamanh.easyhotel.model.ListComment;
+import com.example.phamanh.easyhotel.model.ListRating;
+import com.example.phamanh.easyhotel.model.ListService;
 import com.example.phamanh.easyhotel.model.Location;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.model.RoomModel;
@@ -47,9 +50,19 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rvMain;
     Unbinder unbinder;
 
-    private List<HotelModel> mDataHotel = new ArrayList<>();
+    private List<InfomationModel> mDataInfomation = new ArrayList<>();
     private HotelMainAdapter adapter;
-    private HotelModel item = new HotelModel();
+    private HotelModel hotel = new HotelModel();
+    private List<CommentModel> mDataComment = new ArrayList<>();
+    private ListComment mListComment = new ListComment();
+    private List<RatingModel> mDataRating = new ArrayList<>();
+    private ListRating mListRating = new ListRating();
+    private ListService mListService = new ListService();
+    private List<ServiceDetailModel> mDataServiceDetail = new ArrayList<>();
+    private InfomationModel info = new InfomationModel();
+    private List<String> mDataImage = new ArrayList<>();
+    private List<String> mDataKey = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -65,7 +78,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void init() {
-        adapter = new HotelMainAdapter(mDataHotel);
+        adapter = new HotelMainAdapter(mDataInfomation);
         adapter.setItemListener(toClickItem);
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -116,18 +129,18 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void toGetDataHotel() {
-        if (mDataHotel.size() != 0)
-            mDataHotel.clear();
+        if (mDataInfomation.size() != 0)
+            mDataInfomation.clear();
         refHotel.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                item.setId(dataSnapshot.getKey());
                 try {
                     Gson gson = new Gson();
                     JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
                     if (jsonObject != null)
-                        item = gson.fromJson(jsonObject.toString(), HotelModel.class);
-                    mDataHotel.add(item);
+                        info = gson.fromJson(jsonObject.toString(), InfomationModel.class);
+                    mDataInfomation.add(info);
+                    mDataKey.add(dataSnapshot.getKey());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -153,12 +166,7 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    ItemListener toClickItem = new ItemListener() {
-        @Override
-        public void onItemClicked(int pos) {
-            addFragment(BookingCommentParrent.newInstance(mDataHotel.get(pos)), true);
-        }
-    };
+    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos), mDataKey.get(pos)), true);
 
     @Override
     public void onDestroyView() {
@@ -167,16 +175,12 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void toAddDataDemo() {
-        HotelModel hotel = new HotelModel();
-        List<CommentModel> mDataComment = new ArrayList<>();
-        List<RatingModel> mDataRating = new ArrayList<>();
-        List<ServiceDetailModel> mDataServiceDetail = new ArrayList<>();
-        InfomationModel info = new InfomationModel();
-        List<String> mDataImage = new ArrayList<>();
-        Location location = new Location("100", "200");
+
+        String mKey = String.valueOf(System.currentTimeMillis());
 
         mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_1", "nice", ""));
         mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_2", "bad", ""));
+        mListComment.comment = mDataComment;
 
         mDataRating.add(new RatingModel("email_1", "1", System.currentTimeMillis()));
         mDataRating.add(new RatingModel("email_2", "2", System.currentTimeMillis()));
@@ -186,26 +190,35 @@ public class HomeFragment extends BaseFragment {
         mDataRating.add(new RatingModel("email_6", "6", System.currentTimeMillis()));
         mDataRating.add(new RatingModel("email_7", "7", System.currentTimeMillis()));
         mDataRating.add(new RatingModel("email_8", "8", System.currentTimeMillis()));
+        mListRating.rating = mDataRating;
 
         mDataServiceDetail.add(new ServiceDetailModel("spa"));
         mDataServiceDetail.add(new ServiceDetailModel("eat"));
+        mListService.service = mDataServiceDetail;
 
         info.setAddress("123/123");
         info.setDescription("demo add");
         info.setLogo("demo logo");
         info.setName("De Nhat Demo");
         info.setPrice("1200");
-        info.setLocation(location);
-        hotel.setRoom(new RoomModel(12, 8));
-
-
-        hotel.setDataComment(mDataComment);
-        hotel.setDataRating(mDataRating);
-        hotel.service = mDataServiceDetail;
+        info.setLocation(new Location("10.786968", "106.666520"));
         mDataImage.add("image_1");
         mDataImage.add("image_2");
         info.setDataImage(mDataImage);
-        hotel.setInfomation(info);
-        refHotel.child(String.valueOf(System.currentTimeMillis())).setValue(new Gson().toJson(hotel));
+//        hotel.setRoom(new RoomModel(12, 8));
+
+
+//        hotel.setDataComment(mDataComment);
+//        hotel.setDataRating(mDataRating);
+//        hotel.service = mDataServiceDetail;
+
+//        hotel.setInfomation(info);
+//        refHotel.child(String.valueOf(System.currentTimeMillis())).setValue(new Gson().toJson(hotel));
+
+        refHotel_comment.child(mKey).setValue(new Gson().toJson(mListComment));
+        refHotel_rating.child(mKey).setValue(new Gson().toJson(mListRating));
+        refHotel_service.child(mKey).setValue(new Gson().toJson(mListService));
+        refHotel.child(mKey).setValue(new Gson().toJson(info));
+        refHotel_room.child(mKey).setValue(new Gson().toJson(new RoomModel(12, 8)));
     }
 }

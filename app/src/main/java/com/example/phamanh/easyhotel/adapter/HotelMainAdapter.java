@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
-import com.example.phamanh.easyhotel.model.HotelModel;
+import com.example.phamanh.easyhotel.model.InfomationModel;
 
 import java.util.List;
 
@@ -21,11 +21,11 @@ import butterknife.ButterKnife;
 
 public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.HotelHolder> {
 
-    private List<HotelModel> mData;
+    private List<InfomationModel> mData;
     private ItemListener itemListener;
-    private HotelModel model;
+    private InfomationModel model;
 
-    public HotelMainAdapter(List<HotelModel> mData) {
+    public HotelMainAdapter(List<InfomationModel> mData) {
         this.mData = mData;
     }
 
@@ -42,9 +42,9 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
     @Override
     public void onBindViewHolder(HotelHolder holder, int position) {
         model = mData.get(position);
-        holder.tvAddress.setText(model.getInfomation().getAddress());
-        holder.tvTitle.setText(model.getInfomation().getName());
-        holder.ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(model.getInfomation().getLogo(), Base64.DEFAULT), 0, Base64.decode(model.getInfomation().getLogo(), Base64.DEFAULT).length));
+        holder.tvAddress.setText(model.getAddress());
+        holder.tvTitle.setText(model.getName());
+        holder.ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(model.getLogo(), Base64.DEFAULT), 0, Base64.decode(model.getLogo(), Base64.DEFAULT).length));
     }
 
     @Override

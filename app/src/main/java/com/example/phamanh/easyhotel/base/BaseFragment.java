@@ -29,7 +29,6 @@ public class BaseFragment extends Fragment {
     public DatabaseReference refHotel_comment = firebaseDatabase.getReference("hotel").child(Constant.COMMENT);
     public DatabaseReference refHotel_rating = firebaseDatabase.getReference("hotel").child(Constant.RATING);
 
-
     public void setActionBar(View view, String title) {
         if (getActivity() instanceof BaseActivity) {
             ((BaseActivity) getActivity()).setActionBar(view, title);

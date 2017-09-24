@@ -14,6 +14,7 @@ public class Constant {
     public static final String EMAIL = "email";
     public static final String INDEX_TAB_LOCATION_KEY = "index_tab_location";
     public static final String BASE_MODEL = "base_model";
+    public static final String KEY = "key";
     public static final String TITLE_INTRO = "title_intro";
     public static final String IMAGE_INTRO = "image_intro";
     public static final String SIGNUP_EMAIL = "signup_email";
