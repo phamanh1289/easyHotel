@@ -17,22 +17,65 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_100sdp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_16sdp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_70sdp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:paddingLeft="@dimen/_16sdp"
+                android:paddingRight="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="horizontal">
 
-                <include layout="@layout/view_loading_image"/>
+                <FrameLayout
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp">
 
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/fragProfile_ivBanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_no_image"
-                    app:riv_corner_radius="@dimen/_90sdp"/>
-            </FrameLayout>
+                    <include layout="@layout/view_loading_image"/>
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/fragProfile_ivBanner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_no_image"
+                        app:riv_corner_radius="@dimen/_90sdp"/>
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:orientation="vertical">
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:fletPaddingBottom="@dimen/_8sdp"
+                        app:fletTextAppearance="@color/greyishBrownThree">
+
+                        <EditText
+
+                            android:id="@+id/fragProfile_tvEmail"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:focusable="false"
+                            android:hint="@string/email"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <include layout="@layout/base_line"/>
+                </LinearLayout>
+            </LinearLayout>
 
 
             <LinearLayout
@@ -239,40 +282,6 @@
                     <include layout="@layout/base_line"/>
                 </LinearLayout>
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/_16sdp"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:fletPaddingBottom="@dimen/_8sdp"
-                        app:fletTextAppearance="@color/greyishBrownThree">
-
-                        <EditText
-
-                            android:id="@+id/fragProfile_tvEmail"
-                            fontPath="@string/Helvetica_light"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_2sdp"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:background="@null"
-                            android:focusable="false"
-                            android:hint="@string/email"
-                            android:inputType="textCapWords"
-                            android:textColor="@color/denimBlue"
-                            android:textColorHint="@color/denimBlue"
-                            android:textSize="13.5sp"/>
-                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
-
-                    <include layout="@layout/base_line"/>
-                </LinearLayout>
 
 
             </LinearLayout>

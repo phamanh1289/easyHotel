@@ -121,7 +121,7 @@ public class ProfileFragment extends BaseFragment {
         tvDOB.setText(getUser().getDob());
         tvAddress.setText(getUser().getAddress());
         tvMobilePhone.setText(getUser().getPhone());
-        Glide.with(getContext()).load(getUser().getAvatar()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(120, 120).centerCrop()).listener(new RequestListener<Drawable>() {
+        Glide.with(getContext()).load(getUser().getAvatar()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(210, 210).centerCrop()).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 AppUtils.showAlert(getActivity(), getString(R.string.error), "Load avatar failed.", null);
