@@ -20,9 +20,11 @@ public class Constant {
     public static final String SIGNUP_EMAIL = "signup_email";
     public static final String SIGNUP_PASSWORD = "signup_password";
     public static final String INFOMATION = "infomation";
+    public static final String IMAGE = "image";
     public static final String SERVICE = "service";
     public static final String ROOM = "room";
     public static final String RATING = "rating";
     public static final String COMMENT = "comment";
     public static final String BOOKING = "booking";
+    public static final String IMAGE_DEFAULT = "https://firebasestorage.googleapis.com/v0/b/easy-hotel-25f40.appspot.com/o/ic_no_image.png?alt=media&token=2c1fa369-5a5b-4da8-b768-8ec9c134e0c4";
 }

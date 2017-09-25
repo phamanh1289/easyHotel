@@ -17,9 +17,9 @@ import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.model.ListRating;
 import com.example.phamanh.easyhotel.utils.Constant;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -70,48 +70,30 @@ public class BookingCommentParrent extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             mKey = bundle.getString(Constant.KEY);
+            toGetData();
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.BASE_MODEL);
-            adapter = new BookingCommentPager(getChildFragmentManager());
-            viewpager.setAdapter(adapter);
-            tabBookComment.setupWithViewPager(viewpager);
-            tabBookComment.getTabAt(0).setText("Detail");
-            tabBookComment.getTabAt(1).setText("Booking");
-            tabBookComment.getTabAt(2).setText("Comment");
+//            adapter = new BookingCommentPager(getChildFragmentManager());
+//            viewpager.setAdapter(adapter);
+//            tabBookComment.setupWithViewPager(viewpager);
+//            tabBookComment.getTabAt(0).setText("Detail");
+//            tabBookComment.getTabAt(1).setText("Booking");
+//            tabBookComment.getTabAt(2).setText("Comment");
         }
-        toGetData();
     }
 
     private void toGetData() {
         showLoading();
-        refHotel_rating.addChildEventListener(new ChildEventListener() {
+        refHotel_rating.child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (mKey.equals(dataSnapshot.getKey())) {
-                    try {
-                        Gson gson = new Gson();
-                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        if (jsonObject != null)
-                            mDataRating = gson.fromJson(jsonObject.toString(), ListRating.class);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    if (jsonObject != null)
+                        mDataRating = gson.fromJson(jsonObject.toString(), ListRating.class);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -120,41 +102,110 @@ public class BookingCommentParrent extends BaseFragment {
             }
         });
 
-        refHotel_comment.addChildEventListener(new ChildEventListener() {
+        refHotel_comment.child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (mKey.equals(dataSnapshot.getKey())) {
-                    try {
-                        Gson gson = new Gson();
-                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        if (jsonObject != null)
-                            mCommentModel = gson.fromJson(jsonObject.toString(), ListComment.class);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    if (jsonObject != null)
+                        mCommentModel = gson.fromJson(jsonObject.toString(), ListComment.class);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                adapter = new BookingCommentPager(getChildFragmentManager());
+                viewpager.setAdapter(adapter);
+                tabBookComment.setupWithViewPager(viewpager);
+                tabBookComment.getTabAt(0).setText("Detail");
+                tabBookComment.getTabAt(1).setText("Booking");
+                tabBookComment.getTabAt(2).setText("Comment");
                 dismissLoading();
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+
+//        refHotel_rating.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                if (mKey.equals(dataSnapshot.getKey())) {
+//                    try {
+//                        Gson gson = new Gson();
+//                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+//                        if (jsonObject != null)
+//                            mDataRating = gson.fromJson(jsonObject.toString(), ListRating.class);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//        refHotel_comment.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                if (mKey.equals(dataSnapshot.getKey())) {
+//                    try {
+//                        Gson gson = new Gson();
+//                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+//                        if (jsonObject != null)
+//                            mCommentModel = gson.fromJson(jsonObject.toString(), ListComment.class);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                adapter = new BookingCommentPager(getChildFragmentManager());
+//                viewpager.setAdapter(adapter);
+//                tabBookComment.setupWithViewPager(viewpager);
+//                tabBookComment.getTabAt(0).setText("Detail");
+//                tabBookComment.getTabAt(1).setText("Booking");
+//                tabBookComment.getTabAt(2).setText("Comment");
+//                dismissLoading();
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     @Override

@@ -13,6 +13,8 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.HotelMainAdapter;
 import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.fragment.settings.ProfileFragment;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.CommentModel;
 import com.example.phamanh.easyhotel.model.HotelModel;
@@ -29,6 +31,7 @@ import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -82,43 +85,26 @@ public class HomeFragment extends BaseFragment {
         adapter.setItemListener(toClickItem);
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new LinearLayoutManager(getContext()));
+        toGetDataHotel();
         toGetProfile();
 //        toAddDataDemo();
-        toGetDataHotel();
     }
 
     private void toGetProfile() {
         showLoading();
-        refMember.addChildEventListener(new ChildEventListener() {
+        refMember.child(mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getKey().equals(mUser.getUid())) {
-                    try {
-                        Gson gson = new Gson();
-                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
-                        BaseApplication application = (BaseApplication) getActivity().getApplication();
-                        application.setCustomer(userModel);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
+                    BaseApplication application = (BaseApplication) getActivity().getApplication();
+                    application.setCustomer(userModel);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
                 dismissLoading();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
@@ -127,6 +113,18 @@ public class HomeFragment extends BaseFragment {
             }
         });
     }
+
+    DialogListener toUpdateProfile = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            addFragment(new ProfileFragment(), true);
+        }
+
+        @Override
+        public void onCancelClicked() {
+
+        }
+    };
 
     private void toGetDataHotel() {
         if (mDataInfomation.size() != 0)

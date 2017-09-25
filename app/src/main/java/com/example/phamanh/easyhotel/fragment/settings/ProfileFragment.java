@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +23,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.ImageOrientation;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.wang.avi.AVLoadingIndicatorView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -66,10 +76,12 @@ public class ProfileFragment extends BaseFragment {
     ImageView ivFemale;
     @BindView(R.id.fragProfile_ivBanner)
     RoundedImageView ivBanner;
+    @BindView(R.id.item_avLoading)
+    AVLoadingIndicatorView avLoading;
 
     public final int RQ_SELECT_PHOTO = 1;
     public final int MY_PERMISSIONS_REQUEST_READ_STORE = 2;
-    private String imgBitMap;
+    private Bitmap bitmapChoice;
 
     @Nullable
     @Override
@@ -102,12 +114,6 @@ public class ProfileFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    private void toPostUpdateProfile() {
-        refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(tvEmail.getText().toString(), tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(),
-                tvDOB.getText().toString(), tvAddress.getText().toString(), tvMobilePhone.getText().toString(), imgBitMap)));
-        dismissLoading();
-        AppUtils.showAlert(getContext(), getString(R.string.complete), "Update successfully.", null);
-    }
 
     private void toGetProfile() {
         tvEmail.setText(getUser().getEmail());
@@ -115,8 +121,38 @@ public class ProfileFragment extends BaseFragment {
         tvDOB.setText(getUser().getDob());
         tvAddress.setText(getUser().getAddress());
         tvMobilePhone.setText(getUser().getPhone());
-        if (!getUser().getAvatar().equals(""))
-            ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(getUser().getAvatar(), Base64.DEFAULT), 0, Base64.decode(getUser().getAvatar(), Base64.DEFAULT).length));
+        Glide.with(getContext()).load(getUser().getAvatar()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(120, 120).centerCrop()).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                AppUtils.showAlert(getActivity(), getString(R.string.error), "Load avatar failed.", null);
+                dismissLoading();
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                avLoading.setVisibility(View.GONE);
+                return false;
+            }
+        }).into(ivBanner);
+
+//        final long ONE_MEGABYTE = 1024 * 1024;
+//        StorageReference httpsReference = mFirebaseStorage.getReferenceFromUrl(getUser().getAvatar());
+//        httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                ivBanner.setImageBitmap(Bitmap.createScaledBitmap(bmp, 1024,
+//                        1024, false));
+//                dismissLoading();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                dismissLoading();
+//                AppUtils.showAlert(getActivity(), getString(R.string.error), "Load avatar failed.", null);
+//            }
+//        });
         handleSexSelected(getUser().getGender().equals(getString(R.string.male)));
         dismissLoading();
     }
@@ -191,12 +227,51 @@ public class ProfileFragment extends BaseFragment {
                 options.inJustDecodeBounds = false;
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri), null, options);
                 Bitmap bitmapNew = ImageOrientation.modifyOrientation(getActivity(), bitmap, uri);
-                ivBanner.setImageBitmap(AppUtils.getResizedBitmap(bitmapNew, 1080));
-                imgBitMap = AppUtils.toChangeBitmap(bitmapNew);
+                bitmapChoice = AppUtils.getResizedBitmap(bitmapNew, 1080);
+                ivBanner.setImageBitmap(bitmapChoice);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void toPostUpdateImage() {
+        UserModel user = new UserModel(tvEmail.getText().toString(), tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(),
+                tvDOB.getText().toString(), tvAddress.getText().toString(), tvMobilePhone.getText().toString(), getUser().getAvatar());
+        if (bitmapChoice != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmapChoice.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] dataImage = baos.toByteArray();
+            UploadTask uploadTask = refStorage.child("member_" + mUser.getUid() + ".jpeg").putBytes(dataImage);
+            uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), getString(R.string.error), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                user.setAvatar(downloadUrl.toString());
+                refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
+                toSetNewUser(getUser(), user);
+                AppUtils.showAlert(getContext(), getString(R.string.complete), "Update successfully.", null);
+                dismissLoading();
+            });
+        } else {
+            refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
+            toSetNewUser(getUser(), user);
+            AppUtils.showAlert(getContext(), getString(R.string.complete), "Update successfully.", null);
+            dismissLoading();
+        }
+    }
+
+    private void toSetNewUser(UserModel oldModel, UserModel newModel) {
+        oldModel.setFullName(newModel.getFullName());
+        oldModel.setAvatar(newModel.getAvatar());
+        oldModel.setAddress(newModel.getAddress());
+        oldModel.setDob(newModel.getDob());
+        oldModel.setGender(newModel.getGender());
+        oldModel.setPhone(newModel.getPhone());
+    }
+
+    private boolean toCheckChangeText() {
+        String s = tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female);
+        return !tvEmail.getText().toString().equals(getUser().getFullName()) || !tvDOB.getText().toString().equals(getUser().getDob()) || !tvMobilePhone.getText().toString().equals(getUser().getPhone()) || !tvAddress.getText().toString().equals(getUser().getAddress()) || !s.equals(getUser().getGender()) || bitmapChoice != null;
     }
 
     @OnClick({R.id.fragProfile_llMale, R.id.fragProfile_llFemale, R.id.fragProfile_tvSubmit, R.id.fragProfile_tvDOB, R.id.fragProfile_ivBanner})
@@ -218,7 +293,12 @@ public class ProfileFragment extends BaseFragment {
 
                         @Override
                         public void onFinish() {
-                            toPostUpdateProfile();
+                            if (toCheckChangeText())
+                                toPostUpdateImage();
+                            else {
+                                AppUtils.showAlert(getContext(), getString(R.string.warning), "Profile not change data !", null);
+                                dismissLoading();
+                            }
                         }
                     }.start();
                 } else checkValidInput();

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/whiteThree"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/whiteThree"
+              android:orientation="vertical">
 
-    <include layout="@layout/base_action_bar_home" />
+    <include layout="@layout/base_action_bar_home"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,15 +17,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/fragProfile_ivBanner"
+            <FrameLayout
                 android:layout_width="@dimen/_100sdp"
                 android:layout_height="@dimen/_100sdp"
-                android:scaleType="centerCrop"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_no_image"
-                android:layout_marginTop="@dimen/_16sdp"
-                app:riv_corner_radius="@dimen/_90sdp" />
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <include layout="@layout/view_loading_image"/>
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/fragProfile_ivBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_no_image"
+                    app:riv_corner_radius="@dimen/_90sdp"/>
+            </FrameLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,10 +73,10 @@
                                 android:inputType="textCapWords"
                                 android:textColor="@color/denimBlue"
                                 android:textColorHint="@color/denimBlue"
-                                android:textSize="13.5sp" />
+                                android:textSize="13.5sp"/>
                         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-                        <include layout="@layout/base_line" />
+                        <include layout="@layout/base_line"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -91,15 +99,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_16sdp"
                                 android:background="@null"
-                                android:inputType="date"
                                 android:focusable="false"
                                 android:hint="@string/dob"
+                                android:inputType="date"
                                 android:textColor="@color/denimBlue"
                                 android:textColorHint="@color/denimBlue"
-                                android:textSize="13.5sp" />
+                                android:textSize="13.5sp"/>
                         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-                        <include layout="@layout/base_line" />
+                        <include layout="@layout/base_line"/>
                     </LinearLayout>
 
 
@@ -135,10 +143,10 @@
                                 android:inputType="number"
                                 android:textColor="@color/denimBlue"
                                 android:textColorHint="@color/denimBlue"
-                                android:textSize="13.5sp" />
+                                android:textSize="13.5sp"/>
                         </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-                        <include layout="@layout/base_line" />
+                        <include layout="@layout/base_line"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -160,7 +168,7 @@
                                 android:id="@+id/fragProfile_ivMale"
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/selector_male" />
+                                android:src="@drawable/selector_male"/>
 
                             <TextView
                                 android:id="@+id/fragProfile_tvMale"
@@ -170,7 +178,7 @@
                                 android:gravity="bottom"
                                 android:text="@string/male"
                                 android:textColor="@drawable/selector_text"
-                                android:textSize="@dimen/_9sdp" />
+                                android:textSize="@dimen/_9sdp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -184,7 +192,7 @@
                                 android:id="@+id/fragProfile_ivFemale"
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/selector_female" />
+                                android:src="@drawable/selector_female"/>
 
                             <TextView
                                 android:id="@+id/fragProfile_tvFemale"
@@ -194,7 +202,7 @@
                                 android:gravity="bottom"
                                 android:text="@string/female"
                                 android:textColor="@drawable/selector_text"
-                                android:textSize="@dimen/_9sdp" />
+                                android:textSize="@dimen/_9sdp"/>
                         </LinearLayout>
 
                     </LinearLayout>
@@ -225,10 +233,10 @@
                             android:inputType="textCapWords"
                             android:textColor="@color/denimBlue"
                             android:textColorHint="@color/denimBlue"
-                            android:textSize="13.5sp" />
+                            android:textSize="13.5sp"/>
                     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-                    <include layout="@layout/base_line" />
+                    <include layout="@layout/base_line"/>
                 </LinearLayout>
 
 
@@ -255,15 +263,15 @@
                             android:layout_marginBottom="@dimen/_2sdp"
                             android:layout_marginTop="@dimen/_16sdp"
                             android:background="@null"
-                            android:hint="@string/email"
                             android:focusable="false"
+                            android:hint="@string/email"
                             android:inputType="textCapWords"
                             android:textColor="@color/denimBlue"
                             android:textColorHint="@color/denimBlue"
-                            android:textSize="13.5sp" />
+                            android:textSize="13.5sp"/>
                     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
-                    <include layout="@layout/base_line" />
+                    <include layout="@layout/base_line"/>
                 </LinearLayout>
 
 
@@ -287,7 +295,7 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:text="@string/submit"
                     android:textColor="@color/whiteThree"
-                    android:textSize="17sp" />
+                    android:textSize="17sp"/>
             </FrameLayout>
         </LinearLayout>
     </ScrollView>

@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.model.CommentModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
@@ -37,7 +40,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     @Override
     public void onBindViewHolder(CommentHolder holder, int position) {
         item = mData.get(position);
-        holder.ivUser.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(item.getImage(), Base64.DEFAULT), 0, Base64.decode(item.getImage(), Base64.DEFAULT).length));
+        if (item.getImage().equals(""))
+            holder.ivUser.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(item.getImage(), Base64.DEFAULT), 0, Base64.decode(item.getImage(), Base64.DEFAULT).length));
+        else
+            Glide.with(holder.itemView.getContext()).load(R.drawable.ic_no_image).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(holder.ivUser);
         holder.tvDescription.setText(item.getContent());
         holder.tvUser.setText(item.getEmail());
         holder.tvDate.setText(AppUtils.convertTime(item.getTime()));

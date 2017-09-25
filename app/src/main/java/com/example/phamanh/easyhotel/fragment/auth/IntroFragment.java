@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.utils.Constant;
@@ -50,7 +51,7 @@ public class IntroFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             tvTitle.setText(bundle.getString(Constant.TITLE_INTRO));
-            Glide.with(getContext()).load(bundle.getInt(Constant.IMAGE_INTRO)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(ivBanner);
+            Glide.with(getContext()).load(bundle.getInt(Constant.IMAGE_INTRO)).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(ivBanner);
         }
     }
 

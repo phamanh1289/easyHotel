@@ -55,6 +55,7 @@ public class CommentFragment extends BaseFragment {
         if (mDataComment.size() != 0)
             mDataComment.clear();
         mDataComment.addAll(((BookingCommentParrent) getParentFragment()).mCommentModel.comment);
+        mDataComment.stream().filter(model -> model.getEmail().equals(mUser.getEmail())).forEach(model -> model.setImage(getUser().getAvatar()));
         adapter = new CommentAdapter(mDataComment);
         rvComment.setAdapter(adapter);
         rvComment.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -77,8 +77,9 @@ public class HomeDetailFragment extends BaseFragment {
             rating = (int) v;
             AppUtils.showAlert(getContext(), getString(R.string.complete), "Would you like to rating " + rating + " for the hotel ?", toRating);
         });
-//        if (((BookingCommentParrent) getParentFragment()).mDataRating != null)
-//            tvScore.setText(toCountScore(((BookingCommentParrent) getParentFragment()).mDataRating.rating));
+        if (mDataRating.size() == 0)
+            mDataRating.addAll(((BookingCommentParrent) getParentFragment()).mDataRating.rating);
+        tvScore.setText(toCountScore(mDataRating));
     }
 
     DialogListener toRating = new DialogListener() {
@@ -112,9 +113,9 @@ public class HomeDetailFragment extends BaseFragment {
 
     @OnClick(R.id.fragHomeDetail_tvScore)
     public void onViewClicked() {
-        if (mDataRating.size() == 0)
-            mDataRating.addAll(((BookingCommentParrent) getParentFragment()).mDataRating.rating);
-        tvScore.setText(toCountScore(mDataRating));
+//        if (mDataRating.size() == 0)
+//            mDataRating.addAll(((BookingCommentParrent) getParentFragment()).mDataRating.rating);
+//        tvScore.setText(toCountScore(mDataRating));
         RatingDialog ratingDialog = new RatingDialog(getContext(), mDataRating);
         ratingDialog.show();
     }

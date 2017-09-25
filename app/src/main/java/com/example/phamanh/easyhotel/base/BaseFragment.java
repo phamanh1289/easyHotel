@@ -13,21 +13,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class BaseFragment extends Fragment {
 
     public FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public FirebaseUser mUser = mAuth.getCurrentUser();
-    public FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    public DatabaseReference refMember = firebaseDatabase.getReference("member").child(Constant.INFOMATION);
-    public DatabaseReference refMember_booking = firebaseDatabase.getReference("member").child(Constant.BOOKING);
-    public DatabaseReference refMember_comment = firebaseDatabase.getReference("member").child(Constant.COMMENT);
-    public DatabaseReference refMember_rating = firebaseDatabase.getReference("member").child(Constant.RATING);
-    public DatabaseReference refHotel = firebaseDatabase.getReference("hotel").child(Constant.INFOMATION);
-    public DatabaseReference refHotel_service = firebaseDatabase.getReference("hotel").child(Constant.SERVICE);
-    public DatabaseReference refHotel_room = firebaseDatabase.getReference("hotel").child(Constant.ROOM);
-    public DatabaseReference refHotel_comment = firebaseDatabase.getReference("hotel").child(Constant.COMMENT);
-    public DatabaseReference refHotel_rating = firebaseDatabase.getReference("hotel").child(Constant.RATING);
+    public FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
+    public StorageReference refStorage = FirebaseStorage.getInstance("gs://easy-hotel-25f40.appspot.com").getReference();
+    public DatabaseReference refMember = FirebaseDatabase.getInstance().getReference("member").child(Constant.INFOMATION);
+    public DatabaseReference refMember_image = FirebaseDatabase.getInstance().getReference("member").child(Constant.IMAGE);
+    public DatabaseReference refMember_booking = FirebaseDatabase.getInstance().getReference("member").child(Constant.BOOKING);
+    public DatabaseReference refMember_comment = FirebaseDatabase.getInstance().getReference("member").child(Constant.COMMENT);
+    public DatabaseReference refMember_rating = FirebaseDatabase.getInstance().getReference("member").child(Constant.RATING);
+    public DatabaseReference refHotel = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.INFOMATION);
+    public DatabaseReference refHotel_service = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.SERVICE);
+    public DatabaseReference refHotel_room = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.ROOM);
+    public DatabaseReference refHotel_comment = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.COMMENT);
+    public DatabaseReference refHotel_rating = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.RATING);
 
     public void setActionBar(View view, String title) {
         if (getActivity() instanceof BaseActivity) {
