@@ -6,13 +6,24 @@
               android:clickable="true"
               android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/fragComment_tvNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/no_comment_for_the_hotel"
+        android:textColor="@color/denimBlue"
+        android:textSize="@dimen/_20sdp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragComment_rvComment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingBottom="@dimen/_12sdp">
+        android:paddingBottom="@dimen/_12sdp"
+        android:visibility="gone">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -21,8 +32,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:background="@drawable/shape_backgound"
         android:layout_margin="@dimen/_4sdp"
+        android:background="@drawable/shape_backgound"
         android:orientation="horizontal">
 
         <EditText
@@ -31,10 +42,10 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/_6sdp"
             android:layout_weight="1"
-            android:maxLines="2"
-            android:inputType="text"
             android:background="@null"
             android:hint="@string/enter_comment"
+            android:inputType="text"
+            android:maxLines="2"
             android:textColor="@color/greyishBrownThree"
             android:textSize="@dimen/_12sdp"/>
 
@@ -42,11 +53,11 @@
             android:id="@+id/fragComment_tvEnter"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
-            android:background="@drawable/selector_text_view_red"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/_3sdp"
+            android:background="@drawable/selector_text_view_red"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/enter"
-            android:layout_gravity="center_vertical"
             android:textColor="@color/whiteThree"/>
     </LinearLayout>
 </LinearLayout>

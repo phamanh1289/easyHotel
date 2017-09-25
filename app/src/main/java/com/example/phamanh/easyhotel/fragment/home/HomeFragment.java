@@ -31,7 +31,6 @@ import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -86,30 +85,42 @@ public class HomeFragment extends BaseFragment {
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new LinearLayoutManager(getContext()));
         toGetDataHotel();
-        toGetProfile();
+        if (getUser() == null)
+            toGetDataProfile();
 //        toAddDataDemo();
     }
 
-    private void toGetProfile() {
-        showLoading();
-        refMember.child(mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void toGetDataProfile() {
+        refMember.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    Gson gson = new Gson();
-                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                    UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
-                    BaseApplication application = (BaseApplication) getActivity().getApplication();
-                    application.setCustomer(userModel);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (mUser.getUid().equals(dataSnapshot.getKey())) {
+                    try {
+                        Gson gson = new Gson();
+                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                        UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
+                        BaseApplication application = (BaseApplication) getActivity().getApplication();
+                        application.setCustomer(userModel);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                dismissLoading();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }

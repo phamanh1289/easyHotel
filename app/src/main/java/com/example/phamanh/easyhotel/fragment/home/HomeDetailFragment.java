@@ -5,20 +5,28 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListRating;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.other.view.RatingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.gson.Gson;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.willy.ratingbar.RotationRatingBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +49,15 @@ public class HomeDetailFragment extends BaseFragment {
     @BindView(R.id.fragHomeDetail_ratingStart)
     RotationRatingBar ratingStar;
     @BindView(R.id.fragHomeDetail_tvScore)
-    TextView tvScore;
+    EditText tvScore;
+    @BindView(R.id.item_avLoading)
+    AVLoadingIndicatorView avLoading;
 
     private InfomationModel mInfomationModel;
     private int rating;
-    private List<RatingModel> mDataRating = new ArrayList<>();
+    public List<RatingModel> mDataRating = new ArrayList<>();
     private String mKey;
+    private RatingDialog ratingDialog;
 
     Unbinder unbinder;
 
@@ -65,7 +76,7 @@ public class HomeDetailFragment extends BaseFragment {
     private void init() {
         mInfomationModel = ((BookingCommentParrent) getParentFragment()).mInfomationModel;
         mKey = ((BookingCommentParrent) getParentFragment()).mKey;
-
+        avLoading.setVisibility(tvScore.getText().toString().length() != 0 ? View.GONE : View.VISIBLE);
         if (mInfomationModel != null) {
             tvTitle.setText(mInfomationModel.getName());
             tvDescription.setText(mInfomationModel.getDescription());
@@ -77,9 +88,6 @@ public class HomeDetailFragment extends BaseFragment {
             rating = (int) v;
             AppUtils.showAlert(getContext(), getString(R.string.complete), "Would you like to rating " + rating + " for the hotel ?", toRating);
         });
-        if (mDataRating.size() == 0)
-            mDataRating.addAll(((BookingCommentParrent) getParentFragment()).mDataRating.rating);
-        tvScore.setText(toCountScore(mDataRating));
     }
 
     DialogListener toRating = new DialogListener() {
@@ -111,12 +119,34 @@ public class HomeDetailFragment extends BaseFragment {
         return String.format("%.01f", (float) score / mData.size());
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusBooking mData) {
+        if (mData.action.equals(Constant.ACTION_RATING)) {
+            if (mDataRating.size() == 0)
+                mDataRating.addAll(((BookingCommentParrent) getParentFragment()).mDataRating.rating);
+            avLoading.setVisibility(View.GONE);
+            tvScore.setText(toCountScore(mDataRating));
+        }
+        EventBus.getDefault().removeStickyEvent(mData);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     @OnClick(R.id.fragHomeDetail_tvScore)
     public void onViewClicked() {
-//        if (mDataRating.size() == 0)
-//            mDataRating.addAll(((BookingCommentParrent) getParentFragment()).mDataRating.rating);
-//        tvScore.setText(toCountScore(mDataRating));
-        RatingDialog ratingDialog = new RatingDialog(getContext(), mDataRating);
-        ratingDialog.show();
+        if (avLoading.getVisibility() != View.VISIBLE) {
+            RatingDialog ratingDialog = new RatingDialog(getContext(), mDataRating);
+            ratingDialog.show();
+        }
     }
 }

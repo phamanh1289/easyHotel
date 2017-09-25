@@ -14,9 +14,15 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.CommentAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.CommentModel;
+import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +41,8 @@ public class CommentFragment extends BaseFragment {
     EditText etContent;
     @BindView(R.id.fragComment_tvEnter)
     TextView tvEnter;
+    @BindView(R.id.fragComment_tvNoData)
+    TextView tvNoData;
     Unbinder unbinder;
 
     private CommentAdapter adapter;
@@ -54,8 +62,6 @@ public class CommentFragment extends BaseFragment {
         mKey = ((BookingCommentParrent) getParentFragment()).mKey;
         if (mDataComment.size() != 0)
             mDataComment.clear();
-        mDataComment.addAll(((BookingCommentParrent) getParentFragment()).mCommentModel.comment);
-        mDataComment.stream().filter(model -> model.getEmail().equals(mUser.getEmail())).forEach(model -> model.setImage(getUser().getAvatar()));
         adapter = new CommentAdapter(mDataComment);
         rvComment.setAdapter(adapter);
         rvComment.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -69,6 +75,36 @@ public class CommentFragment extends BaseFragment {
         return true;
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusBooking mData) {
+        if (mData.action.equals(Constant.ACTION_COMMENT)) {
+            if (mDataComment.size() == 0) {
+                mDataComment.addAll(((BookingCommentParrent) getParentFragment()).mCommentModel.comment);
+                rvComment.setVisibility(mDataComment.size() != 0 ? View.VISIBLE : View.GONE);
+                tvNoData.setVisibility(mDataComment.size() != 0 ? View.GONE : View.VISIBLE);
+                for (CommentModel model : mDataComment) {
+                    if (model.getEmail().equals(mUser.getEmail())) {
+                        model.setImage(getUser().getAvatar());
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        }
+        EventBus.getDefault().removeStickyEvent(mData);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -78,8 +114,11 @@ public class CommentFragment extends BaseFragment {
     @OnClick(R.id.fragComment_tvEnter)
     public void onViewClicked() {
         if (toValidate()) {
-            mDataComment.add(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString(), getUser().getAvatar()));
-            adapter.notifyDataSetChanged();
+            mDataComment.add(0, new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString(), getUser().getAvatar()));
+            tvNoData.setVisibility(View.GONE);
+            rvComment.setVisibility(View.VISIBLE);
+            adapter.notifyItemInserted(0);
+            rvComment.scrollToPosition(0);
             ListComment item = new ListComment(mDataComment);
             refHotel_comment.child(mKey).setValue(new Gson().toJson(item));
             etContent.setText("");

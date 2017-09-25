@@ -23,8 +23,8 @@ public class BookingCommentPager extends FragmentPagerAdapter {
 
     private void addFragments() {
         fragments.add(new HomeDetailFragment());
-        fragments.add(new BookingFragment());
         fragments.add(new CommentFragment());
+        fragments.add(new BookingFragment());
     }
 
     @Override

@@ -135,24 +135,6 @@ public class ProfileFragment extends BaseFragment {
                 return false;
             }
         }).into(ivBanner);
-
-//        final long ONE_MEGABYTE = 1024 * 1024;
-//        StorageReference httpsReference = mFirebaseStorage.getReferenceFromUrl(getUser().getAvatar());
-//        httpsReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                ivBanner.setImageBitmap(Bitmap.createScaledBitmap(bmp, 1024,
-//                        1024, false));
-//                dismissLoading();
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                dismissLoading();
-//                AppUtils.showAlert(getActivity(), getString(R.string.error), "Load avatar failed.", null);
-//            }
-//        });
         handleSexSelected(getUser().getGender().equals(getString(R.string.male)));
         dismissLoading();
     }

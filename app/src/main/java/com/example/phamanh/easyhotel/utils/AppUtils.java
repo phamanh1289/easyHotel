@@ -15,7 +15,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -30,7 +29,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.Format;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,6 +36,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class AppUtils {
 
@@ -169,19 +168,6 @@ public class AppUtils {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    public static String changeFile(String s) {
-        String[] result = s.split("/");
-        for (int i = 0; i < result.length; i++) {
-            if (i == result.length - 1)
-                return s = System.currentTimeMillis() + ".pdf";
-            else
-                return s += "/" + result[i] + "/";
-        }
-
-        return s;
-    }
-
-
     public static String convertKeyToString(String keyNamePolicy) {
         String result = "";
         switch (keyNamePolicy) {
@@ -233,36 +219,19 @@ public class AppUtils {
         return new String(chars);
     }
 
-    public static String formatMoney(Double money) {
-        NumberFormat dutchFormat = NumberFormat.getCurrencyInstance(Locale.US);
-        String twoDecimals = dutchFormat.format(money);
-        if (twoDecimals.matches(".*[.]...[,]00$")) {
-            String zeroDecimals = twoDecimals.substring(0, twoDecimals.length() - 3);
-            return zeroDecimals;
-        }
-        if (twoDecimals.endsWith(",00")) {
-            String zeroDecimals = String.format("€ %.0f,-", money);
-            return zeroDecimals;
-        } else {
-            return twoDecimals;
-        }
-    }
 
     public static void showPickTime(Context context, final EditText tvDate, boolean isCheck) {
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar now = Calendar.getInstance();
-                int yearCurrent = now.get(Calendar.YEAR);
-                if (!isCheck) {
-                    if ((yearCurrent - year < 18))
-                        showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
-                    else
-                        tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
-                } else
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context, (view, year, month, dayOfMonth) -> {
+            Calendar now = Calendar.getInstance();
+            int yearCurrent = now.get(Calendar.YEAR);
+            if (!isCheck) {
+                if ((yearCurrent - year < 18))
+                    showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
+                else
                     tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
-            }
+            } else
+                tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
         }, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
@@ -332,8 +301,7 @@ public class AppUtils {
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
             // Log exception
             return null;
@@ -356,7 +324,65 @@ public class AppUtils {
         return Base64.encodeToString(AppUtils.ImageView_byte(AppUtils.getResizedBitmap(bitmap, 1080)), Base64.DEFAULT);
     }
 
-    public static Bitmap toChangeString(String s){
+    public static Bitmap toChangeString(String s) {
         return BitmapFactory.decodeByteArray(Base64.decode(s, Base64.DEFAULT), 0, Base64.decode(s, Base64.DEFAULT).length);
+    }
+
+    public static String getTimeAgo(long timestamp) {
+
+        Calendar cal = Calendar.getInstance();
+        TimeZone tz = cal.getTimeZone();//get your local time zone.
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+        sdf.setTimeZone(tz);//set time zone.
+        String localTime = sdf.format(new Date(timestamp));
+        Date date = new Date();
+        try {
+            date = sdf.parse(localTime);//get local date
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (date == null) {
+            return null;
+        }
+
+        long time = date.getTime();
+
+        Date curDate = currentDate();
+        long now = curDate.getTime();
+        if (time > now || time <= 0) {
+            return null;
+        }
+
+        int timeDIM = getTimeDistanceInMinutes(time);
+
+        String timeAgo;
+        if (timeDIM < 1) {
+            return "A few second.";
+        } else if (timeDIM == 1) {
+            return "1 minute";
+        } else if (timeDIM >= 2 && timeDIM <= 59) {
+            timeAgo = timeDIM + " minutes";
+        } else if (timeDIM >= 60 && timeDIM <= 119) {
+            timeAgo = "1 hour";
+        } else if (timeDIM >= 120 && timeDIM <= 1439) {
+            timeAgo = (Math.round(timeDIM / 60)) + " hours";
+        } else if (timeDIM >= 1440 && timeDIM <= 2879) {
+            timeAgo = "1 day";
+        } else if (timeDIM >= 2880 && (Math.round(timeDIM / 1440)) < 7) {
+            timeAgo = (Math.round(timeDIM / 1440)) + " days";
+        } else timeAgo = convertTime(time);
+
+        return (Math.round(timeDIM / 1440)) < 7 ? timeAgo + " ago" : timeAgo;
+    }
+
+    public static Date currentDate() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTime();
+    }
+
+    private static int getTimeDistanceInMinutes(long time) {
+        long timeDistance = currentDate().getTime() - time;
+        return Math.round((Math.abs(timeDistance) / 1000) / 60);
     }
 }

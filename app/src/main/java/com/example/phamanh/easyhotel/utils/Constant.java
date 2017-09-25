@@ -5,6 +5,9 @@ public class Constant {
 
     public static final String GOOGLE_API_URL = "https://maps.googleapis.com/maps/";
     public static final String TYPE_LOGIN = "type_login";
+    public static final String NO_ACTION = "no_action";
+    public static final String ACTION_RATING = "action_rating";
+    public static final String ACTION_COMMENT = "action_comment";
     public static final String LOGIN_NORMAL = "normal";
     public static final String LOGIN_SOCIAL = "social";
     public static final String USERNAME = "user_name";

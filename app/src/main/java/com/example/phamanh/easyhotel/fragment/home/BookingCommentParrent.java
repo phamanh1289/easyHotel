@@ -13,6 +13,7 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.BookingCommentPager;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.base.BaseModel;
+import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.model.ListRating;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,14 +72,14 @@ public class BookingCommentParrent extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             mKey = bundle.getString(Constant.KEY);
-            toGetData();
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.BASE_MODEL);
-//            adapter = new BookingCommentPager(getChildFragmentManager());
-//            viewpager.setAdapter(adapter);
-//            tabBookComment.setupWithViewPager(viewpager);
-//            tabBookComment.getTabAt(0).setText("Detail");
-//            tabBookComment.getTabAt(1).setText("Booking");
-//            tabBookComment.getTabAt(2).setText("Comment");
+            toGetData();
+            adapter = new BookingCommentPager(getChildFragmentManager());
+            viewpager.setAdapter(adapter);
+            tabBookComment.setupWithViewPager(viewpager);
+            tabBookComment.getTabAt(0).setText("Detail");
+            tabBookComment.getTabAt(1).setText("Comment");
+            tabBookComment.getTabAt(2).setText("Booking");
         }
     }
 
@@ -89,11 +91,14 @@ public class BookingCommentParrent extends BaseFragment {
                 try {
                     Gson gson = new Gson();
                     JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                    if (jsonObject != null)
+                    if (jsonObject != null) {
                         mDataRating = gson.fromJson(jsonObject.toString(), ListRating.class);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                EventBus.getDefault().postSticky(new EventBusBooking(Constant.ACTION_RATING));
             }
 
             @Override
@@ -105,20 +110,17 @@ public class BookingCommentParrent extends BaseFragment {
         refHotel_comment.child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    Gson gson = new Gson();
-                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                    if (jsonObject != null)
-                        mCommentModel = gson.fromJson(jsonObject.toString(), ListComment.class);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (dataSnapshot.getValue() != null){
+                    try {
+                        Gson gson = new Gson();
+                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                        if (jsonObject != null)
+                            mCommentModel = gson.fromJson(jsonObject.toString(), ListComment.class);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                adapter = new BookingCommentPager(getChildFragmentManager());
-                viewpager.setAdapter(adapter);
-                tabBookComment.setupWithViewPager(viewpager);
-                tabBookComment.getTabAt(0).setText("Detail");
-                tabBookComment.getTabAt(1).setText("Booking");
-                tabBookComment.getTabAt(2).setText("Comment");
+                EventBus.getDefault().postSticky(new EventBusBooking(Constant.ACTION_COMMENT));
                 dismissLoading();
             }
 
@@ -127,85 +129,6 @@ public class BookingCommentParrent extends BaseFragment {
 
             }
         });
-
-//        refHotel_rating.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                if (mKey.equals(dataSnapshot.getKey())) {
-//                    try {
-//                        Gson gson = new Gson();
-//                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-//                        if (jsonObject != null)
-//                            mDataRating = gson.fromJson(jsonObject.toString(), ListRating.class);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//        refHotel_comment.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                if (mKey.equals(dataSnapshot.getKey())) {
-//                    try {
-//                        Gson gson = new Gson();
-//                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-//                        if (jsonObject != null)
-//                            mCommentModel = gson.fromJson(jsonObject.toString(), ListComment.class);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                adapter = new BookingCommentPager(getChildFragmentManager());
-//                viewpager.setAdapter(adapter);
-//                tabBookComment.setupWithViewPager(viewpager);
-//                tabBookComment.getTabAt(0).setText("Detail");
-//                tabBookComment.getTabAt(1).setText("Booking");
-//                tabBookComment.getTabAt(2).setText("Comment");
-//                dismissLoading();
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @Override
