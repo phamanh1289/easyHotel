@@ -18,6 +18,7 @@ import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.model.ListRating;
 import com.example.phamanh.easyhotel.utils.Constant;
+import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -62,6 +63,7 @@ public class BookingCommentParrent extends BaseFragment {
         View view = inflater.inflate(R.layout.fragmen_booking_comment, container, false);
         setActionBar(view, getString(R.string.page_home_detail));
         setVisibilityTabBottom(View.GONE);
+        KeyboardUtils.setupUI(view, getActivity());
         unbinder = ButterKnife.bind(this, view);
         init();
         return view;
@@ -107,28 +109,6 @@ public class BookingCommentParrent extends BaseFragment {
             }
         });
 
-        refHotel_comment.child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null){
-                    try {
-                        Gson gson = new Gson();
-                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        if (jsonObject != null)
-                            mCommentModel = gson.fromJson(jsonObject.toString(), ListComment.class);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                EventBus.getDefault().postSticky(new EventBusBooking(Constant.ACTION_COMMENT));
-                dismissLoading();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override

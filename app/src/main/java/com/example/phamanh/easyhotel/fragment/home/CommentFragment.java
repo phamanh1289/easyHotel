@@ -18,11 +18,16 @@ import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,8 @@ public class CommentFragment extends BaseFragment {
     Unbinder unbinder;
 
     private CommentAdapter adapter;
+    private ListComment mListComment;
+    private CommentModel modelComment;
     private List<CommentModel> mDataComment = new ArrayList<>();
     private String mKey;
 
@@ -58,13 +65,69 @@ public class CommentFragment extends BaseFragment {
         return view;
     }
 
+    public static CommentFragment newInstance(String key) {
+
+        Bundle args = new Bundle();
+        args.putString("key", key);
+        CommentFragment fragment = new CommentFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private void init() {
+        showLoading();
         mKey = ((BookingCommentParrent) getParentFragment()).mKey;
-        if (mDataComment.size() != 0)
-            mDataComment.clear();
+//        if (mDataComment.size() != 0)
+//            mDataComment.clear();
         adapter = new CommentAdapter(mDataComment);
         rvComment.setAdapter(adapter);
         rvComment.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (mDataComment.size() != 0)
+            mDataComment.clear();
+        refHotel_comment.child(mKey).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                if (getArguments().getString("key").equals(dataSnapshot.getKey())) {
+                if (dataSnapshot.getValue() != null)
+                    try {
+                        Gson gson = new Gson();
+                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                        if (jsonObject != null) {
+                            modelComment = gson.fromJson(jsonObject.toString(), CommentModel.class);
+                            mDataComment.add(toChangeAvatarComment(dataSnapshot.getKey(), modelComment));
+                        }
+                        adapter.notifyItemInserted(mDataComment.size() - 1);
+                        rvComment.scrollToPosition(mDataComment.size() - 1);
+                        tvNoData.setVisibility(mDataComment.size() != 0 ? View.GONE : View.VISIBLE);
+                        rvComment.setVisibility(mDataComment.size() != 0 ? View.VISIBLE : View.GONE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+//                }
+                dismissLoading();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private boolean toValidate() {
@@ -73,6 +136,16 @@ public class CommentFragment extends BaseFragment {
             return false;
         }
         return true;
+    }
+
+    private CommentModel toChangeAvatarComment(String key, CommentModel item) {
+        if (item.getEmail().equals(getUser().getEmail())) {
+            if (!item.getImage().equals(getUser().getAvatar())) {
+                item.setImage(getUser().getAvatar());
+                refHotel_comment.child(mKey).child(key).setValue(new Gson().toJson(item));
+            }
+        }
+        return item;
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -114,13 +187,14 @@ public class CommentFragment extends BaseFragment {
     @OnClick(R.id.fragComment_tvEnter)
     public void onViewClicked() {
         if (toValidate()) {
-            mDataComment.add(0, new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString(), getUser().getAvatar()));
-            tvNoData.setVisibility(View.GONE);
-            rvComment.setVisibility(View.VISIBLE);
-            adapter.notifyItemInserted(0);
-            rvComment.scrollToPosition(0);
-            ListComment item = new ListComment(mDataComment);
-            refHotel_comment.child(mKey).setValue(new Gson().toJson(item));
+//            KeyboardUtils.hideSoftKeyboard(getActivity());
+//            mDataComment.add(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString(), getUser().getAvatar()));
+//            tvNoData.setVisibility(mDataComment.size() != 0 ? View.GONE : View.VISIBLE);
+//            rvComment.setVisibility(mDataComment.size() != 0 ? View.VISIBLE : View.GONE);
+//            adapter.notifyItemInserted(mDataComment.size());
+//            rvComment.scrollToPosition(mDataComment.size());
+//            ListComment item = new ListComment(mDataComment);
+            refHotel_comment.child(mKey).push().setValue(new Gson().toJson(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString(), getUser().getAvatar())));
             etContent.setText("");
         }
     }

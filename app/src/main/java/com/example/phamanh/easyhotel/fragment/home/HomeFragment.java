@@ -177,6 +177,13 @@ public class HomeFragment extends BaseFragment {
 
     ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos), mDataKey.get(pos)), true);
 
+//    ItemListener toClickItem = new ItemListener() {
+//        @Override
+//        public void onItemClicked(int pos) {
+//            addFragment(CommentFragment.newInstance(mDataKey.get(pos)),true);
+//        }
+//    };
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
