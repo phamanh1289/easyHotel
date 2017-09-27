@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.phamanh.easyhotel.R;
+import com.example.phamanh.easyhotel.interfaces.ItemListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,6 +17,11 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomHolder> {
 
     private int mData;
     private boolean isCheck;
+    private ItemListener mListener;
+
+    public void setListener(ItemListener listener) {
+        mListener = listener;
+    }
 
     public RoomAdapter(int data) {
         mData = data;
@@ -34,12 +40,11 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomHolder> {
     @Override
     public void onBindViewHolder(RoomHolder holder, int position) {
         holder.ivRoom.setImageResource(isCheck ? R.drawable.ic_signle_room_ok : R.drawable.ic_double_room_ok);
-
     }
 
     @Override
     public int getItemCount() {
-        return mData;
+        return mData != 0 ? mData : 0;
     }
 
     class RoomHolder extends RecyclerView.ViewHolder {
@@ -49,6 +54,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomHolder> {
         public RoomHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(view -> mListener.onItemClicked(getAdapterPosition()));
         }
     }
 }

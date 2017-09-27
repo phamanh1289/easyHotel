@@ -1,5 +1,6 @@
 package com.example.phamanh.easyhotel.adapter;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -61,7 +62,8 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                holder.ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                holder.mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                holder.ivBanner.setImageBitmap(holder.mBitmap);
                 holder.avLoading.setVisibility(View.GONE);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -78,7 +80,7 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
             public void onDataChange(DataSnapshot dataSnapshot) {
                 holder.ivDouble.setImageResource(Integer.parseInt(dataSnapshot.child("double").getValue().toString()) != 0 ? R.drawable.ic_double_room_ok : R.drawable.ic_double_room_null);
                 holder.ivSingle.setImageResource(Integer.parseInt(dataSnapshot.child("single").getValue().toString()) != 0 ? R.drawable.ic_signle_room_ok : R.drawable.ic_signle_room);
-            holder.tvBooking.setText(Integer.parseInt(dataSnapshot.child("double").getValue().toString()) == 0 && Integer.parseInt(dataSnapshot.child("double").getValue().toString()) == 0 ? holder.itemView.getContext().getString(R.string.out_room) : holder.itemView.getContext().getString(R.string.booking));
+                holder.tvBooking.setText(Integer.parseInt(dataSnapshot.child("double").getValue().toString()) == 0 && Integer.parseInt(dataSnapshot.child("double").getValue().toString()) == 0 ? holder.itemView.getContext().getString(R.string.out_room) : holder.itemView.getContext().getString(R.string.booking));
             }
 
             @Override
@@ -109,11 +111,15 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         ImageView ivSingle;
         @BindView(R.id.itemHome_tvBooking)
         TextView tvBooking;
+        private Bitmap mBitmap;
 
         public HotelHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(view -> itemListener.onItemClicked(getAdapterPosition()));
+            itemView.setOnClickListener(view -> {
+                itemListener.onItemClicked(getAdapterPosition());
+
+            });
         }
     }
 }

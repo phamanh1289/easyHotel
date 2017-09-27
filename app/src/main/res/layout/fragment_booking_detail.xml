@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/whiteThree"
+              android:clickable="true"
+              android:orientation="vertical">
+
+    <include layout="@layout/base_action_bar_home"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/_16sdp"
+                android:paddingRight="@dimen/_16sdp">
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvHotelName"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:hint="Hotel Name"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvRoomName"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:hint="Room name"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvStartDate"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:hint="Start date"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvDueDate"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:hint="Due Date"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvPersonal"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:hint="Personal"
+                        android:inputType="number"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvService"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:hint="Service"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvFullName"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:hint="Full Name"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvPhone"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:hint="Mobile phone"
+                        android:inputType="number"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragBookingDetail_tvEmail"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fragBookingDetail_tvSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:background="@drawable/selector_text_view_red"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:text="@string/submit"
+                    android:textColor="@color/whiteThree"/>
+
+                <include layout="@layout/base_coordinator"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

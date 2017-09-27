@@ -14,6 +14,7 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.RoomAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.RoomModel;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
 import com.example.phamanh.easyhotel.utils.AppUtils;
@@ -71,15 +72,15 @@ public class BookingFragment extends BaseFragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mRoomModel.single = Integer.parseInt(dataSnapshot.child("single").getValue().toString());
                 if (singleAdapter == null) {
-                    toSetUpUI(rvSingle, singleAdapter,mRoomModel.single, true);
+                    toSetUpUI(rvSingle, singleAdapter,toSingleClick, mRoomModel.single, true);
                 } else
                     singleAdapter.notifyDataSetChanged();
                 tvNoDataSingle.setVisibility(mRoomModel.single != 0 ? View.GONE : View.VISIBLE);
 
                 mRoomModel._double = Integer.parseInt(dataSnapshot.child("double").getValue().toString());
-                if (doubleAdapter == null)
-                    toSetUpUI(rvDouble, doubleAdapter,mRoomModel._double, false);
-                else
+                if (doubleAdapter == null) {
+                    toSetUpUI(rvDouble, doubleAdapter,toDoubleClick, mRoomModel._double, false);
+                } else
                     doubleAdapter.notifyDataSetChanged();
                 tvNoDataDouble.setVisibility(mRoomModel._double != 0 ? View.GONE : View.VISIBLE);
             }
@@ -91,11 +92,14 @@ public class BookingFragment extends BaseFragment {
         });
     }
 
-    private void toSetUpUI(RecyclerView rvMain, RoomAdapter adapter, int i, boolean ischeck) {
+    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(), true);
+    ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(), true);
+
+    private void toSetUpUI(RecyclerView rvMain, RoomAdapter adapter, ItemListener toClick, int i, boolean ischeck) {
         adapter = new RoomAdapter(i);
         adapter.setCheck(ischeck);
+        adapter.setListener(toClick);
         rvMain.setAdapter(adapter);
-//        rvMain.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelSize(R.dimen._3sdp)));
         rvMain.setLayoutManager(new GridLayoutManager(getActivity(), 5));
     }
 
@@ -118,20 +122,9 @@ public class BookingFragment extends BaseFragment {
             case R.id.fragBooking_tvRoom:
                 AppUtils.toGetPopup(getContext(), view, popupRoom, mDataRoom, tvRoom);
                 break;
-//                if (!AppUtils.toDoCheckDate(tvFormDate.getText().toString(), tvToDate.getText().toString()))
-//                    AppUtils.showAlert(getContext(), getString(R.string.error), "Failed date", toClickDialogCheckDate);
+
         }
     }
 
-    DialogListener toClickDialogCheckDate = new DialogListener() {
-        @Override
-        public void onConfirmClicked() {
-            AppUtils.showPickTime(getContext(), tvFormDate, true);
-        }
 
-        @Override
-        public void onCancelClicked() {
-
-        }
-    };
 }

@@ -72,6 +72,7 @@ public class SignUpFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         unbinder = ButterKnife.bind(this, view);
         KeyboardUtils.setupUI(view, getActivity());
+        init();
         return view;
     }
 
@@ -173,6 +174,7 @@ public class SignUpFragment extends BaseFragment {
                 firebaseAuthWithGoogle(account);
             }
         }
+        dismissLoading();
     }
 
     @Override
@@ -180,7 +182,6 @@ public class SignUpFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-
 
     @OnClick({R.id.fragSignUp_tvLogin, R.id.fragSignUp_ivFacebook, R.id.fragSignUp_ivGoogle, R.id.fragSignUp_tvSignUp})
     public void onViewClicked(View view) {

@@ -175,6 +175,7 @@ public class LoginFragment extends BaseFragment {
                 firebaseAuthWithGoogle(account);
             }
         }
+        dismissLoading();
     }
 
     @Override
