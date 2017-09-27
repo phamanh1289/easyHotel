@@ -63,8 +63,6 @@ public class HomeFragment extends BaseFragment {
     private List<ServiceDetailModel> mDataServiceDetail = new ArrayList<>();
     private InfomationModel info = new InfomationModel();
     private List<String> mDataImage = new ArrayList<>();
-    private List<String> mDataKey = new ArrayList<>();
-
 
     @Nullable
     @Override
@@ -90,7 +88,6 @@ public class HomeFragment extends BaseFragment {
         }
         toGetDataHotel();
 //        toAddDataDemo();
-
 
 
     }
@@ -142,29 +139,32 @@ public class HomeFragment extends BaseFragment {
         }
     };
 
-    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos), mDataKey.get(pos)), true);
+    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos)), true);
+
     private void toGetDataHotel() {
         if (mDataInfomation.size() != 0)
             mDataInfomation.clear();
         refHotel.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-                    Gson gson = new Gson();
-                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                    if (jsonObject != null)
-                        info = gson.fromJson(jsonObject.toString(), InfomationModel.class);
-                    mDataInfomation.add(info);
-                    mDataKey.add(dataSnapshot.getKey());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                adapter.notifyDataSetChanged();
+
+                info = new InfomationModel();
+                info.setId(dataSnapshot.getKey());
+                info.setPrice(dataSnapshot.child("price").getValue().toString());
+                info.setName(dataSnapshot.child("name").getValue().toString());
+                info.setLogo(dataSnapshot.child("logo").getValue().toString());
+                info.setDescription(dataSnapshot.child("description").getValue().toString());
+                info.setAddress(dataSnapshot.child("address").getValue().toString());
+                info.setLocation(new Location(dataSnapshot.child("location").child("lat").getValue().toString(), dataSnapshot.child("location").child("lng").getValue().toString()));
+                info.setDataImage((List<String>) dataSnapshot.child("mDataImage").getValue());
+                mDataInfomation.add(info);
+                adapter.notifyItemInserted(mDataInfomation.size());
                 dismissLoading();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
@@ -179,8 +179,9 @@ public class HomeFragment extends BaseFragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-    }
 
+
+    }
 
     @Override
     public void onDestroyView() {

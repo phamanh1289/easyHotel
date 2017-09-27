@@ -56,6 +56,8 @@
     <string name="booking_now">Booking Now</string>
     <string name="enter_comment">Enter comment</string>
     <string name="enter">Enter</string>
+    <string name="out_room">Out Room</string>
+    <string name="booking">Booking now</string>
     <string name="no_comment_for_the_hotel">No comment for the hotel</string>
     <string name="no_rating_for_the_hotel">No rating for the hotel</string>
 

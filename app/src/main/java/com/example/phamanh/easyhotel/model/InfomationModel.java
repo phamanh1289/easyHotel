@@ -7,9 +7,17 @@ import java.util.List;
 
 
 public class InfomationModel extends BaseModel {
-    private String address, description, logo, name, price;
+    private String address, description, logo, name, price, id;
     public List<String> mDataImage = new ArrayList<>();
     public Location location;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Location getLocation() {
         return location;

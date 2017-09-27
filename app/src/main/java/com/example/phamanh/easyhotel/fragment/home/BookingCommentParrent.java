@@ -34,16 +34,15 @@ public class BookingCommentParrent extends BaseFragment {
     ViewPager viewpager;
     Unbinder unbinder;
     private BookingCommentPager adapter;
-    public String mKey;
     public InfomationModel mInfomationModel;
     public ListRating mDataRating = new ListRating();
     public ListComment mCommentModel = new ListComment();
+    public String mKey;
 
-    public static BookingCommentParrent newInstance(BaseModel item, String key) {
+    public static BookingCommentParrent newInstance(BaseModel item) {
 
         Bundle args = new Bundle();
         args.putSerializable(Constant.BASE_MODEL, item);
-        args.putString(Constant.KEY, key);
         BookingCommentParrent fragment = new BookingCommentParrent();
         fragment.setArguments(args);
         return fragment;
@@ -63,8 +62,8 @@ public class BookingCommentParrent extends BaseFragment {
     private void init() {
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mKey = bundle.getString(Constant.KEY);
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.BASE_MODEL);
+            mKey = mInfomationModel.getId();
             adapter = new BookingCommentPager(getChildFragmentManager());
             viewpager.setAdapter(adapter);
             tabBookComment.setupWithViewPager(viewpager);
@@ -73,6 +72,7 @@ public class BookingCommentParrent extends BaseFragment {
             tabBookComment.getTabAt(2).setText("Booking");
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
