@@ -209,11 +209,6 @@ public class SignUpFragment extends BaseFragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 
-    private void toProcessLogin() {
-        toAddReLogin();
-        dismissLoading();
-        StartActivityUtils.toMain(getActivity(), null);
-    }
 
     private void toCreateNewUser() {
         showLoading();
@@ -260,7 +255,8 @@ public class SignUpFragment extends BaseFragment {
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
                         mUser = FirebaseAuth.getInstance().getCurrentUser();
-                        toProcessLogin();
+                        toGetDataProfile();
+                        toAddReLogin();
                     } else {
                         AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
                         dismissLoading();
@@ -275,7 +271,8 @@ public class SignUpFragment extends BaseFragment {
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
                         mUser = FirebaseAuth.getInstance().getCurrentUser();
-                        toProcessLogin();
+                        toGetDataProfile();
+                        toAddReLogin();
                     } else {
                         AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
                         dismissLoading();
@@ -284,26 +281,25 @@ public class SignUpFragment extends BaseFragment {
     }
 
     private void toAddReLogin() {
-        SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
-        toGetDataProfile();
+        if (getUser() == null)
+            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
+            SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+        dismissLoading();
         StartActivityUtils.toMain(getActivity(), null);
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void toGetDataProfile() {
-        final boolean[] isCheckUser = new boolean[1];
-        refMember.child(mUser.getUid()).addChildEventListener(new ChildEventListener() {
+        refMember.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                UserModel userModel;
-                BaseApplication application = (BaseApplication) getActivity().getApplication();
                 if (mUser.getUid().equals(dataSnapshot.getKey())) {
                     try {
                         Gson gson = new Gson();
                         JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
+                        UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
+                        BaseApplication application = (BaseApplication) getActivity().getApplication();
                         application.setCustomer(userModel);
-                        isCheckUser[0] = true;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -312,24 +308,23 @@ public class SignUpFragment extends BaseFragment {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-        if (!isCheckUser[0]) {
-            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", "")));
-        }
     }
 
 }

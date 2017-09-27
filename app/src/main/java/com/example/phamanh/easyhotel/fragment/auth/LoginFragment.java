@@ -119,10 +119,6 @@ public class LoginFragment extends BaseFragment {
                 accessToken,
                 (object, response) -> {
                     showLoading();
-//                    String id = accessToken.getUserId();
-//                    String name = object.has("name") ? object.optString("name") : "";
-//                    String image = "https://graph.facebook.com/" + id + "/picture?type=large";
-//                    String email = object.has("email") ? object.optString("email") : "";
                 });
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,email,gender,birthday");
@@ -142,10 +138,6 @@ public class LoginFragment extends BaseFragment {
             assert signInAccount != null;
             String id = signInAccount.getId();
             SharedPrefUtils.setString(getContext(), Constant.ID, id);
-//            String name = signInAccount.getDisplayName();
-//            String email = signInAccount.getEmail();
-//            String token = signInAccount.getIdToken();
-//            String image = String.valueOf(signInAccount.getPhotoUrl());
             showLoading();
         }
     }
@@ -191,7 +183,7 @@ public class LoginFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fragLogin_ivShowPass, R.id.fragLogin_tvLogin, R.id.fragLogin_ivFacebook, R.id.fragLogin_ivGoogle, R.id.fragLogin_tvSignUp})
+    @OnClick({R.id.fragLogin_ivShowPass, R.id.fragLogin_tvLogin, R.id.fragLogin_ivFacebook, R.id.fragLogin_ivGoogle, R.id.fragLogin_tvSignUp, R.id.fragLogin_tvForgot})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragLogin_ivShowPass:
@@ -214,6 +206,9 @@ public class LoginFragment extends BaseFragment {
                 break;
             case R.id.fragLogin_tvSignUp:
                 addFragment(new SignUpFragment(), false);
+                break;
+            case R.id.fragLogin_tvForgot:
+                addFragment(new SignUpStep2Fragment(), true);
                 break;
         }
     }

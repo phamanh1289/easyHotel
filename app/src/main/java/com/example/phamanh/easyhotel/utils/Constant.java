@@ -30,5 +30,7 @@ public class Constant {
     public static final String COMMENT = "comment";
     public static final String BOOKING = "booking";
     public static final String ACTION_RELOAD_COMMENT = "reload_comment";
-    public static final String IMAGE_DEFAULT = "https://firebasestorage.googleapis.com/v0/b/easy-hotel-25f40.appspot.com/o/ic_no_image.png?alt=media&token=2c1fa369-5a5b-4da8-b768-8ec9c134e0c4";
+    public static final String IMAGE_DEFAULT = "";
+    public static final int SIZE_DEFAULT = 1024*1024;
+    public static final String STORE = "gs://easy-hotel-25f40.appspot.com/";
 }

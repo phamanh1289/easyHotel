@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.activity.LoginActivity;
+import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
@@ -72,6 +73,8 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
     public void LogOutAndLoginHere() {
         FirebaseAuth.getInstance().signOut();
         SharedPrefUtils.removeLogout(getActivity());
+        BaseApplication application = (BaseApplication) getActivity().getApplication();
+        application.setCustomer(null);
         dismissLoading();
         StartActivityUtils.toLogin(getActivity());
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -100,7 +103,7 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fragSetting_llProfile, R.id.fragSetting_llFAQ, R.id.fragSetting_llLogout,R.id.fragSetting_llChangePass})
+    @OnClick({R.id.fragSetting_llProfile, R.id.fragSetting_llFAQ, R.id.fragSetting_llLogout, R.id.fragSetting_llChangePass})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragSetting_llProfile:

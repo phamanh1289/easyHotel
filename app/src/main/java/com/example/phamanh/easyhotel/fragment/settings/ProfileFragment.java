@@ -6,13 +6,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -21,21 +22,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.ImageOrientation;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -78,6 +73,8 @@ public class ProfileFragment extends BaseFragment {
     RoundedImageView ivBanner;
     @BindView(R.id.item_avLoading)
     AVLoadingIndicatorView avLoading;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout mCoordinatorLayout;
 
     public final int RQ_SELECT_PHOTO = 1;
     public final int MY_PERMISSIONS_REQUEST_READ_STORE = 2;
@@ -121,20 +118,12 @@ public class ProfileFragment extends BaseFragment {
         tvDOB.setText(getUser().getDob());
         tvAddress.setText(getUser().getAddress());
         tvMobilePhone.setText(getUser().getPhone());
-        Glide.with(getContext()).load(getUser().getAvatar()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).override(210, 210).centerCrop()).listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                AppUtils.showAlert(getActivity(), getString(R.string.error), "Load avatar failed.", null);
-                dismissLoading();
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                avLoading.setVisibility(View.GONE);
-                return false;
-            }
-        }).into(ivBanner);
+        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(getUser().getAvatar().equals(Constant.IMAGE_DEFAULT) ? Constant.STORE + "member_" + mUser.getUid() + "jpeg" : getUser().getAvatar());
+        baseStore.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
+            ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+        }).addOnFailureListener(exception -> {
+            ivBanner.setImageResource(R.drawable.ic_no_image);
+        });
         handleSexSelected(getUser().getGender().equals(getString(R.string.male)));
         dismissLoading();
     }
@@ -211,7 +200,6 @@ public class ProfileFragment extends BaseFragment {
                 Bitmap bitmapNew = ImageOrientation.modifyOrientation(getActivity(), bitmap, uri);
                 bitmapChoice = AppUtils.getResizedBitmap(bitmapNew, 1080);
                 ivBanner.setImageBitmap(bitmapChoice);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -225,10 +213,10 @@ public class ProfileFragment extends BaseFragment {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmapChoice.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] dataImage = baos.toByteArray();
-            UploadTask uploadTask = refStorage.child("member_" + mUser.getUid() + ".jpeg").putBytes(dataImage);
+            UploadTask uploadTask = baseStore.putBytes(dataImage);
             uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), getString(R.string.error), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                user.setAvatar(downloadUrl.toString());
+                user.setAvatar(Constant.STORE + baseStore.getName());
                 refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
                 toSetNewUser(getUser(), user);
                 AppUtils.showAlert(getContext(), getString(R.string.complete), "Update successfully.", null);
@@ -302,7 +290,13 @@ public class ProfileFragment extends BaseFragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     pickImage();
                 } else {
-                    Toast.makeText(getActivity(), "Permission is required for getting list of files", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(mCoordinatorLayout,
+                            "Permission is required for getting list of files", Snackbar.LENGTH_LONG)
+                            .setAction("CLOSE", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                }
+                            }).show();
                 }
             }
         }

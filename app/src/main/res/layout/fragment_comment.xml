@@ -44,7 +44,6 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/enter_comment"
-            android:inputType="text"
             android:maxLines="2"
             android:textColor="@color/greyishBrownThree"
             android:textSize="@dimen/_12sdp"/>

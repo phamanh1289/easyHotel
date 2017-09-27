@@ -1,8 +1,8 @@
 package com.example.phamanh.easyhotel.adapter;
 
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,12 @@ import android.widget.TextView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.InfomationModel;
+import com.example.phamanh.easyhotel.utils.Constant;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
@@ -24,6 +30,7 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
     private List<InfomationModel> mData;
     private ItemListener itemListener;
     private InfomationModel model;
+    public StorageReference refStorage;
 
     public HotelMainAdapter(List<InfomationModel> mData) {
         this.mData = mData;
@@ -44,7 +51,20 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         model = mData.get(position);
         holder.tvAddress.setText(model.getAddress());
         holder.tvTitle.setText(model.getName());
-        holder.ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(Base64.decode(model.getLogo(), Base64.DEFAULT), 0, Base64.decode(model.getLogo(), Base64.DEFAULT).length));
+            refStorage = FirebaseStorage.getInstance().getReferenceFromUrl(model.getLogo());
+            refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    holder.ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                    holder.avLoading.setVisibility(View.GONE);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    holder.ivBanner.setImageResource(R.drawable.ic_no_image);
+                    holder.avLoading.setVisibility(View.GONE);
+                }
+            });
     }
 
     @Override
@@ -60,6 +80,8 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         TextView tvAddress;
         @BindView(R.id.itemHome_ivBanner)
         ImageView ivBanner;
+        @BindView(R.id.item_avLoading)
+        AVLoadingIndicatorView avLoading;
 
         public HotelHolder(View itemView) {
             super(itemView);

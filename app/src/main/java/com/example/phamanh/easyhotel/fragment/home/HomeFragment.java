@@ -84,10 +84,15 @@ public class HomeFragment extends BaseFragment {
         adapter.setItemListener(toClickItem);
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new LinearLayoutManager(getContext()));
-        toGetDataHotel();
-        if (getUser() == null)
+        showLoading();
+        if (getUser() == null) {
             toGetDataProfile();
+        }
+        toGetDataHotel();
 //        toAddDataDemo();
+
+
+
     }
 
     private void toGetDataProfile() {
@@ -137,6 +142,7 @@ public class HomeFragment extends BaseFragment {
         }
     };
 
+    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos), mDataKey.get(pos)), true);
     private void toGetDataHotel() {
         if (mDataInfomation.size() != 0)
             mDataInfomation.clear();
@@ -175,14 +181,6 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos), mDataKey.get(pos)), true);
-
-//    ItemListener toClickItem = new ItemListener() {
-//        @Override
-//        public void onItemClicked(int pos) {
-//            addFragment(CommentFragment.newInstance(mDataKey.get(pos)),true);
-//        }
-//    };
 
     @Override
     public void onDestroyView() {

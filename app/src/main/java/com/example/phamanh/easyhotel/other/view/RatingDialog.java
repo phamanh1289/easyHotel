@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.RatingAdapter;
@@ -27,6 +28,8 @@ import butterknife.Unbinder;
 public class RatingDialog extends Dialog {
     @BindView(R.id.viewRating_rvRating)
     RecyclerView rvRating;
+    @BindView(R.id.viewRating_tvNoData)
+    TextView tvNodata;
 
     private List<RatingModel> mDataRaring = new ArrayList<>();
     private RatingAdapter adapter;
@@ -55,6 +58,8 @@ public class RatingDialog extends Dialog {
         adapter = new RatingAdapter(mDataRaring);
         rvRating.setAdapter(adapter);
         rvRating.setLayoutManager(new LinearLayoutManager(getContext()));
+        tvNodata.setVisibility(mDataRaring.size() != 0 ? View.GONE : View.VISIBLE);
+        rvRating.setVisibility(mDataRaring.size() != 0 ? View.VISIBLE : View.GONE);
     }
 
     @OnClick({R.id.viewRating_tvCancel})

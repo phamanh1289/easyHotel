@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -93,12 +94,16 @@ public class AppUtils {
         return Patterns.WEB_URL.matcher(url).matches();
     }
 
-    public static String getAuthorization(String token) {
-        return "Bearer " + token;
-    }
-
     public static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     public static float convertDpToPx(final Context context, final int dp) {
@@ -314,14 +319,14 @@ public class AppUtils {
         return format.format(date);
     }
 
-    public static byte[] ImageView_byte(Bitmap bm) {
+    public static byte[] changeBytetoBitMap(Bitmap bm) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bm.compress(Bitmap.CompressFormat.PNG, 100, new ByteArrayOutputStream());
         return stream.toByteArray();
     }
 
     public static String toChangeBitmap(Bitmap bitmap) {
-        return Base64.encodeToString(AppUtils.ImageView_byte(AppUtils.getResizedBitmap(bitmap, 1080)), Base64.DEFAULT);
+        return Base64.encodeToString(AppUtils.changeBytetoBitMap(AppUtils.getResizedBitmap(bitmap, 1080)), Base64.DEFAULT);
     }
 
     public static Bitmap toChangeString(String s) {

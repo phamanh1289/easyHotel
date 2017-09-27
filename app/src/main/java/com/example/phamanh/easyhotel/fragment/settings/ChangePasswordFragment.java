@@ -85,8 +85,8 @@ public class ChangePasswordFragment extends BaseFragment {
                             if (task.isSuccessful()) {
                                 SharedPrefUtils.setString(getContext(), Constant.PASSWORD, etNewPass.getText().toString());
                                 AppUtils.showAlert(getContext(), getString(R.string.complete), "Change password successfully.", null);
-                                getActivity().onBackPressed();
                                 dismissLoading();
+                                getActivity().onBackPressed();
                             }
                         }
                     });

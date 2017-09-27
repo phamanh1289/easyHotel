@@ -16,6 +16,7 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="login">Login</string>
+    <string name="back_to_login">Back to Login</string>
     <string name="cancel">Cancel</string>
     <string name="already_a_member">Already a member ? </string>
 
@@ -48,17 +49,14 @@
     <string name="error">Error</string>
     <string name="complete">Complete</string>
     <string name="warning">Warning</string>
+    <string name="email_admin">admin@easyhotel.com</string>
     <string name="signup_ok">Thank you for signing up. Please log in to your email to verify your account.</string>
-    <string name="descrip_hotel_demo">Với trung tâm spa và phòng xông hơi khô, Muong Thanh Saigon Centre Hotel nằm ở Thành phố Hồ Chí Minh. Nơi nghỉ có quán bar trong khuôn viên và cung cấp Wi-Fi miễn phí.
-
-Các phòng được trang bị TV màn hình phẳng. Một số phòng có khu vực tiếp khách, nơi quý khách có thể thư giãn. Các phòng có phòng tắm riêng kèm bồn tắm hoặc vòi sen. Nơi nghỉ cũng cung cấp áo choàng tắm, dép và máy sấy tóc nhằm mang lại thuận tiện cho quý khách.
-
-Nơi đây có quầy lễ tân 24 giờ.
-
-Trung tâm mua sắm Diamond Plaza cách Muong Thanh Saigon Centre Hotel 500 m, trong khi Nhà thờ Đức Bà cách đó 600 m. Sân bay Quốc tế Tân Sơn Nhất cách chỗ nghỉ này 6 km. </string>
+    <string name="reset_your_password">Don’t worry! Just fill in your email and\nwe’ll help you reset your password</string>
+    <string name="confirm_email">Confirm Email</string>
     <string name="booking_now">Booking Now</string>
     <string name="enter_comment">Enter comment</string>
     <string name="enter">Enter</string>
     <string name="no_comment_for_the_hotel">No comment for the hotel</string>
+    <string name="no_rating_for_the_hotel">No rating for the hotel</string>
 
 </resources>

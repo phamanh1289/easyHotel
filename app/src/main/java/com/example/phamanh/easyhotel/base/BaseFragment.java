@@ -21,7 +21,7 @@ public class BaseFragment extends Fragment {
     public FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public FirebaseUser mUser = mAuth.getCurrentUser();
     public FirebaseStorage mFirebaseStorage = FirebaseStorage.getInstance();
-    public StorageReference refStorage = FirebaseStorage.getInstance("gs://easy-hotel-25f40.appspot.com").getReference();
+    public StorageReference baseStore;
     public DatabaseReference refMember = FirebaseDatabase.getInstance().getReference("member").child(Constant.INFOMATION);
     public DatabaseReference refMember_image = FirebaseDatabase.getInstance().getReference("member").child(Constant.IMAGE);
     public DatabaseReference refMember_booking = FirebaseDatabase.getInstance().getReference("member").child(Constant.BOOKING);

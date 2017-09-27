@@ -1,9 +1,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/red_two"
-    android:clickable="true"
-    android:gravity="center_horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/red_two"
+            android:clickable="true"
+            android:gravity="center_horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:layout_width="@dimen/_140sdp"
             android:layout_height="@dimen/_100sdp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_icons_login" />
+            android:src="@drawable/ic_icons_login"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                     android:layout_width="@dimen/_16sdp"
                     android:layout_height="@dimen/_16sdp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_email" />
+                    android:src="@drawable/ic_email"/>
 
                 <EditText
                     android:id="@+id/fragLogin_etEmail"
@@ -50,7 +50,7 @@
                     android:inputType="textEmailAddress"
                     android:textColor="@color/whiteThree"
                     android:textColorHint="@color/whiteThree"
-                    android:textSize="14.5sp" />
+                    android:textSize="14.5sp"/>
             </FrameLayout>
 
 
@@ -77,7 +77,7 @@
                     android:inputType="textPassword"
                     android:textColor="@color/whiteThree"
                     android:textColorHint="@color/whiteThree"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <FrameLayout
                     android:id="@+id/fragLogin_ivShowPass"
@@ -88,7 +88,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_eye" />
+                        android:src="@drawable/ic_eye"/>
                 </FrameLayout>
 
                 <ImageView
@@ -97,7 +97,7 @@
                     android:layout_height="@dimen/_16sdp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginBottom="@dimen/_1sdp"
-                    android:src="@drawable/ic_password" />
+                    android:src="@drawable/ic_password"/>
 
             </FrameLayout>
 
@@ -112,7 +112,7 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/login"
                 android:textColor="@color/whiteThree"
-                android:textSize="17sp" />
+                android:textSize="17sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,7 +128,7 @@
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginRight="@dimen/_4sdp"
                     android:layout_weight="1"
-                    android:background="@color/whiteThree" />
+                    android:background="@color/whiteThree"/>
 
                 <TextView
                     fontPath="@string/Helvetica_light"
@@ -138,20 +138,19 @@
                     android:padding="@dimen/_2sdp"
                     android:text="@string/or_connect_with"
                     android:textColor="@color/whiteThree"
-                    android:textSize="@dimen/_15sdp" />
+                    android:textSize="@dimen/_15sdp"/>
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_weight="1"
-                    android:background="@color/whiteThree" />
+                    android:background="@color/whiteThree"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_20sdp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -162,16 +161,28 @@
                     android:layout_marginRight="@dimen/_20sdp"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="right"
-                    android:src="@drawable/ic_facebook" />
+                    android:src="@drawable/ic_facebook"/>
 
                 <ImageView
                     android:id="@+id/fragLogin_ivGoogle"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_50sdp"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_google" />
+                    android:src="@drawable/ic_google"/>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/fragLogin_tvForgot"
+                fontPath="@string/Helvetica_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:padding="@dimen/_4sdp"
+                android:text="Forgot Password"
+                android:textColor="@color/whiteThree"
+                android:textSize="14.5sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -188,7 +199,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/new_member"
                     android:textColor="@color/whiteThree"
-                    android:textSize="14.5sp" />
+                    android:textSize="14.5sp"/>
 
                 <TextView
                     android:id="@+id/fragLogin_tvSignUp"
@@ -198,7 +209,7 @@
                     android:padding="@dimen/_4sdp"
                     android:text="@string/sign_up"
                     android:textColor="@color/whiteThree"
-                    android:textSize="14.5sp" />
+                    android:textSize="14.5sp"/>
             </LinearLayout>
         </LinearLayout>
 

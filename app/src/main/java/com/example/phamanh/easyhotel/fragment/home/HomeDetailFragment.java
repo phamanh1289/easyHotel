@@ -9,24 +9,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
-import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.InfomationModel;
-import com.example.phamanh.easyhotel.model.ListRating;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.other.view.RatingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
-import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.willy.ratingbar.RotationRatingBar;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,9 @@ public class HomeDetailFragment extends BaseFragment {
     private int rating;
     public List<RatingModel> mDataRating = new ArrayList<>();
     private String mKey;
+    private RatingModel mRatingModel;
     private RatingDialog ratingDialog;
+    private boolean isCheckNoData;
 
     Unbinder unbinder;
 
@@ -74,29 +78,76 @@ public class HomeDetailFragment extends BaseFragment {
     }
 
     private void init() {
+        showLoading();
         mInfomationModel = ((BookingCommentParrent) getParentFragment()).mInfomationModel;
         mKey = ((BookingCommentParrent) getParentFragment()).mKey;
         avLoading.setVisibility(tvScore.getText().toString().length() != 0 ? View.GONE : View.VISIBLE);
         if (mInfomationModel != null) {
             tvTitle.setText(mInfomationModel.getName());
             tvDescription.setText(mInfomationModel.getDescription());
-            ivBanner.setImageBitmap(AppUtils.toChangeString(mInfomationModel.getLogo()));
+            Glide.with(getContext()).load(mInfomationModel.getLogo()).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).skipMemoryCache(true).override(AppUtils.getScreenWidth(), 170).centerCrop()).into(ivBanner);
         }
         ratingStar.setEmptyDrawableRes(R.drawable.ic_no_start);
         ratingStar.setFilledDrawableRes(R.drawable.ic_start);
         ratingStar.setOnRatingChangeListener((baseRatingBar, v) -> {
             rating = (int) v;
-            AppUtils.showAlert(getContext(), getString(R.string.complete), "Would you like to rating " + rating + " for the hotel ?", toRating);
+            AppUtils.showAlert(getContext(), getString(R.string.complete), "Would you like to rating  for the hotel ?", toRating);
         });
+
+        refHotel_rating.child(mKey).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null) {
+                    try {
+                        Gson gson = new Gson();
+                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                        if (jsonObject != null) {
+                            mRatingModel = gson.fromJson(jsonObject.toString(), RatingModel.class);
+                            mDataRating.add(mRatingModel);
+                            tvScore.setText(toCountScore(mDataRating));
+                            avLoading.setVisibility(mDataRating.size() != 0 ? View.GONE : View.VISIBLE);
+                            isCheckNoData = true;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                dismissLoading();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        if (!isCheckNoData) {
+            dismissLoading();
+            avLoading.setVisibility(View.GONE);
+            tvScore.setText("-");
+        }
     }
 
     DialogListener toRating = new DialogListener() {
         @Override
         public void onConfirmClicked() {
-            tvScore.setText(String.valueOf(rating));
-            mDataRating.add(new RatingModel(getUser().getEmail(), tvScore.getText().toString(), System.currentTimeMillis()));
-            ListRating item = new ListRating(mDataRating);
-            refHotel_rating.child(mKey).setValue(new Gson().toJson(item));
+            mRatingModel = new RatingModel(getUser().getEmail(), String.valueOf(rating), System.currentTimeMillis());
+            refHotel_rating.child(mKey).push().setValue(new Gson().toJson(mRatingModel));
         }
 
         @Override
@@ -113,33 +164,13 @@ public class HomeDetailFragment extends BaseFragment {
 
     private String toCountScore(List<RatingModel> mData) {
         int score = 0;
-        for (RatingModel item : mData) {
-            score += Integer.parseInt(item.getScore());
+        if (mData.size() != 0) {
+            for (RatingModel item : mData) {
+                score += Integer.parseInt(item.getScore());
+            }
+            return String.format("%.01f", (float) score / mData.size());
         }
-        return String.format("%.01f", (float) score / mData.size());
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onEvent(EventBusBooking mData) {
-        if (mData.action.equals(Constant.ACTION_RATING)) {
-            if (mDataRating.size() == 0)
-                mDataRating.addAll(((BookingCommentParrent) getParentFragment()).mDataRating.rating);
-            avLoading.setVisibility(View.GONE);
-            tvScore.setText(toCountScore(mDataRating));
-        }
-        EventBus.getDefault().removeStickyEvent(mData);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+        return "0";
     }
 
     @OnClick(R.id.fragHomeDetail_tvScore)

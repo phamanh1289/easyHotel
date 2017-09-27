@@ -13,20 +13,11 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.BookingCommentPager;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.base.BaseModel;
-import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.model.ListRating;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,12 +61,10 @@ public class BookingCommentParrent extends BaseFragment {
     }
 
     private void init() {
-        showLoading();
         Bundle bundle = getArguments();
         if (bundle != null) {
             mKey = bundle.getString(Constant.KEY);
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.BASE_MODEL);
-            toGetData();
             adapter = new BookingCommentPager(getChildFragmentManager());
             viewpager.setAdapter(adapter);
             tabBookComment.setupWithViewPager(viewpager);
@@ -84,33 +73,6 @@ public class BookingCommentParrent extends BaseFragment {
             tabBookComment.getTabAt(2).setText("Booking");
         }
     }
-
-    private void toGetData() {
-        showLoading();
-        refHotel_rating.child(mKey).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    Gson gson = new Gson();
-                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                    if (jsonObject != null) {
-                        mDataRating = gson.fromJson(jsonObject.toString(), ListRating.class);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                EventBus.getDefault().postSticky(new EventBusBooking(Constant.ACTION_RATING));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
