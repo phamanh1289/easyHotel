@@ -226,6 +226,7 @@ public class LoginFragment extends BaseFragment {
                     if (task.isSuccessful()) {
                         if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
                             mUser = FirebaseAuth.getInstance().getCurrentUser();
+
                             toGetDataProfile();
                             toAddReLogin(true);
                         } else {

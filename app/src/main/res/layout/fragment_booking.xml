@@ -1,65 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:background="@color/whiteThree"
-              android:clickable="true"
-              android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/whiteThree"
+            android:clickable="true">
 
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_8sdp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            app:cardElevation="@dimen/_8sdp">
 
-            <EditText
-                android:id="@+id/fragHomeDetail_tvFormDate"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:focusable="false"
-                android:gravity="center_horizontal"
-                android:hint="Form Date"
-                android:inputType="date"
-                android:padding="@dimen/_8sdp"
-                android:textColor="@color/denimBlue"
-                android:textColorHint="@color/denimBlue"
-                android:textSize="@dimen/_12sdp" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/fragHomeDetail_tvToDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:focusable="false"
-                android:gravity="center_horizontal"
-                android:hint="To Date"
-                android:inputType="date"
-                android:padding="@dimen/_8sdp"
-                android:textColor="@color/denimBlue"
-                android:textColorHint="@color/denimBlue"
-                android:textSize="@dimen/_12sdp" />
+                <EditText
+                    android:id="@+id/fragBooking_tvFormDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:focusable="false"
+                    android:gravity="center_horizontal"
+                    android:hint="Form Date"
+                    android:inputType="date"
+                    android:padding="@dimen/_8sdp"
+                    android:textColor="@color/denimBlue"
+                    android:textColorHint="@color/denimBlue"
+                    android:textSize="@dimen/_12sdp"/>
+
+                <EditText
+                    android:id="@+id/fragBooking_tvToDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:focusable="false"
+                    android:gravity="center_horizontal"
+                    android:hint="To Date"
+                    android:inputType="date"
+                    android:padding="@dimen/_8sdp"
+                    android:textColor="@color/denimBlue"
+                    android:textColorHint="@color/denimBlue"
+                    android:textSize="@dimen/_12sdp"/>
+
+                <TextView
+                    android:id="@+id/fragBooking_tvRoom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:hint="Room"
+                    android:padding="@dimen/_8sdp"
+                    android:textColor="@color/denimBlue"
+                    android:textColorHint="@color/denimBlue"
+                    android:textSize="@dimen/_12sdp"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/denimBlue"
+            android:padding="@dimen/_10sdp"
+            android:text="Single"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_16sdp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragBooking_rvSingle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                android:padding="@dimen/_8sdp">
+
+            </android.support.v7.widget.RecyclerView>
 
             <TextView
-                android:id="@+id/fragHomeDetail_tvRoom"
+                android:id="@+id/fragBooking_tvNoDataSingle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:hint="Room"
-                android:padding="@dimen/_8sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:text="@string/out_room"
                 android:textColor="@color/denimBlue"
-                android:textColorHint="@color/denimBlue"
-                android:textSize="@dimen/_12sdp" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                android:textSize="@dimen/_22sdp"/>
+        </FrameLayout>
 
-</LinearLayout>
+        <TextView
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/denimBlue"
+            android:padding="@dimen/_10sdp"
+            android:text="Double"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_16sdp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragBooking_rvDouble"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                android:padding="@dimen/_8sdp">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/fragBooking_tvNoDataDouble"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_150sdp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:text="@string/out_room"
+                android:textColor="@color/denimBlue"
+                android:textSize="@dimen/_22sdp"/>
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
