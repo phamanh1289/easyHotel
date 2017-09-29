@@ -7,38 +7,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.RoomAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
-import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.RoomModel;
-import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
-import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class BookingFragment extends BaseFragment {
 
 
-    @BindView(R.id.fragBooking_tvRoom)
-    TextView tvRoom;
-    @BindView(R.id.fragBooking_tvFormDate)
-    EditText tvFormDate;
-    @BindView(R.id.fragBooking_tvToDate)
-    EditText tvToDate;
     @BindView(R.id.fragBooking_rvSingle)
     RecyclerView rvSingle;
     @BindView(R.id.fragBooking_rvDouble)
@@ -48,11 +37,13 @@ public class BookingFragment extends BaseFragment {
     @BindView(R.id.fragBooking_tvNoDataDouble)
     TextView tvNoDataDouble;
 
-    private SelectSinglePopup popupRoom;
-    private List<String> mDataRoom = new ArrayList<>();
+
     private RoomModel mRoomModel = new RoomModel();
     private RoomAdapter singleAdapter, doubleAdapter;
     private String mKey;
+    private String service;
+    private ServiceDetailModel mServiceDetailModel;
+    private List<String> mDataService;
     Unbinder unbinder;
 
 
@@ -72,14 +63,14 @@ public class BookingFragment extends BaseFragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mRoomModel.single = Integer.parseInt(dataSnapshot.child("single").getValue().toString());
                 if (singleAdapter == null) {
-                    toSetUpUI(rvSingle, singleAdapter,toSingleClick, mRoomModel.single, true);
+                    toSetUpUI(rvSingle, singleAdapter, toSingleClick, mRoomModel.single, true);
                 } else
                     singleAdapter.notifyDataSetChanged();
                 tvNoDataSingle.setVisibility(mRoomModel.single != 0 ? View.GONE : View.VISIBLE);
 
                 mRoomModel._double = Integer.parseInt(dataSnapshot.child("double").getValue().toString());
                 if (doubleAdapter == null) {
-                    toSetUpUI(rvDouble, doubleAdapter,toDoubleClick, mRoomModel._double, false);
+                    toSetUpUI(rvDouble, doubleAdapter, toDoubleClick, mRoomModel._double, false);
                 } else
                     doubleAdapter.notifyDataSetChanged();
                 tvNoDataDouble.setVisibility(mRoomModel._double != 0 ? View.GONE : View.VISIBLE);
@@ -90,41 +81,31 @@ public class BookingFragment extends BaseFragment {
 
             }
         });
+        mServiceDetailModel = ((BookingCommentParrent) getParentFragment()).mServiceDetailModel;
+        mDataService = mServiceDetailModel.getService();
+        int count = mDataService.size();
+        for (int i = 0; i < count; i++) {
+            if (i == 0)
+                service = mDataService.get(i);
+            else
+                service += " - " + mDataService.get(i);
+        }
     }
 
-    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(), true);
-    ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(), true);
+    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel.getName(), service, pos, true), true);
+    ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel.getName(), service, pos, false), true);
 
     private void toSetUpUI(RecyclerView rvMain, RoomAdapter adapter, ItemListener toClick, int i, boolean ischeck) {
         adapter = new RoomAdapter(i);
         adapter.setCheck(ischeck);
         adapter.setListener(toClick);
         rvMain.setAdapter(adapter);
-        rvMain.setLayoutManager(new GridLayoutManager(getActivity(), 5));
+        rvMain.setLayoutManager(new GridLayoutManager(getActivity(), 4));
     }
-
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
-
-    @OnClick({R.id.fragBooking_tvFormDate, R.id.fragBooking_tvToDate, R.id.fragBooking_tvRoom})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.fragBooking_tvFormDate:
-                AppUtils.showPickTime(getContext(), tvFormDate, true);
-                break;
-            case R.id.fragBooking_tvToDate:
-                AppUtils.showPickTime(getContext(), tvToDate, true);
-                break;
-            case R.id.fragBooking_tvRoom:
-                AppUtils.toGetPopup(getContext(), view, popupRoom, mDataRoom, tvRoom);
-                break;
-
-        }
-    }
-
-
 }

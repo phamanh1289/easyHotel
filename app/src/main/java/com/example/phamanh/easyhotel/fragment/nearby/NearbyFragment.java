@@ -251,7 +251,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
 
         @Override
         public void onProviderDisabled(String s) {
-            AppUtils.showAlert(getContext(), getString(R.string.warning), "Please enable location !", null);
+            AppUtils.showAlert(getContext(), "Please enable location !", null);
         }
     };
 

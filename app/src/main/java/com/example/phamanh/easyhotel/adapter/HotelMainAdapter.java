@@ -1,6 +1,5 @@
 package com.example.phamanh.easyhotel.adapter;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,6 @@ import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,13 +57,10 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         holder.tvAddress.setText(model.getAddress());
         holder.tvTitle.setText(model.getName());
         refStorage = FirebaseStorage.getInstance().getReferenceFromUrl(model.getLogo());
-        refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                holder.mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                holder.ivBanner.setImageBitmap(holder.mBitmap);
-                holder.avLoading.setVisibility(View.GONE);
-            }
+        refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
+            mData.get(position).setBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            holder.ivBanner.setImageBitmap(mData.get(position).getBitmap());
+            holder.avLoading.setVisibility(View.GONE);
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -111,14 +106,13 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         ImageView ivSingle;
         @BindView(R.id.itemHome_tvBooking)
         TextView tvBooking;
-        private Bitmap mBitmap;
 
         public HotelHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(view -> {
-                itemListener.onItemClicked(getAdapterPosition());
-
+                if (avLoading.getVisibility() == View.GONE)
+                    itemListener.onItemClicked(getAdapterPosition());
             });
         }
     }

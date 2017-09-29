@@ -158,7 +158,7 @@ public class LoginFragment extends BaseFragment {
         if (TextUtils.isEmpty(strError))
             return true;
         else {
-            AppUtils.showAlert(getActivity(), getString(R.string.error), strError, null);
+            AppUtils.showAlert(getActivity(), strError, null);
             return false;
         }
     }
@@ -232,10 +232,10 @@ public class LoginFragment extends BaseFragment {
                             toAddReLogin(true);
                         } else {
                             dismissLoading();
-                            AppUtils.showAlert(getContext(), getString(R.string.error), "Email not activated", null);
+                            AppUtils.showAlert(getContext(), "Email not activated", null);
                         }
                     } else {
-                        AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
+                        AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
                     }
                 });
@@ -254,7 +254,7 @@ public class LoginFragment extends BaseFragment {
                         toGetDataProfile();
                         toAddReLogin(true);
                     } else {
-                        AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
+                        AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
                     }
                 });
@@ -270,7 +270,7 @@ public class LoginFragment extends BaseFragment {
                         toGetDataProfile();
                         toAddReLogin(true);
                     } else {
-                        AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
+                        AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
                     }
                 });

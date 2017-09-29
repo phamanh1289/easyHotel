@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
             isCheckBack = false;
         KeyboardUtils.hideSoftKeyboard(this);
         if (isCheckBack || (getSupportFragmentManager().getBackStackEntryCount() == 0 && !isCheckBack)) {
-            AppUtils.showAlert(this, getString(R.string.warning), "Are you want exit ?", toExitApp);
+            AppUtils.showAlertConfirm(this, "Are you want exit ?", toExitApp);
         } else if (!isCheckBack) {
             super.onBackPressed();
             if (getSupportFragmentManager().getBackStackEntryCount() <= 0) {

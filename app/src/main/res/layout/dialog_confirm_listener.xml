@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="@dimen/_270sdp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:background="@drawable/shape_radius_dialog_white_90"
+              android:gravity="center"
+              android:orientation="vertical"
+              tools:ignore="MissingPrefix">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_21sdp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialogConfirmListener_tvTitle"
+            fontPath="@string/Helvetica_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:text="New Diary"
+            android:textColor="@color/greyishBrownThree"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/dialogConfirmListener_tvContent"
+            fontPath="@string/Helvetica_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_21sdp"
+            android:gravity="center"
+            android:text="Enter a name for this diary"
+            android:textColor="@color/greyishBrownThree"
+            android:textSize="13sp"/>
+
+        <EditText
+            android:id="@+id/dialogConfirmListener_etCode"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
+            android:background="@drawable/shape_boder_edit_text"
+            android:hint="Enter your active code here"
+            android:inputType="text"
+            android:paddingLeft="@dimen/_5sdp"
+            android:textColor="@color/greyishBrownThree"
+            android:textSize="13sp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/silver"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/dialogConfirmDiary_tvCancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textColor="@color/bright_blue"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
+
+        <FrameLayout
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:background="@color/silver"/>
+
+        <TextView
+            android:id="@+id/dialogConfirmDiary_tvSave"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="Save"
+            android:textColor="@color/bright_blue"
+            android:textSize="17sp"/>
+    </LinearLayout>
+</LinearLayout>

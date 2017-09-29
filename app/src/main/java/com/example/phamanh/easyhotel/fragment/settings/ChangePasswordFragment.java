@@ -62,7 +62,7 @@ public class ChangePasswordFragment extends BaseFragment {
         if (TextUtils.isEmpty(strError))
             return true;
         else {
-            AppUtils.showAlert(getActivity(), getString(R.string.error), strError, null);
+            AppUtils.showAlert(getActivity(), strError, null);
             return false;
         }
     }
@@ -84,7 +84,7 @@ public class ChangePasswordFragment extends BaseFragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 SharedPrefUtils.setString(getContext(), Constant.PASSWORD, etNewPass.getText().toString());
-                                AppUtils.showAlert(getContext(), getString(R.string.complete), "Change password successfully.", null);
+                                AppUtils.showAlert(getContext(), "Change password successfully.", null);
                                 dismissLoading();
                                 getActivity().onBackPressed();
                             }

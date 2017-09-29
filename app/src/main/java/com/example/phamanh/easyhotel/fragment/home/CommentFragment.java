@@ -61,6 +61,7 @@ public class CommentFragment extends BaseFragment {
         init();
         return view;
     }
+
     private void init() {
         mKey = ((BookingCommentParrent) getParentFragment()).mKey;
         adapter = new CommentAdapter(mDataComment);
@@ -71,7 +72,7 @@ public class CommentFragment extends BaseFragment {
         refHotel_comment.child(mKey).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     try {
                         Gson gson = new Gson();
                         JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
@@ -81,14 +82,13 @@ public class CommentFragment extends BaseFragment {
                             mDataComment.add(modelComment);
                         }
                         adapter.notifyItemInserted(mDataComment.size() - 1);
-                        rvComment.scrollToPosition(mDataComment.size());
+                        rvComment.scrollToPosition(mDataComment.size()-1);
                         tvNoData.setVisibility(mDataComment.size() != 0 ? View.GONE : View.VISIBLE);
                         rvComment.setVisibility(mDataComment.size() != 0 ? View.VISIBLE : View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                dismissLoading();
             }
 
             @Override
@@ -116,7 +116,7 @@ public class CommentFragment extends BaseFragment {
 
     private boolean toValidate() {
         if (etContent.getText().toString().isEmpty()) {
-            AppUtils.showAlert(getContext(), getString(R.string.warning), "Please enter content", null);
+            AppUtils.showAlert(getContext(),  "Please enter content", null);
             return false;
         }
         return true;

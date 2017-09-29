@@ -168,7 +168,7 @@ public class ProfileFragment extends BaseFragment {
         if (TextUtils.isEmpty(strError))
             return true;
         else {
-            AppUtils.showAlert(getActivity(), getString(R.string.error), strError, null);
+            AppUtils.showAlert(getActivity(),  strError, null);
             return false;
         }
     }
@@ -214,18 +214,18 @@ public class ProfileFragment extends BaseFragment {
             bitmapChoice.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] dataImage = baos.toByteArray();
             UploadTask uploadTask = baseStore.putBytes(dataImage);
-            uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), getString(R.string.error), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
+            uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(),  "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 user.setAvatar(Constant.STORE + baseStore.getName());
                 refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
                 toSetNewUser(getUser(), user);
-                AppUtils.showAlert(getContext(), getString(R.string.complete), "Update successfully.", null);
+                AppUtils.showAlert(getContext(), "Update successfully.", null);
                 dismissLoading();
             });
         } else {
             refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
             toSetNewUser(getUser(), user);
-            AppUtils.showAlert(getContext(), getString(R.string.complete), "Update successfully.", null);
+            AppUtils.showAlert(getContext(), "Update successfully.", null);
             dismissLoading();
         }
     }
@@ -266,7 +266,7 @@ public class ProfileFragment extends BaseFragment {
                             if (toCheckChangeText())
                                 toPostUpdateImage();
                             else {
-                                AppUtils.showAlert(getContext(), getString(R.string.warning), "Profile not change data !", null);
+                                AppUtils.showAlert(getContext(),  "Profile not change data !", null);
                                 dismissLoading();
                             }
                         }

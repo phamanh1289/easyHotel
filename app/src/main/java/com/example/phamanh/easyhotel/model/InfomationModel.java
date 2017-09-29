@@ -1,5 +1,7 @@
 package com.example.phamanh.easyhotel.model;
 
+import android.graphics.Bitmap;
+
 import com.example.phamanh.easyhotel.base.BaseModel;
 
 import java.util.ArrayList;
@@ -8,8 +10,17 @@ import java.util.List;
 
 public class InfomationModel extends BaseModel {
     private String address, description, logo, name, price, id;
+    private Bitmap bitmap;
     public List<String> mDataImage = new ArrayList<>();
     public Location location;
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 
     public String getId() {
         return id;

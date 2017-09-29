@@ -2,19 +2,29 @@ package com.example.phamanh.easyhotel.fragment.home;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.BookingModel;
+import com.example.phamanh.easyhotel.other.database.DataHardCode;
+import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
+import com.google.gson.Gson;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,10 +57,20 @@ public class BookingDetailFragment extends BaseFragment {
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout mCoordinatorLayout;
 
-    public static BookingDetailFragment newInstance() {
+    private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Date mDate = new Date();
+    private SelectSinglePopup popupRoom, popupService;
+    private List<String> mDataRoom = new ArrayList<>();
+    private String service;
+    private BookingModel mBookingModel;
+
+    public static BookingDetailFragment newInstance(String title, String service, int room, boolean check) {
 
         Bundle args = new Bundle();
-
+        args.putString(Constant.TITLE_INTRO, title);
+        args.putString(Constant.SERVICE, service);
+        args.putInt(Constant.ID, room);
+        args.putBoolean(Constant.KEY, check);
         BookingDetailFragment fragment = new BookingDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -61,7 +81,24 @@ public class BookingDetailFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_booking_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
+        setActionBar(view, "Order Room");
+        init();
         return view;
+    }
+
+    private void init() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mDataRoom.addAll(DataHardCode.getListRoom(bundle.getBoolean(Constant.KEY)));
+        }
+        tvHotelName.setText(getArguments().getString(Constant.TITLE_INTRO));
+        tvRoomName.setText("Room #" + String.valueOf(getArguments().getInt(Constant.ID)));
+        tvStartDate.setText(dateFormat.format(mDate));
+        tvDueDate.setText(dateFormat.format(mDate));
+        tvEmail.setText(getUser().getEmail());
+        tvFullName.setText(getUser().getFullName());
+        tvPhone.setText(getUser().getPhone());
+        tvService.setText(getArguments().getString(Constant.SERVICE));
     }
 
     @Override
@@ -90,7 +127,7 @@ public class BookingDetailFragment extends BaseFragment {
             check = false;
         }
         if (!AppUtils.toDoCheckDate(tvStartDate.getText().toString(), tvDueDate.getText().toString())) {
-            AppUtils.showAlert(getContext(), getString(R.string.error), "Error date.", toClickDialogCheckDate);
+            AppUtils.showAlert(getContext(), "Error date.", toClickDialogCheckDate);
             check = false;
         }
         if (tvPersonal.getText().toString().isEmpty()) {
@@ -130,14 +167,24 @@ public class BookingDetailFragment extends BaseFragment {
             toShowSnack(s);
     }
 
-    private void toShowSnack(String title) {
-        Snackbar.make(mCoordinatorLayout,
-                title, Snackbar.LENGTH_LONG)
-                .setAction("Submit", v -> {
-                }).show();
+    private void toGetDataToPost() {
+        mBookingModel = new BookingModel();
+        mBookingModel.setHotelName(tvHotelName.getText().toString());
+        mBookingModel.setRoomName(tvRoomName.getText().toString());
+        mBookingModel.setStartDate(tvStartDate.getText().toString());
+        mBookingModel.setDueDate(tvDueDate.getText().toString());
+        mBookingModel.setPersonal(tvPersonal.getText().toString());
+        mBookingModel.setService(tvService.getText().toString());
+        mBookingModel.setFullName(tvFullName.getText().toString());
+        mBookingModel.setPhone(tvPhone.getText().toString());
+        mBookingModel.setEmail(tvEmail.getText().toString());
     }
 
-    @OnClick({R.id.fragBookingDetail_tvStartDate, R.id.fragBookingDetail_tvDueDate, R.id.fragBookingDetail_tvService, R.id.fragBookingDetail_tvSubmit})
+    private void toShowSnack(String title) {
+        AppUtils.showAlert(getContext(), title, null);
+    }
+
+    @OnClick({R.id.fragBookingDetail_tvStartDate, R.id.fragBookingDetail_tvDueDate, R.id.fragBookingDetail_tvService, R.id.fragBookingDetail_tvSubmit, R.id.fragBookingDetail_tvPersonal})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragBookingDetail_tvStartDate:
@@ -146,14 +193,29 @@ public class BookingDetailFragment extends BaseFragment {
             case R.id.fragBookingDetail_tvDueDate:
                 AppUtils.showPickTime(getContext(), tvDueDate, true);
                 break;
-            case R.id.fragBookingDetail_tvService:
-
-                break;
             case R.id.fragBookingDetail_tvSubmit:
                 if (!toValidate())
                     toShowTextError();
-                else
-                    Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
+                else {
+                    showLoading();
+                    new CountDownTimer(2000, 1000) {
+                        @Override
+                        public void onTick(long l) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            toGetDataToPost();
+                            refMember_booking.child(mUser.getUid()).push().setValue(new Gson().toJson(mBookingModel));
+                            AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
+                            dismissLoading();
+                        }
+                    }.start();
+                }
+                break;
+            case R.id.fragBookingDetail_tvPersonal:
+                AppUtils.toGetPopup(getContext(), view, popupRoom, mDataRoom, tvPersonal);
                 break;
         }
     }
@@ -162,6 +224,18 @@ public class BookingDetailFragment extends BaseFragment {
         @Override
         public void onConfirmClicked() {
             AppUtils.showPickTime(getContext(), tvStartDate, true);
+        }
+
+        @Override
+        public void onCancelClicked() {
+
+        }
+    };
+    DialogListener toChangeHome = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            clearAllBackStack();
+            addFragment(new HomeFragment(), true);
         }
 
         @Override

@@ -37,6 +37,7 @@
     <string name="search_place">Cafe, ATM, Bank, Hospital....</string>
 
     <string name="first_name">User Name</string>
+    <string name="full_name">Full Name</string>
     <string name="female">Female</string>
     <string name="phone">Home Number</string>
     <string name="mobi_phone">Mobile Number</string>

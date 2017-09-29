@@ -2,19 +2,24 @@ package com.example.phamanh.easyhotel.model;
 
 import com.example.phamanh.easyhotel.base.BaseModel;
 
+import java.util.List;
+
 
 public class ServiceDetailModel extends BaseModel {
-    private String nameService;
+    private List<String> service;
 
-    public String getNameService() {
-        return nameService;
+    public ServiceDetailModel(List<String> service) {
+        this.service = service;
     }
 
-    public ServiceDetailModel(String nameService) {
-        this.nameService = nameService;
+    public ServiceDetailModel() {
     }
 
-    public void setNameService(String nameService) {
-        this.nameService = nameService;
+    public List<String> getService() {
+        return service;
+    }
+
+    public void setService(List<String> service) {
+        this.service = service;
     }
 }

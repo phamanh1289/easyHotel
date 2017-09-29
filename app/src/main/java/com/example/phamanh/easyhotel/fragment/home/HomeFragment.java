@@ -21,10 +21,8 @@ import com.example.phamanh.easyhotel.model.HotelModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.model.ListRating;
-import com.example.phamanh.easyhotel.model.ListService;
 import com.example.phamanh.easyhotel.model.Location;
 import com.example.phamanh.easyhotel.model.RatingModel;
-import com.example.phamanh.easyhotel.model.RoomModel;
 import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
@@ -59,8 +57,7 @@ public class HomeFragment extends BaseFragment {
     private ListComment mListComment = new ListComment();
     private List<RatingModel> mDataRating = new ArrayList<>();
     private ListRating mListRating = new ListRating();
-    private ListService mListService = new ListService();
-    private List<ServiceDetailModel> mDataServiceDetail = new ArrayList<>();
+    private ServiceDetailModel service = new ServiceDetailModel();
     private InfomationModel info = new InfomationModel();
     private List<String> mDataImage = new ArrayList<>();
 
@@ -147,7 +144,6 @@ public class HomeFragment extends BaseFragment {
         refHotel.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 info = new InfomationModel();
                 info.setId(dataSnapshot.getKey());
                 info.setPrice(dataSnapshot.child("price").getValue().toString());
@@ -191,35 +187,35 @@ public class HomeFragment extends BaseFragment {
 
     private void toAddDataDemo() {
 
-        String mKey = String.valueOf(System.currentTimeMillis());
+        String mKeyHotel = String.valueOf(System.currentTimeMillis());
 
-        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_1", "nice", ""));
-        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_2", "bad", ""));
-        mListComment.comment = mDataComment;
+//        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_1", "nice", ""));
+//        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_2", "bad", ""));
+//        mListComment.comment = mDataComment;
+//
+//        mDataRating.add(new RatingModel("email_1", "1", System.currentTimeMillis()));
+//        mDataRating.add(new RatingModel("email_2", "2", System.currentTimeMillis()));
+//        mDataRating.add(new RatingModel("email_3", "3", System.currentTimeMillis()));
+//        mDataRating.add(new RatingModel("email_4", "4", System.currentTimeMillis()));
+//        mDataRating.add(new RatingModel("email_5", "5", System.currentTimeMillis()));
+//        mDataRating.add(new RatingModel("email_6", "6", System.currentTimeMillis()));
+//        mDataRating.add(new RatingModel("email_7", "7", System.currentTimeMillis()));
+//        mDataRating.add(new RatingModel("email_8", "8", System.currentTimeMillis()));
+//        mListRating.rating = mDataRating;
 
-        mDataRating.add(new RatingModel("email_1", "1", System.currentTimeMillis()));
-        mDataRating.add(new RatingModel("email_2", "2", System.currentTimeMillis()));
-        mDataRating.add(new RatingModel("email_3", "3", System.currentTimeMillis()));
-        mDataRating.add(new RatingModel("email_4", "4", System.currentTimeMillis()));
-        mDataRating.add(new RatingModel("email_5", "5", System.currentTimeMillis()));
-        mDataRating.add(new RatingModel("email_6", "6", System.currentTimeMillis()));
-        mDataRating.add(new RatingModel("email_7", "7", System.currentTimeMillis()));
-        mDataRating.add(new RatingModel("email_8", "8", System.currentTimeMillis()));
-        mListRating.rating = mDataRating;
-
-        mDataServiceDetail.add(new ServiceDetailModel("spa"));
-        mDataServiceDetail.add(new ServiceDetailModel("eat"));
-        mListService.service = mDataServiceDetail;
-
-        info.setAddress("123/123");
-        info.setDescription("demo add");
-        info.setLogo("demo logo");
-        info.setName("De Nhat Demo");
-        info.setPrice("1200");
-        info.setLocation(new Location("10.786968", "106.666520"));
-        mDataImage.add("image_1");
-        mDataImage.add("image_2");
-        info.setDataImage(mDataImage);
+        List<String> mdata = new ArrayList<>();
+        mdata.add("spa");
+        mdata.add("eat");
+        service.setService(mdata);
+//        info.setAddress("123/123");
+//        info.setDescription("demo add");
+//        info.setLogo("demo logo");
+//        info.setName("De Nhat Demo");
+//        info.setPrice("1200");
+//        info.setLocation(new Location("10.786968", "106.666520"));
+//        mDataImage.add("image_1");
+//        mDataImage.add("image_2");
+//        info.setDataImage(mDataImage);
 //        hotel.setRoom(new RoomModel(12, 8));
 
 
@@ -230,10 +226,11 @@ public class HomeFragment extends BaseFragment {
 //        hotel.setInfomation(info);
 //        refHotel.child(String.valueOf(System.currentTimeMillis())).setValue(new Gson().toJson(hotel));
 
-        refHotel_comment.child(mKey).setValue(new Gson().toJson(mListComment));
-        refHotel_rating.child(mKey).setValue(new Gson().toJson(mListRating));
-        refHotel_service.child(mKey).setValue(new Gson().toJson(mListService));
-        refHotel.child(mKey).setValue(new Gson().toJson(info));
-        refHotel_room.child(mKey).setValue(new Gson().toJson(new RoomModel(12, 8)));
+//        refHotel_comment.child(mKey).setValue(new Gson().toJson(mListComment));
+        refHotel_service.child("1506252747351").setValue(new Gson().toJson(service));
+        refHotel_service.child("1506252754506").setValue(new Gson().toJson(service));
+//        refHotel_service.child(mKey).setValue(new Gson().toJson(mListService));
+//        refHotel.child(mKey).setValue(new Gson().toJson(info));
+//        refHotel_room.child(mKey).setValue(new Gson().toJson(new RoomModel(12, 8)));
     }
 }

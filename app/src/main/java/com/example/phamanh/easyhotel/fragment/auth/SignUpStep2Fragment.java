@@ -47,7 +47,7 @@ public class SignUpStep2Fragment extends BaseFragment {
             case R.id.fragForgotPassword_tvSubmit:
                 if (AppUtils.isValidEmail(evEmail.getText().toString())) {
                     if (evEmail.getText().toString().equals(getString(R.string.email_admin))) {
-                        AppUtils.showAlert(getContext(), getString(R.string.error), "Admin not request reset password.", null);
+                        AppUtils.showAlert(getContext(), "Admin not request reset password.", null);
                     } else {
                         showLoading();
                         mAuth.sendPasswordResetEmail(evEmail.getText().toString())
@@ -55,18 +55,18 @@ public class SignUpStep2Fragment extends BaseFragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            AppUtils.showAlert(getContext(), getString(R.string.complete), "Your password has been sent to you. Please check your email.", null);
+                                            AppUtils.showAlert(getContext(), "Your password has been sent to you. Please check your email.", null);
                                             dismissLoading();
                                             getActivity().onBackPressed();
                                         } else {
-                                            AppUtils.showAlert(getContext(), getString(R.string.error), "Send request failed.", null);
+                                            AppUtils.showAlert(getContext(), "Send request failed.", null);
                                             dismissLoading();
                                         }
                                     }
                                 });
                     }
                 } else
-                    AppUtils.showAlert(getContext(), getString(R.string.error), "Email is incorrect. Please try again.", null);
+                    AppUtils.showAlert(getContext(), "Email is incorrect. Please try again.", null);
                 break;
             case R.id.fragForgotPassword_tvBackLogin:
                 getActivity().onBackPressed();

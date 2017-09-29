@@ -19,12 +19,14 @@ public class DataHardCode {
         return rs;
     }
 
-    public static List<String> getListRoom() {
+    public static List<String> getListRoom(boolean check) {
         List<String> rs = new ArrayList<>();
-        rs.add("Single");
-        rs.add("Double");
-        rs.add("Group");
+        rs.add("1");
+        rs.add("2");
+        if (!check){
+            rs.add("3");
+            rs.add("4");
+        }
         return rs;
     }
-
 }

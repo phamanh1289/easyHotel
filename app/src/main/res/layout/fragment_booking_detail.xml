@@ -136,6 +136,7 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:background="@null"
+                        android:focusable="false"
                         android:hint="Personal"
                         android:inputType="number"
                         android:textColor="@color/denimBlue"
@@ -144,7 +145,6 @@
                 </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                 <include layout="@layout/base_line"/>
-
                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -166,10 +166,10 @@
                         android:textColor="@color/denimBlue"
                         android:textColorHint="@color/denimBlue"
                         android:textSize="13.5sp"/>
+
                 </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 
                 <include layout="@layout/base_line"/>
-
                 <com.wrapp.floatlabelededittext.FloatLabeledEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

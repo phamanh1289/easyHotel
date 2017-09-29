@@ -1,6 +1,5 @@
 package com.example.phamanh.easyhotel.fragment.home;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -17,12 +16,10 @@ import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.other.view.RatingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
-import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.willy.ratingbar.RotationRatingBar;
@@ -54,8 +51,6 @@ public class HomeDetailFragment extends BaseFragment {
     EditText tvScore;
     @BindView(R.id.item_avLoading)
     AVLoadingIndicatorView avLoading;
-    @BindView(R.id.fragHomeDetail_avMain)
-    AVLoadingIndicatorView avLoading_Main;
 
     private InfomationModel mInfomationModel;
     private int rating;
@@ -87,14 +82,7 @@ public class HomeDetailFragment extends BaseFragment {
         if (mInfomationModel != null) {
             tvTitle.setText(mInfomationModel.getName());
             tvDescription.setText(mInfomationModel.getDescription());
-            baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(mInfomationModel.getLogo());
-            baseStore.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
-                ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-                avLoading_Main.setVisibility(View.GONE);
-            }).addOnFailureListener(exception -> {
-                ivBanner.setImageResource(R.drawable.ic_no_image);
-                avLoading_Main.setVisibility(View.GONE);
-            });
+            ivBanner.setImageBitmap(mInfomationModel.getBitmap());
         }
         ratingStar.setEmptyDrawableRes(R.drawable.ic_no_start);
         ratingStar.setFilledDrawableRes(R.drawable.ic_start);
@@ -102,56 +90,53 @@ public class HomeDetailFragment extends BaseFragment {
 
         {
             rating = (int) v;
-            AppUtils.showAlert(getContext(), getString(R.string.complete), "Would you like to rating  for the hotel ?", toRating);
+            AppUtils.showAlertConfirm(getContext(), "Would you like to rating  for the hotel ?", toRating);
         });
 
-        refHotel_rating.child(mKey).
-
-                addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        if (dataSnapshot.getValue() != null) {
-                            try {
-                                Gson gson = new Gson();
-                                JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                                if (jsonObject != null) {
-                                    mRatingModel = gson.fromJson(jsonObject.toString(), RatingModel.class);
-                                    mDataRating.add(mRatingModel);
-                                    tvScore.setText(toCountScore(mDataRating));
-                                    avLoading.setVisibility(mDataRating.size() != 0 ? View.GONE : View.VISIBLE);
-                                    isCheckNoData = true;
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+        refHotel_rating.child(mKey).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null) {
+                    try {
+                        Gson gson = new Gson();
+                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                        if (jsonObject != null) {
+                            mRatingModel = gson.fromJson(jsonObject.toString(), RatingModel.class);
+                            mDataRating.add(mRatingModel);
+                            tvScore.setText(toCountScore(mDataRating));
+                            avLoading.setVisibility(mDataRating.size() != 0 ? View.GONE : View.VISIBLE);
+                            dismissLoading();
+                            isCheckNoData = true;
                         }
-                        dismissLoading();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                }
+                dismissLoading();
+            }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    }
+            }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    }
+            }
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                    }
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        });
 
-        if (!isCheckNoData)
-
-        {
+        if (!isCheckNoData) {
             dismissLoading();
             avLoading.setVisibility(View.GONE);
             tvScore.setText("-");

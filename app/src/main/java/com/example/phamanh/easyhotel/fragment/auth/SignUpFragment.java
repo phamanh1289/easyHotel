@@ -158,7 +158,7 @@ public class SignUpFragment extends BaseFragment {
         if (TextUtils.isEmpty(strError))
             return true;
         else {
-            AppUtils.showAlert(getActivity(), getString(R.string.error), strError, null);
+            AppUtils.showAlert(getActivity(), strError, null);
             return false;
         }
     }
@@ -218,7 +218,7 @@ public class SignUpFragment extends BaseFragment {
                     if (task.isSuccessful()) {
                         toSendMailVerify();
                     } else {
-                        AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
+                        AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
                     }
                 });
@@ -241,7 +241,7 @@ public class SignUpFragment extends BaseFragment {
         FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        AppUtils.showAlert(getContext(), getString(R.string.complete), "Thank you for signing up. Please log in to your email to verify your account.", toCLickMoveLogin);
+                        AppUtils.showAlert(getContext(), "Thank you for signing up. Please log in to your email to verify your account.", toCLickMoveLogin);
                     }
                 });
     }
@@ -259,7 +259,7 @@ public class SignUpFragment extends BaseFragment {
                         toGetDataProfile();
                         toAddReLogin();
                     } else {
-                        AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
+                        AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
                     }
                 });
@@ -275,7 +275,7 @@ public class SignUpFragment extends BaseFragment {
                         toGetDataProfile();
                         toAddReLogin();
                     } else {
-                        AppUtils.showAlert(getContext(), getString(R.string.error), task.getException().getMessage(), null);
+                        AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
                     }
                 });

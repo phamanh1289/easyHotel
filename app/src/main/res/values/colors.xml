@@ -8,10 +8,13 @@
     <color name="denimBlueTwo">#deff0004</color>
     <color name="red_two">#ff696c</color>
     <color name="whiteThree">#ffffffff</color>
+    <color name="whiteThreeDialog">#ebffffff</color>
     <color name="while_intro">#FFFCF9F9</color>
     <color name="blur_background">#a9878787</color>
     <color name="blur_">#54bfbfbf</color>
     <color name="denimBlue">#3d6098</color>
     <color name="greyishBrownThree">#555555</color>
     <color name="ground_main">#9ed0d0d0</color>
+    <color name="silver">#c8c7cc</color>
+    <color name="bright_blue">#007aff</color>
 </resources>

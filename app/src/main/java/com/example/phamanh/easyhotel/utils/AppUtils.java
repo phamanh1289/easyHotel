@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.other.view.ConfirmDialog;
+import com.example.phamanh.easyhotel.other.view.ConfirmListenerDialog;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +42,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class AppUtils {
+    private static String service;
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -47,17 +50,19 @@ public class AppUtils {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public static void showAlert(final Context context, String title, String content, @Nullable final DialogListener listener) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
-        builder.setMessage(content);
-        builder.setPositiveButton(R.string.accept, (dialogInterface, i) -> {
-            if (listener != null) {
-                listener.onConfirmClicked();
-            }
-        });
-        builder.create().show();
+    public static void showAlert(Context context, String title, DialogListener clickListener) {
+        ConfirmDialog dialog = new ConfirmDialog(context, title);
+        dialog.setOnItemClickListener(clickListener);
+        dialog.show();
     }
+
+    public static void showAlertConfirm(Context context, String title, DialogListener clickListener) {
+        ConfirmListenerDialog dialog = new ConfirmListenerDialog(context,"", title,"Cancel","Submit");
+        dialog.setOnItemClickListener(clickListener);
+        dialog.show();
+    }
+
+
 
     public static String convertNumberOrdinal(int i) {
         String[] sufixes = new String[]{"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"};
@@ -232,7 +237,7 @@ public class AppUtils {
             int yearCurrent = now.get(Calendar.YEAR);
             if (!isCheck) {
                 if ((yearCurrent - year < 18))
-                    showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
+                    showAlert(context, "You must 18 year old.", null);
                 else
                     tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
             } else
@@ -259,7 +264,7 @@ public class AppUtils {
         Calendar minAdultAge = new GregorianCalendar();
         minAdultAge.add(Calendar.YEAR, -18);
         if (minAdultAge.before(userAge)) {
-            showAlert(context, context.getString(R.string.error), "You must 18 year old.", null);
+            showAlert(context, "You must 18 year old.", null);
             return false;
         }
         return true;
