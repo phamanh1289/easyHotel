@@ -78,11 +78,11 @@ public class CommentFragment extends BaseFragment {
                         JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
                         if (jsonObject != null) {
                             modelComment = gson.fromJson(jsonObject.toString(), CommentModel.class);
-//                            mDataComment.add(toChangeAvatarComment(dataSnapshot.getKey(), modelComment));
                             mDataComment.add(modelComment);
                         }
                         adapter.notifyItemInserted(mDataComment.size() - 1);
-                        rvComment.scrollToPosition(mDataComment.size()-1);
+                        if (mDataComment.size() > 1)
+                            rvComment.scrollToPosition(mDataComment.size() - 1);
                         tvNoData.setVisibility(mDataComment.size() != 0 ? View.GONE : View.VISIBLE);
                         rvComment.setVisibility(mDataComment.size() != 0 ? View.VISIBLE : View.GONE);
                     } catch (JSONException e) {
@@ -116,7 +116,7 @@ public class CommentFragment extends BaseFragment {
 
     private boolean toValidate() {
         if (etContent.getText().toString().isEmpty()) {
-            AppUtils.showAlert(getContext(),  "Please enter content", null);
+            AppUtils.showAlert(getContext(), "Please enter content", null);
             return false;
         }
         return true;

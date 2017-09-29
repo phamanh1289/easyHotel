@@ -14,10 +14,12 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.BookingModel;
+import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.other.database.DataHardCode;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
+import com.example.phamanh.easyhotel.utils.StartActivityUtils;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -62,15 +64,19 @@ public class BookingDetailFragment extends BaseFragment {
     private SelectSinglePopup popupRoom, popupService;
     private List<String> mDataRoom = new ArrayList<>();
     private String service;
+    private boolean isCheckRoom;
+    private InfomationModel mInfomationModel;
     private BookingModel mBookingModel;
+    private int countRoom;
 
-    public static BookingDetailFragment newInstance(String title, String service, int room, boolean check) {
+    public static BookingDetailFragment newInstance(InfomationModel title, String service, int room, boolean check, int count) {
 
         Bundle args = new Bundle();
-        args.putString(Constant.TITLE_INTRO, title);
+        args.putSerializable(Constant.TITLE_INTRO, title);
         args.putString(Constant.SERVICE, service);
         args.putInt(Constant.ID, room);
         args.putBoolean(Constant.KEY, check);
+        args.putInt(Constant.COMMENT, count);
         BookingDetailFragment fragment = new BookingDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -89,9 +95,12 @@ public class BookingDetailFragment extends BaseFragment {
     private void init() {
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mDataRoom.addAll(DataHardCode.getListRoom(bundle.getBoolean(Constant.KEY)));
+            isCheckRoom = bundle.getBoolean(Constant.KEY);
+            mDataRoom.addAll(DataHardCode.getListRoom(isCheckRoom));
+            mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.TITLE_INTRO);
+            countRoom = bundle.getInt(Constant.COMMENT);
         }
-        tvHotelName.setText(getArguments().getString(Constant.TITLE_INTRO));
+        tvHotelName.setText(mInfomationModel.getName());
         tvRoomName.setText("Room #" + String.valueOf(getArguments().getInt(Constant.ID)));
         tvStartDate.setText(dateFormat.format(mDate));
         tvDueDate.setText(dateFormat.format(mDate));
@@ -208,6 +217,7 @@ public class BookingDetailFragment extends BaseFragment {
                         public void onFinish() {
                             toGetDataToPost();
                             refMember_booking.child(mUser.getUid()).push().setValue(new Gson().toJson(mBookingModel));
+                            refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "double").setValue(countRoom - 1);
                             AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
                             dismissLoading();
                         }
@@ -235,7 +245,7 @@ public class BookingDetailFragment extends BaseFragment {
         @Override
         public void onConfirmClicked() {
             clearAllBackStack();
-            addFragment(new HomeFragment(), true);
+            StartActivityUtils.toMain(getContext(), null);
         }
 
         @Override

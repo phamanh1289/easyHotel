@@ -92,8 +92,8 @@ public class BookingFragment extends BaseFragment {
         }
     }
 
-    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel.getName(), service, pos, true), true);
-    ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel.getName(), service, pos, false), true);
+    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel, service, pos, true, mRoomModel.single), true);
+    ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel, service, pos, false, mRoomModel._double), true);
 
     private void toSetUpUI(RecyclerView rvMain, RoomAdapter adapter, ItemListener toClick, int i, boolean ischeck) {
         adapter = new RoomAdapter(i);

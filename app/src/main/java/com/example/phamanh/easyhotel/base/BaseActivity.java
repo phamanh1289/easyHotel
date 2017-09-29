@@ -63,6 +63,7 @@ public class BaseActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager != null && fragment != null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             if (isReplace)
                 fragmentTransaction.replace(this instanceof MainActivity ? android.R.id.tabcontent : R.id.frmContainer, fragment);
             else {
@@ -75,6 +76,7 @@ public class BaseActivity extends AppCompatActivity {
             if (isAddToBackStack) {
                 fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
             }
+
             fragmentTransaction.commit();
         }
     }
