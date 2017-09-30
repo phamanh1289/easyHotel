@@ -40,14 +40,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentH
     @Override
     public void onBindViewHolder(CommentHolder holder, int position) {
         CommentModel item = mData.get(position);
-        refStorage = FirebaseStorage.getInstance().getReferenceFromUrl(item.getImage());
-        refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
-            holder.ivUser.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-            holder.avLoading.setVisibility(View.GONE);
-        }).addOnFailureListener(exception -> {
+        if (!item.getImage().equals("")) {
+            refStorage = FirebaseStorage.getInstance().getReferenceFromUrl(item.getImage());
+            refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
+                holder.ivUser.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                holder.avLoading.setVisibility(View.GONE);
+            }).addOnFailureListener(exception -> {
+                holder.ivUser.setImageResource(R.drawable.ic_no_image);
+                holder.avLoading.setVisibility(View.GONE);
+            });
+        } else {
             holder.ivUser.setImageResource(R.drawable.ic_no_image);
             holder.avLoading.setVisibility(View.GONE);
-        });
+        }
         holder.tvDescription.setText(item.getContent());
         holder.tvUser.setText(item.getEmail());
         holder.tvDate.setText(AppUtils.getTimeAgo(item.getTime()));

@@ -58,7 +58,8 @@ public class HomeDetailFragment extends BaseFragment {
     private String mKey;
     private RatingModel mRatingModel;
     private RatingDialog ratingDialog;
-    private boolean isCheckNoData;
+    private boolean isCheckNoData, isCheckRating;
+    private View view;
 
     Unbinder unbinder;
 
@@ -66,12 +67,20 @@ public class HomeDetailFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home_detail, container, false);
+        view = inflater.inflate(R.layout.fragment_home_detail, container, false);
         KeyboardUtils.setupUI(view, getActivity());
         setActionBar(view, getString(R.string.page_home_detail));
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mDataRating.size() != 0)
+            mDataRating.clear();
         unbinder = ButterKnife.bind(this, view);
         init();
-        return view;
     }
 
     private void init() {
@@ -86,69 +95,99 @@ public class HomeDetailFragment extends BaseFragment {
         }
         ratingStar.setEmptyDrawableRes(R.drawable.ic_no_start);
         ratingStar.setFilledDrawableRes(R.drawable.ic_start);
-        ratingStar.setOnRatingChangeListener((baseRatingBar, v) ->
-
-        {
-            rating = (int) v;
-            AppUtils.showAlertConfirm(getContext(), "Would you like to rating  for the hotel ?", toRating);
-        });
-
-        refHotel_rating.child(mKey).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
-                    try {
-                        Gson gson = new Gson();
-                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        if (jsonObject != null) {
-                            mRatingModel = gson.fromJson(jsonObject.toString(), RatingModel.class);
-                            mDataRating.add(mRatingModel);
-                            tvScore.setText(toCountScore(mDataRating));
-                            avLoading.setVisibility(mDataRating.size() != 0 ? View.GONE : View.VISIBLE);
-                            dismissLoading();
-                            isCheckNoData = true;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                dismissLoading();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        refHotel_rating.child(mKey).addChildEventListener(toAddRating);
 
         if (!isCheckNoData) {
             dismissLoading();
             avLoading.setVisibility(View.GONE);
             tvScore.setText("-");
+            isCheckRating = true;
+            toPostRating();
+        }
+    }
+
+    private void toPostRating() {
+        if (isCheckRating) {
+            ratingStar.setOnRatingChangeListener((baseRatingBar, v) ->
+            {
+                rating = (int) v;
+                AppUtils.showAlertConfirm(getContext(), "Would you like to rating  for the hotel ?", toRating);
+            });
+        }
+    }
+
+    ChildEventListener toAddRating = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot.getValue() != null) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    if (jsonObject != null) {
+                        mRatingModel = gson.fromJson(jsonObject.toString(), RatingModel.class);
+                        mDataRating.add(mRatingModel);
+                    }
+                    tvScore.setText(toCountScore(mDataRating));
+                    ratingStar.setRating(Float.parseFloat(mRatingModel.getScore()));
+                    isCheckRating = true;
+                    toPostRating();
+                    avLoading.setVisibility(mDataRating.size() != 0 ? View.GONE : View.VISIBLE);
+                    isCheckNoData = true;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            dismissLoading();
         }
 
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot.getValue() != null) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    if (jsonObject != null) {
+                        mRatingModel = gson.fromJson(jsonObject.toString(), RatingModel.class);
+                        mDataRating.add(mRatingModel);
+                    }
+                    tvScore.setText(toCountScore(mDataRating));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            refHotel_rating.removeEventListener(toAddRating);
+        } catch (Exception e) {
+
+        }
     }
 
     DialogListener toRating = new DialogListener() {
         @Override
         public void onConfirmClicked() {
             mRatingModel = new RatingModel(getUser().getEmail(), String.valueOf(rating), System.currentTimeMillis());
-            refHotel_rating.child(mKey).push().setValue(new Gson().toJson(mRatingModel));
+            refHotel_rating.child(mKey).child(mUser.getUid()).setValue(new Gson().toJson(mRatingModel));
         }
 
         @Override
@@ -177,7 +216,7 @@ public class HomeDetailFragment extends BaseFragment {
     @OnClick(R.id.fragHomeDetail_tvScore)
     public void onViewClicked() {
         if (avLoading.getVisibility() != View.VISIBLE) {
-            RatingDialog ratingDialog = new RatingDialog(getContext(), mDataRating);
+            ratingDialog = new RatingDialog(getContext(), mDataRating);
             ratingDialog.show();
         }
     }

@@ -143,15 +143,15 @@ public class SignUpFragment extends BaseFragment {
 
     public boolean checkValidInput() {
         String strError = "";
-        if (etEmail.getText().toString().isEmpty())
+        if (etEmail.getText().toString().trim().isEmpty())
             strError = "Please enter your email.";
         else if (!AppUtils.isValidEmail(etEmail.getText().toString()))
             strError = "Email is incorrect. Please try again.";
-        else if (etPassword.getText().toString().isEmpty())
+        else if (etPassword.getText().toString().trim().isEmpty())
             strError = "Please input password.";
         else if (etPassword.getText().length() < 6)
             strError = "Please input at least 6 characters.";
-        else if (etConfirmPassword.getText().toString().isEmpty())
+        else if (etConfirmPassword.getText().toString().trim().isEmpty())
             strError = "Please input confirm password.";
         else if (!etPassword.getText().toString().equals(etConfirmPassword.getText().toString()))
             strError = "The passwords you entered do not match. Please try again.";

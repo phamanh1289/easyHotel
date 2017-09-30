@@ -53,6 +53,8 @@ public class BookingCommentParrent extends BaseFragment {
         return fragment;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmen_booking_comment, container, false);

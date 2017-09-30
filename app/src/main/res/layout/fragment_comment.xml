@@ -47,16 +47,24 @@
             android:maxLines="2"
             android:textColor="@color/greyishBrownThree"
             android:textSize="@dimen/_12sdp"/>
-
-        <TextView
-            android:id="@+id/fragComment_tvEnter"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/_3sdp"
-            android:background="@drawable/selector_text_view_red"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/enter"
-            android:textColor="@color/whiteThree"/>
+<FrameLayout
+    android:layout_width="@dimen/_36sdp"
+    android:layout_height="@dimen/_36sdp"
+    android:layout_marginRight="@dimen/_3sdp"
+    android:layout_marginTop="@dimen/_2sdp"
+    android:background="@drawable/selector_text_view_red">
+    <TextView
+        android:id="@+id/fragComment_tvEnter"
+        android:layout_width="@dimen/_26sdp"
+        android:layout_height="@dimen/_26sdp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginLeft="@dimen/_2sdp"
+        android:background="@drawable/ic_send_black_48dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/whiteThree"/>
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+</FrameLayout>
     </LinearLayout>
 </LinearLayout>

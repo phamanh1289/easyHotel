@@ -85,8 +85,6 @@ public class HomeFragment extends BaseFragment {
         }
         toGetDataHotel();
 //        toAddDataDemo();
-
-
     }
 
     private void toGetDataProfile() {
@@ -175,8 +173,6 @@ public class HomeFragment extends BaseFragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-
     }
 
     @Override

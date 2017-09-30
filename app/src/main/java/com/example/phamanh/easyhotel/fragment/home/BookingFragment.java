@@ -13,6 +13,7 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.RoomAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
+import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.RoomModel;
 import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.google.firebase.database.DataSnapshot;
@@ -40,8 +41,8 @@ public class BookingFragment extends BaseFragment {
 
     private RoomModel mRoomModel = new RoomModel();
     private RoomAdapter singleAdapter, doubleAdapter;
-    private String mKey;
-    private String service;
+    private InfomationModel mInfomationModel;
+    private String service, mKey;
     private ServiceDetailModel mServiceDetailModel;
     private List<String> mDataService;
     Unbinder unbinder;
@@ -57,23 +58,27 @@ public class BookingFragment extends BaseFragment {
     }
 
     private void init() {
-        mKey = ((BookingCommentParrent) getParentFragment()).mKey;
+        mInfomationModel = ((BookingCommentParrent) getParentFragment()).mInfomationModel;
+        mKey = mInfomationModel.getId();
+
         refHotel_room.child(mKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mRoomModel.single = Integer.parseInt(dataSnapshot.child("single").getValue().toString());
-                if (singleAdapter == null) {
-                    toSetUpUI(rvSingle, singleAdapter, toSingleClick, mRoomModel.single, true);
-                } else
-                    singleAdapter.notifyDataSetChanged();
-                tvNoDataSingle.setVisibility(mRoomModel.single != 0 ? View.GONE : View.VISIBLE);
+                if (!mKey.equals("")) {
+                    mRoomModel.single = Integer.parseInt(dataSnapshot.child("single").getValue().toString());
+                    if (rvSingle != null) {
+                        toSetUpUI(rvSingle, singleAdapter, toSingleClick, mRoomModel.single, true);
+                    } else
+                        singleAdapter.notifyDataSetChanged();
+                    tvNoDataSingle.setVisibility(mRoomModel.single != 0 ? View.GONE : View.VISIBLE);
 
-                mRoomModel._double = Integer.parseInt(dataSnapshot.child("double").getValue().toString());
-                if (doubleAdapter == null) {
-                    toSetUpUI(rvDouble, doubleAdapter, toDoubleClick, mRoomModel._double, false);
-                } else
-                    doubleAdapter.notifyDataSetChanged();
-                tvNoDataDouble.setVisibility(mRoomModel._double != 0 ? View.GONE : View.VISIBLE);
+                    mRoomModel._double = Integer.parseInt(dataSnapshot.child("double").getValue().toString());
+                    if (rvDouble != null) {
+                        toSetUpUI(rvDouble, doubleAdapter, toDoubleClick, mRoomModel._double, false);
+                    } else
+                        doubleAdapter.notifyDataSetChanged();
+                    tvNoDataDouble.setVisibility(mRoomModel._double != 0 ? View.GONE : View.VISIBLE);
+                }
             }
 
             @Override
@@ -92,12 +97,19 @@ public class BookingFragment extends BaseFragment {
         }
     }
 
-    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel, service, pos, true, mRoomModel.single), true);
+    @Override
+    public void onStop() {
+        super.onStop();
+        mInfomationModel = null;
+        mKey = "";
+    }
+
+    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(mInfomationModel, service, pos, true, mRoomModel.single), true);
     ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel, service, pos, false, mRoomModel._double), true);
 
-    private void toSetUpUI(RecyclerView rvMain, RoomAdapter adapter, ItemListener toClick, int i, boolean ischeck) {
+    private void toSetUpUI(RecyclerView rvMain, RoomAdapter adapter, ItemListener toClick, int i, boolean isCheck) {
         adapter = new RoomAdapter(i);
-        adapter.setCheck(ischeck);
+        adapter.setCheck(isCheck);
         adapter.setListener(toClick);
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new GridLayoutManager(getActivity(), 4));

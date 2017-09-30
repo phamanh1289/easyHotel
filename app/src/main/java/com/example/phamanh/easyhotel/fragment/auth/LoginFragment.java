@@ -147,11 +147,11 @@ public class LoginFragment extends BaseFragment {
 
     public boolean checkValidInput() {
         String strError = "";
-        if (etEmail.getText().toString().isEmpty())
+        if (etEmail.getText().toString().trim().isEmpty())
             strError = "Please enter your email.";
         else if (!AppUtils.isValidEmail(etEmail.getText().toString()))
             strError = "Email is incorrect. Please try again.";
-        else if (etPassword.getText().toString().isEmpty())
+        else if (etPassword.getText().toString().trim().isEmpty())
             strError = "Please input password.";
         else if (etPassword.getText().length() < 6)
             strError = "Please input at least 6 characters.";
@@ -175,7 +175,6 @@ public class LoginFragment extends BaseFragment {
                 firebaseAuthWithGoogle(account);
             }
         }
-        dismissLoading();
     }
 
     @Override
@@ -252,7 +251,7 @@ public class LoginFragment extends BaseFragment {
                     if (task.isSuccessful()) {
                         mUser = FirebaseAuth.getInstance().getCurrentUser();
                         toGetDataProfile();
-                        toAddReLogin(true);
+                        toAddReLogin(false);
                     } else {
                         AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
@@ -268,7 +267,7 @@ public class LoginFragment extends BaseFragment {
                     if (task.isSuccessful()) {
                         mUser = FirebaseAuth.getInstance().getCurrentUser();
                         toGetDataProfile();
-                        toAddReLogin(true);
+                        toAddReLogin(false);
                     } else {
                         AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
@@ -277,8 +276,6 @@ public class LoginFragment extends BaseFragment {
     }
 
     private void toAddReLogin(boolean check) {
-        if (getUser() == null)
-            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
         if (check)
             SharedPrefUtils.saveLogin(getActivity(), etEmail.getText().toString(), etPassword.getText().toString());
         else
@@ -303,6 +300,8 @@ public class LoginFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                 }
+                if (getUser() == null)
+                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
             }
 
             @Override
@@ -324,5 +323,6 @@ public class LoginFragment extends BaseFragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
     }
 }

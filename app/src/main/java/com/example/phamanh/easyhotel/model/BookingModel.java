@@ -5,7 +5,7 @@ import com.example.phamanh.easyhotel.base.BaseModel;
 
 public class BookingModel extends BaseModel {
 
-    private String hotelName, roomName, startDate, dueDate, personal, service, fullName, phone, email;
+    private String hotelName, typeRoom, startDate, dueDate, personal, service, fullName, phone, email;
 
     public String getHotelName() {
         return hotelName;
@@ -16,11 +16,11 @@ public class BookingModel extends BaseModel {
     }
 
     public String getRoomName() {
-        return roomName;
+        return typeRoom;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setRoomName(String typeRoom) {
+        this.typeRoom = typeRoom;
     }
 
     public String getStartDate() {

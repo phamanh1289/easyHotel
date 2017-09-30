@@ -14,6 +14,9 @@ public class RatingModel extends BaseModel {
         this.time = time;
     }
 
+    public RatingModel() {
+    }
+
     public Long getTime() {
         return time;
     }

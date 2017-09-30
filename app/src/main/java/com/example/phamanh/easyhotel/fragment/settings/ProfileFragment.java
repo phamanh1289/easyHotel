@@ -130,23 +130,23 @@ public class ProfileFragment extends BaseFragment {
 
     public boolean isValidate() {
         boolean isCheck = true;
-        if (tvUserName.getText().toString().isEmpty()) {
+        if (tvUserName.getText().toString().trim().isEmpty()) {
             tvUserName.setHintTextColor(Color.RED);
             isCheck = false;
         }
-        if (tvDOB.getText().toString().isEmpty()) {
+        if (tvDOB.getText().toString().trim().isEmpty()) {
             tvDOB.setHintTextColor(Color.RED);
             isCheck = false;
         }
-        if (tvMobilePhone.getText().toString().isEmpty()) {
+        if (tvMobilePhone.getText().toString().trim().isEmpty()) {
             tvMobilePhone.setHintTextColor(Color.RED);
             isCheck = false;
         }
-        if (tvEmail.getText().toString().isEmpty()) {
+        if (tvEmail.getText().toString().trim().isEmpty()) {
             tvEmail.setHintTextColor(Color.RED);
             isCheck = false;
         }
-        if (tvAddress.getText().toString().isEmpty()) {
+        if (tvAddress.getText().toString().trim().isEmpty()) {
             tvAddress.setHintTextColor(Color.RED);
             isCheck = false;
         }
@@ -155,15 +155,15 @@ public class ProfileFragment extends BaseFragment {
 
     public boolean checkValidInput() {
         String strError = "";
-        if (tvUserName.getText().toString().isEmpty())
+        if (tvUserName.getText().toString().trim().isEmpty())
             strError = "Please input full name.";
-        else if (tvDOB.getText().toString().isEmpty())
+        else if (tvDOB.getText().toString().trim().isEmpty())
             strError = "Please indicate date of birth.";
-        else if (tvMobilePhone.getText().toString().isEmpty())
+        else if (tvMobilePhone.getText().toString().trim().isEmpty())
             strError = "Please input mobile phone.";
-        else if (tvAddress.getText().toString().isEmpty())
+        else if (tvAddress.getText().toString().trim().isEmpty())
             strError = "Please input address.";
-        else if (tvEmail.getText().toString().isEmpty())
+        else if (tvEmail.getText().toString().trim().isEmpty())
             strError = "Please input email.";
         if (TextUtils.isEmpty(strError))
             return true;

@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +55,8 @@ public class BookingDetailFragment extends BaseFragment {
     EditText tvPhone;
     @BindView(R.id.fragBookingDetail_tvEmail)
     EditText tvEmail;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.fragBookingDetail_tvNumber)
+    EditText tvNumber;
 
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Date mDate = new Date();
@@ -67,7 +66,7 @@ public class BookingDetailFragment extends BaseFragment {
     private boolean isCheckRoom;
     private InfomationModel mInfomationModel;
     private BookingModel mBookingModel;
-    private int countRoom;
+    private int countRoom, numberRoom = 1;
 
     public static BookingDetailFragment newInstance(InfomationModel title, String service, int room, boolean check, int count) {
 
@@ -97,11 +96,11 @@ public class BookingDetailFragment extends BaseFragment {
         if (bundle != null) {
             isCheckRoom = bundle.getBoolean(Constant.KEY);
             mDataRoom.addAll(DataHardCode.getListRoom(isCheckRoom));
+            tvRoomName.setText(isCheckRoom ? "Single" : "Double");
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.TITLE_INTRO);
             countRoom = bundle.getInt(Constant.COMMENT);
         }
         tvHotelName.setText(mInfomationModel.getName());
-        tvRoomName.setText("Room #" + String.valueOf(getArguments().getInt(Constant.ID)));
         tvStartDate.setText(dateFormat.format(mDate));
         tvDueDate.setText(dateFormat.format(mDate));
         tvEmail.setText(getUser().getEmail());
@@ -119,19 +118,19 @@ public class BookingDetailFragment extends BaseFragment {
     private boolean toValidate() {
         boolean check = true;
 
-        if (tvHotelName.getText().toString().isEmpty()) {
+        if (tvHotelName.getText().toString().trim().isEmpty()) {
             tvHotelName.setHintTextColor(Color.RED);
             check = false;
         }
-        if (tvRoomName.getText().toString().isEmpty()) {
+        if (tvRoomName.getText().toString().trim().isEmpty()) {
             tvRoomName.setHintTextColor(Color.RED);
             check = false;
         }
-        if (tvStartDate.getText().toString().isEmpty()) {
+        if (tvStartDate.getText().toString().trim().isEmpty()) {
             tvStartDate.setHintTextColor(Color.RED);
             check = false;
         }
-        if (tvDueDate.getText().toString().isEmpty()) {
+        if (tvDueDate.getText().toString().trim().isEmpty()) {
             tvDueDate.setHintTextColor(Color.RED);
             check = false;
         }
@@ -139,15 +138,15 @@ public class BookingDetailFragment extends BaseFragment {
             AppUtils.showAlert(getContext(), "Error date.", toClickDialogCheckDate);
             check = false;
         }
-        if (tvPersonal.getText().toString().isEmpty()) {
+        if (tvPersonal.getText().toString().trim().isEmpty()) {
             tvPersonal.setHintTextColor(Color.RED);
             check = false;
         }
-        if (tvFullName.getText().toString().isEmpty()) {
+        if (tvFullName.getText().toString().trim().isEmpty()) {
             tvFullName.setHintTextColor(Color.RED);
             check = false;
         }
-        if (tvPhone.getText().toString().isEmpty()) {
+        if (tvPhone.getText().toString().trim().isEmpty()) {
             tvPhone.setHintTextColor(Color.RED);
             check = false;
         }
@@ -157,22 +156,22 @@ public class BookingDetailFragment extends BaseFragment {
 
     private void toShowTextError() {
         String s = "";
-        if (tvHotelName.getText().toString().isEmpty()) {
+        if (tvHotelName.getText().toString().trim().isEmpty()) {
             s = "Please input hotel name";
-        } else if (tvRoomName.getText().toString().isEmpty()) {
+        } else if (tvRoomName.getText().toString().trim().isEmpty()) {
             s = "Please input room name";
-        } else if (tvStartDate.getText().toString().isEmpty()) {
+        } else if (tvStartDate.getText().toString().trim().isEmpty()) {
             s = "Please choice start date";
-        } else if (tvDueDate.getText().toString().isEmpty()) {
+        } else if (tvDueDate.getText().toString().trim().isEmpty()) {
             s = "Please choice due date";
-        } else if (tvPersonal.getText().toString().isEmpty()) {
+        } else if (tvPersonal.getText().toString().trim().isEmpty()) {
             s = "Please input personal";
-        } else if (tvFullName.getText().toString().isEmpty()) {
+        } else if (tvFullName.getText().toString().trim().isEmpty()) {
             s = "Please input full name";
-        } else if (tvPhone.getText().toString().isEmpty()) {
+        } else if (tvPhone.getText().toString().trim().isEmpty()) {
             s = "Please input mobile phone";
         }
-        if (!s.isEmpty())
+        if (!s.trim().isEmpty())
             toShowSnack(s);
     }
 
@@ -193,7 +192,7 @@ public class BookingDetailFragment extends BaseFragment {
         AppUtils.showAlert(getContext(), title, null);
     }
 
-    @OnClick({R.id.fragBookingDetail_tvStartDate, R.id.fragBookingDetail_tvDueDate, R.id.fragBookingDetail_tvService, R.id.fragBookingDetail_tvSubmit, R.id.fragBookingDetail_tvPersonal})
+    @OnClick({R.id.fragBookingDetail_tvStartDate, R.id.fragBookingDetail_tvDueDate, R.id.fragBookingDetail_tvService, R.id.fragBookingDetail_tvSubmit, R.id.fragBookingDetail_tvPersonal, R.id.fragBookingDetail_ivAdd, R.id.fragBookingDetail_ivSub})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragBookingDetail_tvStartDate:
@@ -207,7 +206,7 @@ public class BookingDetailFragment extends BaseFragment {
                     toShowTextError();
                 else {
                     showLoading();
-                    new CountDownTimer(2000, 1000) {
+                    new CountDownTimer(1000, 1000) {
                         @Override
                         public void onTick(long l) {
 
@@ -219,6 +218,7 @@ public class BookingDetailFragment extends BaseFragment {
                             refMember_booking.child(mUser.getUid()).push().setValue(new Gson().toJson(mBookingModel));
                             refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "double").setValue(countRoom - 1);
                             AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
+                            mInfomationModel = null;
                             dismissLoading();
                         }
                     }.start();
@@ -226,6 +226,18 @@ public class BookingDetailFragment extends BaseFragment {
                 break;
             case R.id.fragBookingDetail_tvPersonal:
                 AppUtils.toGetPopup(getContext(), view, popupRoom, mDataRoom, tvPersonal);
+                break;
+            case R.id.fragBookingDetail_ivAdd:
+                if (numberRoom < countRoom) {
+                    numberRoom++;
+                    tvNumber.setText(numberRoom + " room");
+                } else AppUtils.showAlert(getContext(), "Full room in the hotel.", null);
+                break;
+            case R.id.fragBookingDetail_ivSub:
+                if (numberRoom > 1) {
+                    numberRoom--;
+                    tvNumber.setText(numberRoom + " room");
+                } else AppUtils.showAlert(getContext(), "Rooms are not empty.", null);
                 break;
         }
     }

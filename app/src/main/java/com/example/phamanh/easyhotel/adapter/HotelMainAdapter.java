@@ -75,7 +75,7 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
             public void onDataChange(DataSnapshot dataSnapshot) {
                 holder.ivDouble.setImageResource(Integer.parseInt(dataSnapshot.child("double").getValue().toString()) != 0 ? R.drawable.ic_double_room_ok : R.drawable.ic_double_room_null);
                 holder.ivSingle.setImageResource(Integer.parseInt(dataSnapshot.child("single").getValue().toString()) != 0 ? R.drawable.ic_signle_room_ok : R.drawable.ic_signle_room);
-                holder.tvBooking.setText(Integer.parseInt(dataSnapshot.child("double").getValue().toString()) == 0 && Integer.parseInt(dataSnapshot.child("double").getValue().toString()) == 0 ? holder.itemView.getContext().getString(R.string.out_room) : holder.itemView.getContext().getString(R.string.booking));
+                holder.tvBooking.setText(Integer.parseInt(dataSnapshot.child("double").getValue().toString()) == 0 && Integer.parseInt(dataSnapshot.child("single").getValue().toString()) == 0 ? holder.itemView.getContext().getString(R.string.out_room) : holder.itemView.getContext().getString(R.string.booking));
             }
 
             @Override

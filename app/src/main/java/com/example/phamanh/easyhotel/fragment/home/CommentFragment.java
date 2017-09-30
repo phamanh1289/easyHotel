@@ -115,7 +115,7 @@ public class CommentFragment extends BaseFragment {
     }
 
     private boolean toValidate() {
-        if (etContent.getText().toString().isEmpty()) {
+        if (etContent.getText().toString().trim().isEmpty()) {
             AppUtils.showAlert(getContext(), "Please enter content", null);
             return false;
         }
@@ -141,7 +141,7 @@ public class CommentFragment extends BaseFragment {
     @OnClick(R.id.fragComment_tvEnter)
     public void onViewClicked() {
         if (toValidate()) {
-            refHotel_comment.child(mKey).push().setValue(new Gson().toJson(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString(), getUser().getAvatar())));
+            refHotel_comment.child(mKey).push().setValue(new Gson().toJson(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString().trim(), getUser().getAvatar())));
             etContent.setText("");
         }
     }
