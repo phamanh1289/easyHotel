@@ -305,6 +305,8 @@ public class SignUpFragment extends BaseFragment {
                         e.printStackTrace();
                     }
                 }
+                if (getUser() == null)
+                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
             }
 
             @Override

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -31,6 +35,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,6 +56,24 @@ public class AppUtils {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    public static void printHashKey(Context context) {
+
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                Log.e("hash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
+    }
+
     public static void showAlert(Context context, String title, DialogListener clickListener) {
         ConfirmDialog dialog = new ConfirmDialog(context, title);
         dialog.setOnItemClickListener(clickListener);
@@ -57,11 +81,10 @@ public class AppUtils {
     }
 
     public static void showAlertConfirm(Context context, String title, DialogListener clickListener) {
-        ConfirmListenerDialog dialog = new ConfirmListenerDialog(context,"", title,"Cancel","Submit");
+        ConfirmListenerDialog dialog = new ConfirmListenerDialog(context, "", title, "Cancel", "Submit");
         dialog.setOnItemClickListener(clickListener);
         dialog.show();
     }
-
 
 
     public static String convertNumberOrdinal(int i) {

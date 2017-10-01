@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "251479910350-12o8i16go8jnjcj1st4bpcnh5i4j3fnt.apps.googleusercontent.com",
+          "client_id": "251479910350-fp9feqsa7ivdvq8jbogjb4hdntrh5p1f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.phamanh.easyhotel",
-            "certificate_hash": "41bd7ee2eee3bfc6a2f97e528f33d1e903caed79"
+            "certificate_hash": "402aafb263fc3d2f42f7b315e3562041cdef05e6"
           }
         },
         {
