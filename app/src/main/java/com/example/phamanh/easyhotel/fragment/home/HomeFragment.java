@@ -134,7 +134,7 @@ public class HomeFragment extends BaseFragment {
         }
     };
 
-    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos)), true);
+    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos),pos), true);
 
     private void toGetDataHotel() {
         if (mDataInfomation.size() != 0)

@@ -72,11 +72,14 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
             }
         });
 
-        FirebaseDatabase.getInstance().getReference("hotel").child(Constant.LIKE).child(model.getId()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("hotel").child(Constant.LIKE).child(model.getId()).child(mKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null)
-                    holder.tvLike.setImageResource(R.drawable.ic_like_main);
+                if (dataSnapshot.getValue() != null)
+                    if (dataSnapshot.getValue().equals(mKey)){
+                        holder.tvLike.setImageResource(R.drawable.ic_like_main);
+                        model.isLike = true;
+                    }
             }
 
             @Override

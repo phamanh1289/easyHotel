@@ -26,7 +26,7 @@ public class RatingModel extends BaseModel {
     }
 
     public String getScore() {
-        return score;
+        return score != null ? score : "";
     }
 
     public void setScore(String score) {
@@ -34,7 +34,7 @@ public class RatingModel extends BaseModel {
     }
 
     public String getEmail() {
-        return email;
+        return email != null ? email : "";
     }
 
     public void setEmail(String email) {

@@ -10,6 +10,7 @@ import java.util.List;
 
 public class InfomationModel extends BaseModel {
     private String address, description, logo, name, price, id;
+    public boolean isLike;
     private Bitmap bitmap;
     public List<String> mDataImage = new ArrayList<>();
     public Location location;

@@ -43,11 +43,13 @@ public class BookingCommentParrent extends BaseFragment {
     public InfomationModel mInfomationModel;
     public ServiceDetailModel mServiceDetailModel;
     public String mKey;
+    private int index;
 
-    public static BookingCommentParrent newInstance(BaseModel item) {
+    public static BookingCommentParrent newInstance(BaseModel item, int index) {
 
         Bundle args = new Bundle();
         args.putSerializable(Constant.BASE_MODEL, item);
+        args.putInt(Constant.INDEX_TAB_LOCATION_KEY, index);
         BookingCommentParrent fragment = new BookingCommentParrent();
         fragment.setArguments(args);
         return fragment;
@@ -69,6 +71,7 @@ public class BookingCommentParrent extends BaseFragment {
         if (bundle != null) {
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.BASE_MODEL);
             mKey = mInfomationModel.getId();
+            index = bundle.getInt(Constant.INDEX_TAB_LOCATION_KEY);
             adapter = new BookingCommentPager(getChildFragmentManager());
             viewpager.setAdapter(adapter);
             tabBookComment.setupWithViewPager(viewpager);
