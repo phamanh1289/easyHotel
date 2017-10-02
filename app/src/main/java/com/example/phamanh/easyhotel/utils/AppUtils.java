@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
+import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.other.view.ConfirmDialog;
 import com.example.phamanh.easyhotel.other.view.ConfirmListenerDialog;
@@ -53,7 +54,25 @@ public class AppUtils {
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+        if (netInfo != null && netInfo.isConnectedOrConnecting())
+            return true;
+        else {
+            showAlert(context, "No connection. Please check your internet,", new DialogListener() {
+                @Override
+                public void onConfirmClicked() {
+                    SharedPrefUtils.removeLogout(context);
+                    BaseApplication application = (BaseApplication) context.getApplicationContext();
+                    application.setCustomer(null);
+                    StartActivityUtils.toLogin(context);
+                }
+
+                @Override
+                public void onCancelClicked() {
+
+                }
+            });
+            return false;
+        }
     }
 
     public static void printHashKey(Context context) {

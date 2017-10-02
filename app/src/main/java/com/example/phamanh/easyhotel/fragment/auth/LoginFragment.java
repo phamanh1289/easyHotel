@@ -191,7 +191,7 @@ public class LoginFragment extends BaseFragment {
                 isShowPass = !isShowPass;
                 break;
             case R.id.fragLogin_tvLogin:
-                if (checkValidInput()) {
+                if (checkValidInput() && AppUtils.isNetworkAvailable(getContext())) {
                     showLoading();
                     toLoginUser();
                 }

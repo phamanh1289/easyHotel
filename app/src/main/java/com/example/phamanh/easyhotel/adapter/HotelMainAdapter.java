@@ -14,6 +14,7 @@ import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +37,7 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
     private InfomationModel model;
     public StorageReference refStorage;
     private DatabaseReference database;
+    private String mKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     public HotelMainAdapter(List<InfomationModel> mData) {
         this.mData = mData;
@@ -56,6 +58,7 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         model = mData.get(position);
         holder.tvAddress.setText(model.getAddress());
         holder.tvTitle.setText(model.getName());
+        holder.tvPrice.setText(String.valueOf(model.getPrice()));
         refStorage = FirebaseStorage.getInstance().getReferenceFromUrl(model.getLogo());
         refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
             mData.get(position).setBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
@@ -66,6 +69,19 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
             public void onFailure(@NonNull Exception exception) {
                 holder.ivBanner.setImageResource(R.drawable.ic_no_image);
                 holder.avLoading.setVisibility(View.GONE);
+            }
+        });
+
+        FirebaseDatabase.getInstance().getReference("hotel").child(Constant.LIKE).child(model.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null)
+                    holder.tvLike.setImageResource(R.drawable.ic_like_main);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
@@ -106,6 +122,10 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         ImageView ivSingle;
         @BindView(R.id.itemHome_tvBooking)
         TextView tvBooking;
+        @BindView(R.id.itemHome_tvPrice)
+        TextView tvPrice;
+        @BindView(R.id.itemHome_tvLike)
+        ImageView tvLike;
 
         public HotelHolder(View itemView) {
             super(itemView);

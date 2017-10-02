@@ -53,8 +53,6 @@ public class BookingCommentParrent extends BaseFragment {
         return fragment;
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmen_booking_comment, container, false);
@@ -115,29 +113,6 @@ public class BookingCommentParrent extends BaseFragment {
 
             }
         });
-
-//        refHotel_service.child(mKey).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.getValue() != null) {
-//                    try {
-//                        Gson gson = new Gson();
-//                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-//                        if (jsonObject != null) {
-//                            mServiceDetailModel = gson.fromJson(jsonObject.toString(), ServiceDetailModel.class);
-//                            mDataService.add(mServiceDetailModel);
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @Override

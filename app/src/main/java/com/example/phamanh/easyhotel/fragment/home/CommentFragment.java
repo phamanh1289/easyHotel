@@ -14,14 +14,17 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.CommentAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.CommentModel;
+import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,6 +82,7 @@ public class CommentFragment extends BaseFragment {
                         if (jsonObject != null) {
                             modelComment = gson.fromJson(jsonObject.toString(), CommentModel.class);
                             mDataComment.add(modelComment);
+                            EventBus.getDefault().postSticky(new EventBusBooking(Constant.COMMENT, String.valueOf(mDataComment.size())));
                         }
                         adapter.notifyItemInserted(mDataComment.size() - 1);
                         if (mDataComment.size() > 1)
@@ -111,7 +115,6 @@ public class CommentFragment extends BaseFragment {
 
             }
         });
-
     }
 
     private boolean toValidate() {

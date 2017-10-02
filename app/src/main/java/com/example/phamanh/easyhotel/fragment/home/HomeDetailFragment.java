@@ -12,10 +12,12 @@ import android.widget.TextView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.other.view.RatingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +26,9 @@ import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.willy.ratingbar.RotationRatingBar;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +56,14 @@ public class HomeDetailFragment extends BaseFragment {
     EditText tvScore;
     @BindView(R.id.item_avLoading)
     AVLoadingIndicatorView avLoading;
+    @BindView(R.id.fragHomeDetail_tvLike)
+    EditText tvLike;
+    @BindView(R.id.fragHomeDetail_tvCheck)
+    EditText tvCheck;
+    @BindView(R.id.fragHomeDetail_tvComment)
+    EditText tvComment;
+    @BindView(R.id.fragHomeDetail_ivLike)
+    ImageView ivLike;
 
     private InfomationModel mInfomationModel;
     private int rating;
@@ -70,7 +83,6 @@ public class HomeDetailFragment extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_home_detail, container, false);
         KeyboardUtils.setupUI(view, getActivity());
         setActionBar(view, getString(R.string.page_home_detail));
-
         return view;
     }
 
@@ -102,6 +114,7 @@ public class HomeDetailFragment extends BaseFragment {
             avLoading.setVisibility(View.GONE);
             tvScore.setText("-");
             isCheckRating = true;
+            tvCheck.setText("0");
             toPostRating();
         }
     }
@@ -128,6 +141,7 @@ public class HomeDetailFragment extends BaseFragment {
                         mDataRating.add(mRatingModel);
                     }
                     tvScore.setText(toCountScore(mDataRating));
+                    tvCheck.setText(String.valueOf(mDataRating.size()));
                     ratingStar.setRating(Float.parseFloat(mRatingModel.getScore()));
                     isCheckRating = true;
                     toPostRating();
@@ -213,11 +227,39 @@ public class HomeDetailFragment extends BaseFragment {
         return "0";
     }
 
-    @OnClick(R.id.fragHomeDetail_tvScore)
-    public void onViewClicked() {
-        if (avLoading.getVisibility() != View.VISIBLE) {
-            ratingDialog = new RatingDialog(getContext(), mDataRating);
-            ratingDialog.show();
+    @OnClick({R.id.fragHomeDetail_tvScore, R.id.fragHomeDetail_ivLike})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fragHomeDetail_tvScore:
+                if (avLoading.getVisibility() != View.VISIBLE) {
+                    ratingDialog = new RatingDialog(getContext(), mDataRating);
+                    ratingDialog.show();
+                }
+                break;
+            case R.id.fragHomeDetail_ivLike:
+//                if (ivLike.get)
+                refMember_like.child(mKey).child(mUser.getUid()).setValue(mUser.getUid());
+                break;
         }
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusBooking event) {
+        if (event.getAction().equals(Constant.COMMENT)) {
+            tvComment.setText(event.getValue());
+        }
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

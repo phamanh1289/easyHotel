@@ -187,7 +187,7 @@ public class SignUpFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragSignUp_tvLogin:
-                if (checkValidInput())
+                if (checkValidInput() && AppUtils.isNetworkAvailable(getContext()))
                     toCreateNewUser();
                 break;
             case R.id.fragSignUp_ivFacebook:
@@ -284,7 +284,7 @@ public class SignUpFragment extends BaseFragment {
     private void toAddReLogin() {
         if (getUser() == null)
             refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
-            SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+        SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
         dismissLoading();
         StartActivityUtils.toMain(getActivity(), null);
         getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

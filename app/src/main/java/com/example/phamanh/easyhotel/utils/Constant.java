@@ -26,6 +26,7 @@ public class Constant {
     public static final String IMAGE = "image";
     public static final String SERVICE = "service";
     public static final String ROOM = "room";
+    public static final String LIKE = "like";
     public static final String RATING = "rating";
     public static final String COMMENT = "comment";
     public static final String BOOKING = "booking";

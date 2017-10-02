@@ -17,6 +17,27 @@
             android:scaleType="centerCrop"
             app:riv_corner_radius="@dimen/_15sdp"/>
 
+        <TextView
+            android:id="@+id/itemHome_tvPrice"
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@drawable/ic_price_tag"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingLeft="@dimen/_3sdp"
+            android:text="99.999"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_8sdp"/>
+
+        <ImageView
+            android:id="@+id/itemHome_tvLike"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_32sdp"
+            android:src="@drawable/ic_no_lick_main"/>
+
         <include layout="@layout/view_loading_image"/>
     </FrameLayout>
 
@@ -84,6 +105,7 @@
             android:orientation="horizontal">
 
         </LinearLayout>
+
         <TextView
             android:id="@+id/itemHome_tvTitle"
             fontPath="@string/Helvetica_bold"

@@ -17,7 +17,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/_150sdp">
 
                 <ImageView
                     android:id="@+id/fragHomeDetail_ivBanner"
@@ -25,6 +25,13 @@
                     android:layout_height="@dimen/_150sdp"
                     android:layout_marginBottom="@dimen/_17sdp"
                     android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:id="@+id/fragHomeDetail_ivLike"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_no_lick_main"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -49,6 +56,72 @@
                         android:visibility="gone"/>
                 </FrameLayout>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:background="@color/blur_"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/fragHomeDetail_tvLike"
+                        fontPath="@string/Helvetica_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:text="120"
+                        android:textColor="@color/whiteThree"
+                        android:textSize="@dimen/_11sdp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_like_main"/>
+
+                    <EditText
+                        android:id="@+id/fragHomeDetail_tvCheck"
+                        fontPath="@string/Helvetica_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:text="1200"
+                        android:textColor="@color/whiteThree"
+                        android:textSize="@dimen/_11sdp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_check_in_main"/>
+
+                    <EditText
+                        android:id="@+id/fragHomeDetail_tvComment"
+                        fontPath="@string/Helvetica_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:text="1200"
+                        android:textColor="@color/whiteThree"
+                        android:textSize="@dimen/_11sdp"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_comment_main"/>
+
+                </LinearLayout>
             </FrameLayout>
 
 

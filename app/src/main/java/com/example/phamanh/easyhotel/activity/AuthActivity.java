@@ -13,7 +13,6 @@ import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
 import com.example.phamanh.easyhotel.utils.StartActivityUtils;
 
 
-
 public class AuthActivity extends BaseActivity {
 
 
@@ -38,7 +37,7 @@ public class AuthActivity extends BaseActivity {
         if (SharedPrefUtils.getString(this, Constant.TYPE_LOGIN).equals(Constant.LOGIN_NORMAL) || SharedPrefUtils.getString(this, Constant.TYPE_LOGIN).equals(Constant.LOGIN_SOCIAL)) {
             StartActivityUtils.toMain(this, null);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        } else{
+        } else {
             StartActivityUtils.toIntro(this);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
