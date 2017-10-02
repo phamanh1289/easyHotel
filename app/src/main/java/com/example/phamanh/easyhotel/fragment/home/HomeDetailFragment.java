@@ -226,9 +226,9 @@ public class HomeDetailFragment extends BaseFragment {
                 break;
             case R.id.fragHomeDetail_ivLike:
                 if (!mInfomationModel.isLike)
-                    refMember_like.child(mKey).child(mUser.getUid()).setValue(mUser.getUid());
+                    refHotel_like.child(mKey).child(mUser.getUid()).setValue(mUser.getUid());
                 else
-                    refMember_like.child(mKey).child(mUser.getUid()).removeValue();
+                    refHotel_like.child(mKey).child(mUser.getUid()).removeValue();
                 mInfomationModel.isLike = !mInfomationModel.isLike;
                 ivLike.setImageResource(mInfomationModel.isLike ? R.drawable.ic_like_main : R.drawable.ic_no_lick_main);
                 break;

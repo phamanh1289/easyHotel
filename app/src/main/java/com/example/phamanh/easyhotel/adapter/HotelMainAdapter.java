@@ -55,7 +55,7 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
 
     @Override
     public void onBindViewHolder(HotelHolder holder, int position) {
-        model = mData.get(position);
+        InfomationModel model = mData.get(position);
         holder.tvAddress.setText(model.getAddress());
         holder.tvTitle.setText(model.getName());
         holder.tvPrice.setText(String.valueOf(model.getPrice()));
@@ -72,14 +72,13 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
             }
         });
 
-        FirebaseDatabase.getInstance().getReference("hotel").child(Constant.LIKE).child(model.getId()).child(mKey).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("hotel").child(Constant.LIKE).child(model.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null)
-                    if (dataSnapshot.getValue().equals(mKey)){
-                        holder.tvLike.setImageResource(R.drawable.ic_like_main);
-                        model.isLike = true;
-                    }
+//                if (dataSnapshot.child(mKey).getValue() != null) {
+                holder.tvLike.setImageResource(dataSnapshot.child(mKey).getValue() != null ? R.drawable.ic_like_main : R.drawable.ic_no_lick_main);
+                model.isLike = dataSnapshot.child(mKey).getValue() != null;
+//                }
             }
 
             @Override

@@ -103,7 +103,7 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fragSetting_llProfile, R.id.fragSetting_llFAQ, R.id.fragSetting_llLogout, R.id.fragSetting_llChangePass})
+    @OnClick({R.id.fragSetting_llProfile, R.id.fragSetting_llFAQ, R.id.fragSetting_llLogout, R.id.fragSetting_llChangePass, R.id.fragSetting_llHistory})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragSetting_llProfile:
@@ -119,6 +119,9 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
                 break;
             case R.id.fragSetting_llChangePass:
                 addFragment(new ChangePasswordFragment(), true);
+                break;
+            case R.id.fragSetting_llHistory:
+                addFragment(new HistoryFragment(), true);
                 break;
         }
     }

@@ -17,6 +17,7 @@ import com.example.phamanh.easyhotel.fragment.settings.ProfileFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.CommentModel;
+import com.example.phamanh.easyhotel.model.HistoryModel;
 import com.example.phamanh.easyhotel.model.HotelModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
@@ -175,6 +176,8 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -183,7 +186,11 @@ public class HomeFragment extends BaseFragment {
 
     private void toAddDataDemo() {
 
-        String mKeyHotel = String.valueOf(System.currentTimeMillis());
+        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("1")));
+        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("2")));
+        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("3")));
+
+//        String mKeyHotel = String.valueOf(System.currentTimeMillis());
 
 //        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_1", "nice", ""));
 //        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_2", "bad", ""));
@@ -199,10 +206,10 @@ public class HomeFragment extends BaseFragment {
 //        mDataRating.add(new RatingModel("email_8", "8", System.currentTimeMillis()));
 //        mListRating.rating = mDataRating;
 
-        List<String> mdata = new ArrayList<>();
-        mdata.add("spa");
-        mdata.add("eat");
-        service.setService(mdata);
+//        List<String> mdata = new ArrayList<>();
+//        mdata.add("spa");
+//        mdata.add("eat");
+//        service.setService(mdata);
 //        info.setAddress("123/123");
 //        info.setDescription("demo add");
 //        info.setLogo("demo logo");
@@ -223,8 +230,8 @@ public class HomeFragment extends BaseFragment {
 //        refHotel.child(String.valueOf(System.currentTimeMillis())).setValue(new Gson().toJson(hotel));
 
 //        refHotel_comment.child(mKey).setValue(new Gson().toJson(mListComment));
-        refHotel_service.child("1506252747351").setValue(new Gson().toJson(service));
-        refHotel_service.child("1506252754506").setValue(new Gson().toJson(service));
+//        refHotel_service.child("1506252747351").setValue(new Gson().toJson(service));
+//        refHotel_service.child("1506252754506").setValue(new Gson().toJson(service));
 //        refHotel_service.child(mKey).setValue(new Gson().toJson(mListService));
 //        refHotel.child(mKey).setValue(new Gson().toJson(info));
 //        refHotel_room.child(mKey).setValue(new Gson().toJson(new RoomModel(12, 8)));
