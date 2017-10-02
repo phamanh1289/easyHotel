@@ -290,7 +290,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/denimBlue"
+                    android:text="10.000"
+                    android:textSize="@dimen/_15sdp"
+                    android:background="@null"
+                    android:gravity="center_horizontal"
+                    android:padding="@dimen/_4sdp"
+                    android:id="@+id/fragBookingDetail_tvPrice"/>
                 <TextView
                     android:id="@+id/fragBookingDetail_tvSubmit"
                     android:layout_width="match_parent"

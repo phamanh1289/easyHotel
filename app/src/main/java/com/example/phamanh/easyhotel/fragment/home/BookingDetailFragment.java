@@ -38,8 +38,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.example.phamanh.easyhotel.R.id.fragBookingDetail_tvNumber;
-
 
 public class BookingDetailFragment extends BaseFragment {
 
@@ -63,8 +61,10 @@ public class BookingDetailFragment extends BaseFragment {
     EditText tvPhone;
     @BindView(R.id.fragBookingDetail_tvEmail)
     EditText tvEmail;
-    @BindView(fragBookingDetail_tvNumber)
+    @BindView(R.id.fragBookingDetail_tvNumber)
     EditText tvNumber;
+    @BindView(R.id.fragBookingDetail_tvPrice)
+    EditText tvPrice;
 
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Date mDate = new Date();
@@ -74,7 +74,7 @@ public class BookingDetailFragment extends BaseFragment {
     private boolean isCheckRoom;
     private InfomationModel mInfomationModel;
     private BookingModel mBookingModel;
-    private int countRoom, numberRoom = 1, nowRoom;
+    private int countRoom, numberRoom = 1, nowRoom, countPrice;
 
     public static BookingDetailFragment newInstance(InfomationModel title, String service, int room, boolean check, int count) {
 
@@ -106,8 +106,10 @@ public class BookingDetailFragment extends BaseFragment {
             mDataRoom.addAll(DataHardCode.getListRoom(isCheckRoom));
             tvRoomName.setText(isCheckRoom ? "Single" : "Double");
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.TITLE_INTRO);
+            countPrice = Integer.parseInt(mInfomationModel.getPrice());
             countRoom = bundle.getInt(Constant.COMMENT);
         }
+        tvPrice.setText(String.valueOf(countPrice));
         tvHotelName.setText(mInfomationModel.getName());
         tvStartDate.setText(dateFormat.format(mDate));
         tvDueDate.setText(dateFormat.format(mDate));
@@ -239,13 +241,15 @@ public class BookingDetailFragment extends BaseFragment {
             case R.id.fragBookingDetail_ivAdd:
                 if (numberRoom < countRoom) {
                     numberRoom++;
-                    tvNumber.setText(numberRoom + " room");
+                    tvNumber.setText(String.valueOf(numberRoom + " room"));
+                    tvPrice.setText(String.valueOf(numberRoom * countPrice));
                 } else AppUtils.showAlert(getContext(), "Full room in the hotel.", null);
                 break;
             case R.id.fragBookingDetail_ivSub:
                 if (numberRoom > 1) {
                     numberRoom--;
-                    tvNumber.setText(numberRoom + " room");
+                    tvNumber.setText(String.valueOf(numberRoom + " room"));
+                    tvPrice.setText(String.valueOf(numberRoom * countPrice));
                 } else AppUtils.showAlert(getContext(), "Rooms are not empty.", null);
                 break;
         }
@@ -293,7 +297,8 @@ public class BookingDetailFragment extends BaseFragment {
                     }
                 });
                 numberRoom = nowRoom;
-                tvNumber.setText(numberRoom + " room");
+                tvNumber.setText(String.valueOf(numberRoom + " room"));
+                tvPrice.setText(String.valueOf(numberRoom * countPrice));
             }
         }
         dismissLoading();
