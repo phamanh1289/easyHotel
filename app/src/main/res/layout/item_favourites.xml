@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/itemDiscover_llMain"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_margin="@dimen/_4sdp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/itemFavourites_ivBanner"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_130sdp"
+            android:scaleType="centerCrop"
+            app:riv_corner_radius="@dimen/_15sdp"/>
+
+        <TextView
+            android:id="@+id/itemFavourites_tvPrice"
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@drawable/ic_price_tag"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingLeft="@dimen/_3sdp"
+            android:text="99.999"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_8sdp"/>
+
+        <ImageView
+            android:id="@+id/itemFavourites_tvLike"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_32sdp"
+            android:src="@drawable/ic_no_lick_main"/>
+
+        <include layout="@layout/view_loading_image"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itemFavourites_tvBooking"
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_text_view_red"
+            android:paddingBottom="@dimen/_4sdp"
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingRight="@dimen/_8sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:text="@string/booking_now"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_8sdp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/itemFavourites_ivSingle"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:src="@drawable/ic_signle_room_ok"/>
+
+            <TextView
+                android:layout_width="@dimen/_2sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:background="@color/whiteThree"/>
+
+            <ImageView
+                android:id="@+id/itemFavourites_ivDouble"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:src="@drawable/ic_double_room_ok"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/shape_boder_bottom_main"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/itemFavourites_tvTitle"
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/_6sdp"
+            android:text="Khách sạn Mường Thanh"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_10sdp"/>
+
+        <TextView
+            android:id="@+id/itemFavourites_tvAddress"
+            fontPath="@string/Helvetica_light"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:paddingLeft="@dimen/_6sdp"
+            android:paddingRight="@dimen/_4sdp"
+            android:text="123/3 Bùi Thị Xuân, phường 3, Tân Bình."
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_9sdp"/>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -84,6 +84,31 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/fragSetting_llFavourites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_16sdp"
+        android:paddingRight="@dimen/_16sdp"
+        android:paddingTop="@dimen/_26sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/favourites"
+            android:textColor="@color/denimBlue"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_arrow_right" />
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/fragSetting_llFAQ"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

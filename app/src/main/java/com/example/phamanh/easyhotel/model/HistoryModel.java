@@ -4,7 +4,7 @@ import com.example.phamanh.easyhotel.base.BaseModel;
 
 
 public class HistoryModel extends BaseModel {
-    private String title;
+    private String title, time;
 
     public HistoryModel(String title) {
         this.title = title;

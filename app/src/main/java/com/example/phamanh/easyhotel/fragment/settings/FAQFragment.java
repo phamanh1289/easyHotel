@@ -21,14 +21,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * *******************************************
- * * Created by Simon on 18/09/2017.           **
- * * Copyright (c) 2015 by AppsCyclone      **
- * * All rights reserved                    **
- * * http://appscyclone.com/                **
- * *******************************************
- */
 
 public class FAQFragment extends BaseFragment {
 

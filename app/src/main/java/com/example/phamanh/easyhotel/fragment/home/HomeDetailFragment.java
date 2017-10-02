@@ -14,6 +14,7 @@ import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.InfomationModel;
+import com.example.phamanh.easyhotel.model.LikeMemberModel;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.other.view.RatingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
@@ -225,10 +226,13 @@ public class HomeDetailFragment extends BaseFragment {
                 }
                 break;
             case R.id.fragHomeDetail_ivLike:
-                if (!mInfomationModel.isLike)
+                if (!mInfomationModel.isLike) {
                     refHotel_like.child(mKey).child(mUser.getUid()).setValue(mUser.getUid());
-                else
+                    refMember_like.child(mUser.getUid()).child(mKey).setValue(new Gson().toJson(new LikeMemberModel(mKey)));
+                } else {
                     refHotel_like.child(mKey).child(mUser.getUid()).removeValue();
+                    refMember_like.child(mUser.getUid()).child(mKey).removeValue();
+                }
                 mInfomationModel.isLike = !mInfomationModel.isLike;
                 ivLike.setImageResource(mInfomationModel.isLike ? R.drawable.ic_like_main : R.drawable.ic_no_lick_main);
                 break;
