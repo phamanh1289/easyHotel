@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.FavouritesAdapter;
@@ -36,6 +37,8 @@ public class FavouritesFragment extends BaseFragment {
 
     @BindView(R.id.fragFavourites_rvMain)
     RecyclerView rvMain;
+    @BindView(R.id.fragFavourites_tvNoData)
+    TextView tvNoData;
     Unbinder unbinder;
 
     private List<InfomationModel> mDataInfomation = new ArrayList<>();
@@ -55,8 +58,25 @@ public class FavouritesFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        try {
+            refMember_like.removeEventListener(toAddHotel);
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            refMember_like.removeEventListener(toAddHotel);
+        } catch (Exception e) {
+        }
+    }
+
     private void init() {
-        showLoading();
         adapter = new FavouritesAdapter(mDataInfomation);
         adapter.setItemListener(toClickModel);
         rvMain.setAdapter(adapter);
@@ -72,47 +92,74 @@ public class FavouritesFragment extends BaseFragment {
     };
 
     private void toGetListHotel() {
-        if (mDataInfomation.size() != 0)
-            mDataInfomation.clear();
-        refMember_like.child(mUser.getUid()).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.getValue() != null) {
-                    try {
-                        Gson gson = new Gson();
-                        JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                        if (jsonObject != null) {
-                            LikeMemberModel item = gson.fromJson(jsonObject.toString(), LikeMemberModel.class);
-                            mDataLike.add(item);
-                            toLoadData(mDataLike);
-                        }
-                    } catch (Exception e) {
-                        dismissLoading();
-                    }
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        showLoading();
+        if (mDataLike.size() != 0)
+            mDataLike.clear();
+        refMember_like.child(mUser.getUid()).addChildEventListener(toAddHotel);
+        dismissLoading();
     }
+
+    ChildEventListener toAddHotel = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot.getValue() != null) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    if (jsonObject != null) {
+                        LikeMemberModel item = gson.fromJson(jsonObject.toString(), LikeMemberModel.class);
+                        mDataLike.add(item);
+                        toGetDataHotel(item.getHotel());
+                        if (mDataLike.size() != 0) {
+                            tvNoData.setVisibility(View.GONE);
+                        } else tvNoData.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception ignored) {
+                    dismissLoading();
+                }
+            } else {
+                dismissLoading();
+            }
+
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.getValue() != null) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                    if (jsonObject != null) {
+                        LikeMemberModel item = gson.fromJson(jsonObject.toString(), LikeMemberModel.class);
+                        mDataLike.remove(item);
+                        if (mDataLike.size() == 0) {
+                            tvNoData.setVisibility(View.VISIBLE);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (Exception ignored) {
+                    dismissLoading();
+                }
+            } else {
+                dismissLoading();
+            }
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     private void toLoadData(List<LikeMemberModel> mData) {
         for (LikeMemberModel item : mData) {
@@ -122,8 +169,6 @@ public class FavouritesFragment extends BaseFragment {
     }
 
     private void toGetDataHotel(String key) {
-        if (mDataInfomation.size() != 0)
-            mDataInfomation.clear();
         refHotel.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -140,6 +185,7 @@ public class FavouritesFragment extends BaseFragment {
                     mDataInfomation.add(info);
                     adapter.notifyItemInserted(mDataInfomation.size());
                 }
+                dismissLoading();
             }
 
             @Override

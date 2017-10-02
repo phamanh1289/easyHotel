@@ -135,47 +135,60 @@ public class HomeFragment extends BaseFragment {
         }
     };
 
-    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos),pos), true);
+    ItemListener toClickItem = pos -> addFragment(BookingCommentParrent.newInstance(mDataInfomation.get(pos), pos), true);
 
     private void toGetDataHotel() {
         if (mDataInfomation.size() != 0)
             mDataInfomation.clear();
-        refHotel.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                info = new InfomationModel();
-                info.setId(dataSnapshot.getKey());
-                info.setPrice(dataSnapshot.child("price").getValue().toString());
-                info.setName(dataSnapshot.child("name").getValue().toString());
-                info.setLogo(dataSnapshot.child("logo").getValue().toString());
-                info.setDescription(dataSnapshot.child("description").getValue().toString());
-                info.setAddress(dataSnapshot.child("address").getValue().toString());
-                info.setLocation(new Location(dataSnapshot.child("location").child("lat").getValue().toString(), dataSnapshot.child("location").child("lng").getValue().toString()));
-                info.setDataImage((List<String>) dataSnapshot.child("mDataImage").getValue());
-                mDataInfomation.add(info);
-                adapter.notifyItemInserted(mDataInfomation.size());
-                dismissLoading();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        refHotel.addChildEventListener(toGetHotel);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            refHotel.removeEventListener(toGetHotel);
+        } catch (Exception e) {
+        }
+    }
+
+    ChildEventListener toGetHotel = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            info = new InfomationModel();
+            info.setId(dataSnapshot.getKey());
+            info.setPrice(dataSnapshot.child("price").getValue().toString());
+            info.setName(dataSnapshot.child("name").getValue().toString());
+            info.setLogo(dataSnapshot.child("logo").getValue().toString());
+            info.setDescription(dataSnapshot.child("description").getValue().toString());
+            info.setAddress(dataSnapshot.child("address").getValue().toString());
+            info.setLocation(new Location(dataSnapshot.child("location").child("lat").getValue().toString(), dataSnapshot.child("location").child("lng").getValue().toString()));
+            info.setDataImage((List<String>) dataSnapshot.child("mDataImage").getValue());
+            mDataInfomation.add(info);
+            adapter.notifyItemInserted(mDataInfomation.size());
+            dismissLoading();
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
 
     @Override
