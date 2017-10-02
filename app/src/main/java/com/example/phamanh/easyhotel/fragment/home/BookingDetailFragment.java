@@ -13,6 +13,8 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.BookingModel;
+import com.example.phamanh.easyhotel.model.EventBusBooking;
+import com.example.phamanh.easyhotel.model.HistoryModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.other.database.DataHardCode;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
@@ -20,6 +22,10 @@ import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.StartActivityUtils;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +37,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.example.phamanh.easyhotel.R.id.fragBookingDetail_tvNumber;
 
 
 public class BookingDetailFragment extends BaseFragment {
@@ -55,7 +63,7 @@ public class BookingDetailFragment extends BaseFragment {
     EditText tvPhone;
     @BindView(R.id.fragBookingDetail_tvEmail)
     EditText tvEmail;
-    @BindView(R.id.fragBookingDetail_tvNumber)
+    @BindView(fragBookingDetail_tvNumber)
     EditText tvNumber;
 
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -66,7 +74,7 @@ public class BookingDetailFragment extends BaseFragment {
     private boolean isCheckRoom;
     private InfomationModel mInfomationModel;
     private BookingModel mBookingModel;
-    private int countRoom, numberRoom = 1;
+    private int countRoom, numberRoom = 1, nowRoom;
 
     public static BookingDetailFragment newInstance(InfomationModel title, String service, int room, boolean check, int count) {
 
@@ -216,7 +224,8 @@ public class BookingDetailFragment extends BaseFragment {
                         public void onFinish() {
                             toGetDataToPost();
                             refMember_booking.child(mUser.getUid()).push().setValue(new Gson().toJson(mBookingModel));
-                            refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "double").setValue(countRoom - 1);
+                            refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "double").setValue(countRoom - numberRoom);
+                            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_BOOKING + mInfomationModel.getName(), System.currentTimeMillis())));
                             AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
                             mInfomationModel = null;
                             dismissLoading();
@@ -265,4 +274,42 @@ public class BookingDetailFragment extends BaseFragment {
 
         }
     };
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusBooking event) {
+        if (event.getAction().equals(isCheckRoom ? "single" : "double")) {
+            nowRoom = Integer.parseInt(event.getValue());
+            if (numberRoom > nowRoom) {
+                AppUtils.showAlert(getContext(), nowRoom != 0 ? "Now, maximum " + nowRoom + " rooms in the hotel." : "Out room.", new DialogListener() {
+                    @Override
+                    public void onConfirmClicked() {
+                        if (nowRoom == 0)
+                            StartActivityUtils.toMain(getContext(), null);
+                    }
+
+                    @Override
+                    public void onCancelClicked() {
+
+                    }
+                });
+                numberRoom = nowRoom;
+                tvNumber.setText(numberRoom + " room");
+            }
+        }
+        dismissLoading();
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

@@ -17,7 +17,6 @@ import com.example.phamanh.easyhotel.fragment.settings.ProfileFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.CommentModel;
-import com.example.phamanh.easyhotel.model.HistoryModel;
 import com.example.phamanh.easyhotel.model.HotelModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
@@ -199,9 +198,9 @@ public class HomeFragment extends BaseFragment {
 
     private void toAddDataDemo() {
 
-        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("1")));
-        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("2")));
-        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("3")));
+//        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("1")));
+//        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("2")));
+//        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("3")));
 
 //        String mKeyHotel = String.valueOf(System.currentTimeMillis());
 

@@ -137,8 +137,12 @@ public class FavouritesFragment extends BaseFragment {
                     if (jsonObject != null) {
                         LikeMemberModel item = gson.fromJson(jsonObject.toString(), LikeMemberModel.class);
                         mDataLike.remove(item);
-                        if (mDataLike.size() == 0) {
-                            tvNoData.setVisibility(View.VISIBLE);
+                        for (int i = 0; i < mDataInfomation.size(); i++) {
+                            if (item.getHotel().equals(mDataInfomation.get(i).getId())) {
+                                mDataInfomation.remove(i);
+                                adapter.notifyItemRemoved(i);
+                                tvNoData.setVisibility(mDataInfomation.size() == 0 ? View.VISIBLE : View.GONE);
+                            }
                         }
                         adapter.notifyDataSetChanged();
                     }

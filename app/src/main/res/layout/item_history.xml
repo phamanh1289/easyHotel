@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_margin="@dimen/_6sdp"
-             android:foreground="?android:attr/selectableItemBackground"
-             android:padding="@dimen/_16sdp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:foreground="?android:attr/selectableItemBackground"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/_6sdp"
+        android:padding="@dimen/_8sdp">
+
+        <TextView
+            android:id="@+id/itemHistory_tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/denimBlue"
+            android:textSize="@dimen/_13sdp"/>
+
+        <TextView
+            android:id="@+id/itemHistory_tvTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:textColor="@color/blur_background"
+            android:textSize="@dimen/_12sdp"/>
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/itemHistory_tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="You must like 'De Nhat Hotel'"
-        android:textColor="@color/denimBlue"
-        android:textSize="17sp"/>
-
-</FrameLayout>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/greyishBrownThree"/>
+</LinearLayout>

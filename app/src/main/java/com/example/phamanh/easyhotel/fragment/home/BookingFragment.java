@@ -13,12 +13,15 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.RoomAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
+import com.example.phamanh.easyhotel.model.EventBusBooking;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.RoomModel;
 import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -71,6 +74,7 @@ public class BookingFragment extends BaseFragment {
                     } else
                         singleAdapter.notifyDataSetChanged();
                     tvNoDataSingle.setVisibility(mRoomModel.single != 0 ? View.GONE : View.VISIBLE);
+                    EventBus.getDefault().postSticky(new EventBusBooking("single", String.valueOf(mRoomModel.single)));
 
                     mRoomModel._double = Integer.parseInt(dataSnapshot.child("double").getValue().toString());
                     if (rvDouble != null) {
@@ -78,6 +82,7 @@ public class BookingFragment extends BaseFragment {
                     } else
                         doubleAdapter.notifyDataSetChanged();
                     tvNoDataDouble.setVisibility(mRoomModel._double != 0 ? View.GONE : View.VISIBLE);
+                    EventBus.getDefault().postSticky(new EventBusBooking("double", String.valueOf(mRoomModel._double)));
                 }
             }
 

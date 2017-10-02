@@ -13,6 +13,7 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.EventBusBooking;
+import com.example.phamanh.easyhotel.model.HistoryModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.LikeMemberModel;
 import com.example.phamanh.easyhotel.model.RatingModel;
@@ -69,7 +70,7 @@ public class HomeDetailFragment extends BaseFragment {
     TextView tvSubmitRating;
 
     private InfomationModel mInfomationModel;
-    private int rating, countStart;
+    private int rating, countStart, countLike;
     public List<RatingModel> mDataRating = new ArrayList<>();
     private String mKey;
     private RatingModel mRatingModel;
@@ -123,6 +124,7 @@ public class HomeDetailFragment extends BaseFragment {
             rating = (int) v;
             tvSubmitRating.setVisibility(countStart != rating ? View.VISIBLE : View.GONE);
         });
+        refHotel_like.child(mKey).addChildEventListener(toAddLike);
     }
 
     ChildEventListener toAddRating = new ChildEventListener() {
@@ -167,6 +169,35 @@ public class HomeDetailFragment extends BaseFragment {
         }
     };
 
+    ChildEventListener toAddLike = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot.getValue() != null) {
+                tvLike.setText(String.valueOf(++countLike));
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -189,6 +220,7 @@ public class HomeDetailFragment extends BaseFragment {
                     mDataRating.add(i, mRatingModel);
                 }
             }
+            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_RATING + mInfomationModel.getName(), System.currentTimeMillis())));
             tvScore.setText(toCountScore(mDataRating));
             tvSubmitRating.setVisibility(View.GONE);
         }
@@ -229,9 +261,11 @@ public class HomeDetailFragment extends BaseFragment {
                 if (!mInfomationModel.isLike) {
                     refHotel_like.child(mKey).child(mUser.getUid()).setValue(mUser.getUid());
                     refMember_like.child(mUser.getUid()).child(mKey).setValue(new Gson().toJson(new LikeMemberModel(mKey)));
+                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_LIKE + mInfomationModel.getName(), System.currentTimeMillis())));
                 } else {
                     refHotel_like.child(mKey).child(mUser.getUid()).removeValue();
                     refMember_like.child(mUser.getUid()).child(mKey).removeValue();
+                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_DISLIKE + mInfomationModel.getName(), System.currentTimeMillis())));
                 }
                 mInfomationModel.isLike = !mInfomationModel.isLike;
                 ivLike.setImageResource(mInfomationModel.isLike ? R.drawable.ic_like_main : R.drawable.ic_no_lick_main);

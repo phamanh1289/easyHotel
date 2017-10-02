@@ -15,6 +15,8 @@ import com.example.phamanh.easyhotel.adapter.CommentAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.CommentModel;
 import com.example.phamanh.easyhotel.model.EventBusBooking;
+import com.example.phamanh.easyhotel.model.HistoryModel;
+import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.ListComment;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
@@ -54,6 +56,7 @@ public class CommentFragment extends BaseFragment {
     private CommentModel modelComment;
     private List<CommentModel> mDataComment = new ArrayList<>();
     private String mKey;
+    private InfomationModel mInfomationModel;
 
     @Nullable
     @Override
@@ -67,6 +70,7 @@ public class CommentFragment extends BaseFragment {
 
     private void init() {
         mKey = ((BookingCommentParrent) getParentFragment()).mKey;
+        mInfomationModel = ((BookingCommentParrent) getParentFragment()).mInfomationModel;
         adapter = new CommentAdapter(mDataComment);
         rvComment.setAdapter(adapter);
         rvComment.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -145,6 +149,7 @@ public class CommentFragment extends BaseFragment {
     public void onViewClicked() {
         if (toValidate()) {
             refHotel_comment.child(mKey).push().setValue(new Gson().toJson(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString().trim(), getUser().getAvatar())));
+            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_COMMENT + mInfomationModel.getName(), System.currentTimeMillis())));
             etContent.setText("");
         }
     }

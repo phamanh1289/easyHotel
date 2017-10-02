@@ -21,6 +21,11 @@ public class Constant {
     public static final String KEY = "key";
     public static final String TITLE_INTRO = "title_intro";
     public static final String IMAGE_INTRO = "image_intro";
+    public static final String MESS_LIKE = "You liked hotel ";
+    public static final String MESS_RATING = "You rated hotel ";
+    public static final String MESS_DISLIKE = "You disliked hotel ";
+    public static final String MESS_COMMENT = "You commented hotel ";
+    public static final String MESS_BOOKING = "You have booked a room in the hotel ";
     public static final String SIGNUP_EMAIL = "signup_email";
     public static final String SIGNUP_PASSWORD = "signup_password";
     public static final String INFOMATION = "infomation";
@@ -34,6 +39,6 @@ public class Constant {
     public static final String BOOKING = "booking";
     public static final String ACTION_RELOAD_COMMENT = "reload_comment";
     public static final String IMAGE_DEFAULT = "";
-    public static final int SIZE_DEFAULT = 1024*1024;
+    public static final int SIZE_DEFAULT = 1024 * 1024;
     public static final String STORE = "gs://easy-hotel-25f40.appspot.com/";
 }

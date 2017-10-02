@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.HistoryModel;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
 
     @Override
     public HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
         return new HistoryHolder(view);
     }
 
@@ -39,6 +40,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
     public void onBindViewHolder(HistoryHolder holder, int position) {
         HistoryModel item = mData.get(position);
         holder.tvTitle.setText(item.getTitle());
+        holder.tvTime.setText((AppUtils.getTimeAgo(item.getTime())));
     }
 
     @Override
@@ -50,6 +52,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
 
         @BindView(R.id.itemHistory_tvTitle)
         TextView tvTitle;
+        @BindView(R.id.itemHistory_tvTime)
+        TextView tvTime;
 
         public HistoryHolder(View itemView) {
             super(itemView);
