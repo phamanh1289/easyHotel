@@ -15,6 +15,7 @@ import com.example.phamanh.easyhotel.activity.LoginActivity;
 import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.UserModel;
+import com.example.phamanh.easyhotel.other.enums.RoleEnum;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
@@ -224,11 +225,11 @@ public class LoginFragment extends BaseFragment {
         mAuth.signInWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
                 .addOnCompleteListener(getActivity(), task -> {
                     if (task.isSuccessful()) {
-                        if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified() || FirebaseAuth.getInstance().getCurrentUser().getEmail().equals("admin@easyhotel.com")) {
+                        if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified() || FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(Constant.MAIL_ADMIN)) {
                             mUser = FirebaseAuth.getInstance().getCurrentUser();
-
                             toGetDataProfile();
-                            toAddReLogin(true);
+                            if (!mUser.getEmail().equals(Constant.MAIL_ADMIN))
+                                toAddReLogin(true);
                         } else {
                             dismissLoading();
                             AppUtils.showAlert(getContext(), "Email not activated", null);
@@ -296,12 +297,14 @@ public class LoginFragment extends BaseFragment {
                         UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
                         BaseApplication application = (BaseApplication) getActivity().getApplication();
                         application.setCustomer(userModel);
+                        if (mUser.getEmail().equals(Constant.MAIL_ADMIN))
+                            application.setRole(RoleEnum.ADMIN);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 if (getUser() == null)
-                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
+                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
             }
 
             @Override

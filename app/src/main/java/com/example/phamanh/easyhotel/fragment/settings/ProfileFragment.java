@@ -118,7 +118,7 @@ public class ProfileFragment extends BaseFragment {
         tvDOB.setText(getUser().getDob());
         tvAddress.setText(getUser().getAddress());
         tvMobilePhone.setText(getUser().getPhone());
-        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(getUser().getAvatar().equals(Constant.IMAGE_DEFAULT) ? Constant.STORE + "member_" + mUser.getUid() + "jpeg" : getUser().getAvatar());
+        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(getUser().getAvatar().equals(Constant.IMAGE_DEFAULT) ? Constant.STORE + "member_" + mUser.getUid(): getUser().getAvatar());
         baseStore.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
             ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
         }).addOnFailureListener(exception -> {

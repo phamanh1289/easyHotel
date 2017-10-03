@@ -283,7 +283,7 @@ public class SignUpFragment extends BaseFragment {
 
     private void toAddReLogin() {
         if (getUser() == null)
-            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
+            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
         SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
         dismissLoading();
         StartActivityUtils.toMain(getActivity(), null);
@@ -306,7 +306,7 @@ public class SignUpFragment extends BaseFragment {
                     }
                 }
                 if (getUser() == null)
-                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.IMAGE_DEFAULT)));
+                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
             }
 
             @Override

@@ -11,5 +11,5 @@ package com.example.phamanh.easyhotel.other.enums;
 
 public enum RoleEnum {
     USER,
-    GUEST
+    ADMIN
 }

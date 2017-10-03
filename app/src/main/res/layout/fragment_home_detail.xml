@@ -93,7 +93,7 @@
                         android:layout_marginRight="@dimen/_4sdp"
                         android:background="@null"
                         android:focusable="false"
-                        android:text="1200"
+                        android:text="0"
                         android:textColor="@color/whiteThree"
                         android:textSize="@dimen/_11sdp"/>
 
@@ -112,7 +112,7 @@
                         android:layout_marginRight="@dimen/_4sdp"
                         android:background="@null"
                         android:focusable="false"
-                        android:text="1200"
+                        android:text="0"
                         android:textColor="@color/whiteThree"
                         android:textSize="@dimen/_11sdp"/>
 

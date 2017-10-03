@@ -90,7 +90,7 @@ public class CommentFragment extends BaseFragment {
                         }
                         adapter.notifyItemInserted(mDataComment.size() - 1);
                         if (mDataComment.size() > 1)
-                            rvComment.scrollToPosition(mDataComment.size() - 1);
+                            rvComment.scrollToPosition(mDataComment.size() > 1 ? mDataComment.size() - 1 : 1);
                         tvNoData.setVisibility(mDataComment.size() != 0 ? View.GONE : View.VISIBLE);
                         rvComment.setVisibility(mDataComment.size() != 0 ? View.VISIBLE : View.GONE);
                     } catch (JSONException e) {

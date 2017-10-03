@@ -36,9 +36,10 @@ public class Constant {
     public static final String RATING = "rating";
     public static final String HISTORY = "history";
     public static final String COMMENT = "comment";
+    public static final String MAIL_ADMIN = "admin@easyhotel.com";
     public static final String BOOKING = "booking";
+    public static final String IMAGE_DEFAULT = "gs://easy-hotel-25f40.appspot.com/ic_no_image.png";
     public static final String ACTION_RELOAD_COMMENT = "reload_comment";
-    public static final String IMAGE_DEFAULT = "";
     public static final int SIZE_DEFAULT = 1024 * 1024;
     public static final String STORE = "gs://easy-hotel-25f40.appspot.com/";
 }
