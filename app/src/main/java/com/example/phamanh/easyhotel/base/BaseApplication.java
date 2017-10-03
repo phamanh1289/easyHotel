@@ -1,4 +1,7 @@
 package com.example.phamanh.easyhotel.base;
+/*
+ * Created by HoangDong on 13/06/2017.
+ */
 
 import android.app.Application;
 
@@ -7,7 +10,6 @@ import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.other.enums.RoleEnum;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-
 
 public class BaseApplication extends Application {
     public int currentTab;
@@ -18,7 +20,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.font_Helvetica))
+                .setDefaultFontPath(getString(R.string.font_roman))
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
@@ -39,4 +41,5 @@ public class BaseApplication extends Application {
     public void setCustomer(UserModel model) {
         this.user = model;
     }
+
 }

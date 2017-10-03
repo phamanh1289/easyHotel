@@ -1,12 +1,17 @@
+<?xml version="1.0"?>
+
 <resources>
+
     <string name="app_name">EasyHotel</string>
     <string name="font_Helvetica">fonts/Helvetica.ttf</string>
     <string name="Helvetica_light">fonts/Helvetica-Light.ttf</string>
     <string name="Helvetica_bold">fonts/Helvetica-Bold.ttf</string>
-
-
+    <string name="font_roman">fonts/FrutigerLTStd-Roman.otf</string>
+    <string name="font_black">fonts/FrutigerLTStd-Black.otf</string>
+    <string name="font_sftext_regular">fonts/SFText-Regular.otf</string>
+    <string name="font_sftext_semiBoldItalic">fonts/SFText-SemiboldItalic.otf</string>
+    <string name="font_sftext_semibold">fonts/SFText-Semibold.ttf</string>
     <string name="accept">Submit</string>
-
     <string name="new_member">New member ? </string>
     <string name="sign_up">Sign Up</string>
     <string name="or_connect_with">OR</string>
@@ -19,7 +24,6 @@
     <string name="back_to_login">Back to Login</string>
     <string name="cancel">Cancel</string>
     <string name="already_a_member">Already a member ? </string>
-
     <string name="page_home">Home</string>
     <string name="page_home_detail">Detail Hotel</string>
     <string name="my_profile">Edit Profile</string>
@@ -37,7 +41,6 @@
     <string name="google_maps_key">AIzaSyAJcr3XOh_QLsrPLcTAUUd8eRkMd9nuuL8</string>
     <string name="facebook_app_id">117766158898188</string>
     <string name="search_place">Cafe, ATM, Bank, Hospital....</string>
-
     <string name="first_name">User Name</string>
     <string name="full_name">Full Name</string>
     <string name="female">Female</string>
@@ -47,7 +50,6 @@
     <string name="nric">NRIC</string>
     <string name="postal">Postal Code</string>
     <string name="address">Address</string>
-
     <string name="male">Male</string>
     <string name="error">Error</string>
     <string name="complete">Complete</string>
@@ -63,5 +65,4 @@
     <string name="booking">Booking now</string>
     <string name="no_comment_for_the_hotel">No comment for the hotel</string>
     <string name="no_rating_for_the_hotel">No rating for the hotel</string>
-
 </resources>
