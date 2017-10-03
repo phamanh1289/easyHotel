@@ -74,7 +74,7 @@ public class BookingDetailFragment extends BaseFragment {
     private boolean isCheckRoom;
     private InfomationModel mInfomationModel;
     private BookingModel mBookingModel;
-    private int countRoom, numberRoom = 1, nowRoom, countPrice;
+    private int countRoom, numberRoom = 1, countPrice;
 
     public static BookingDetailFragment newInstance(InfomationModel title, String service, int room, boolean check, int count) {
 
@@ -224,12 +224,14 @@ public class BookingDetailFragment extends BaseFragment {
 
                         @Override
                         public void onFinish() {
-                            toGetDataToPost();
-                            refMember_booking.child(mUser.getUid()).push().setValue(new Gson().toJson(mBookingModel));
-                            refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "double").setValue(countRoom - numberRoom);
-                            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_BOOKING + mInfomationModel.getName(), System.currentTimeMillis())));
-                            AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
-                            mInfomationModel = null;
+                            if (toCheckRoom()) {
+                                toGetDataToPost();
+                                refMember_booking.child(mUser.getUid()).push().setValue(new Gson().toJson(mBookingModel));
+                                refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "double").setValue(countRoom - numberRoom);
+                                refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_BOOKING + mInfomationModel.getName(), System.currentTimeMillis())));
+                                AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
+                                mInfomationModel = null;
+                            }
                             dismissLoading();
                         }
                     }.start();
@@ -253,6 +255,24 @@ public class BookingDetailFragment extends BaseFragment {
                 } else AppUtils.showAlert(getContext(), "Rooms are not empty.", null);
                 break;
         }
+    }
+
+    private boolean toCheckRoom() {
+        if (countRoom == 0) {
+            AppUtils.showAlert(getContext(), "Out room.", new DialogListener() {
+                @Override
+                public void onConfirmClicked() {
+                    getActivity().onBackPressed();
+                }
+
+                @Override
+                public void onCancelClicked() {
+
+                }
+            });
+            return false;
+        }
+        return true;
     }
 
     DialogListener toClickDialogCheckDate = new DialogListener() {
@@ -282,13 +302,13 @@ public class BookingDetailFragment extends BaseFragment {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusBooking event) {
         if (event.getAction().equals(isCheckRoom ? "single" : "double")) {
-            nowRoom = Integer.parseInt(event.getValue());
-            if (numberRoom > nowRoom) {
-                AppUtils.showAlert(getContext(), nowRoom != 0 ? "Now, maximum " + nowRoom + " rooms in the hotel." : "Out room.", new DialogListener() {
+            countRoom = Integer.parseInt(event.getValue());
+            if (numberRoom > countRoom) {
+                AppUtils.showAlert(getContext(), countRoom != 0 ? "Now, maximum " + countRoom + " rooms in the hotel." : "Out room.", new DialogListener() {
                     @Override
                     public void onConfirmClicked() {
-                        if (nowRoom == 0)
-                            StartActivityUtils.toMain(getContext(), null);
+                        if (countRoom == 0)
+                            getActivity().onBackPressed();
                     }
 
                     @Override
@@ -296,7 +316,7 @@ public class BookingDetailFragment extends BaseFragment {
 
                     }
                 });
-                numberRoom = nowRoom;
+                numberRoom = countRoom;
                 tvNumber.setText(String.valueOf(numberRoom + " room"));
                 tvPrice.setText(String.valueOf(numberRoom * countPrice));
             }
