@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 
 public class NewsAdapter extends Adapter<NewsAdapter.ItemsHolder> {
 
-
     private List<NewsModel> list;
     private ItemListener clickLister;
 
@@ -32,7 +31,6 @@ public class NewsAdapter extends Adapter<NewsAdapter.ItemsHolder> {
 
     public NewsAdapter(List<NewsModel> list) {
         this.list = list;
-
     }
 
     @Override
@@ -55,10 +53,9 @@ public class NewsAdapter extends Adapter<NewsAdapter.ItemsHolder> {
                     .into(holder.imgView);
     }
 
-
     @Override
     public int getItemCount() {
-        return list.size();
+        return list.size() != 0 ? list.size() : 0;
     }
 
     class ItemsHolder extends ViewHolder {

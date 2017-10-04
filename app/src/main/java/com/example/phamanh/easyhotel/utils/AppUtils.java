@@ -1,7 +1,6 @@
 package com.example.phamanh.easyhotel.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -13,7 +12,6 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -39,6 +37,7 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.Format;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -103,38 +102,6 @@ public class AppUtils {
         ConfirmListenerDialog dialog = new ConfirmListenerDialog(context, "", title, "Cancel", "Submit");
         dialog.setOnItemClickListener(clickListener);
         dialog.show();
-    }
-
-
-    public static String convertNumberOrdinal(int i) {
-        String[] sufixes = new String[]{"th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"};
-        switch (i % 100) {
-            case 11:
-            case 12:
-            case 13:
-                return i + "th";
-            default:
-                return i + sufixes[i % 10];
-
-        }
-    }
-
-    public static void showAlertClaimStatus(final Context context, String title, String content, String confirm, String cancel, @Nullable final DialogListener listener) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
-        builder.setMessage(content);
-        builder.setCancelable(false);
-        builder.setPositiveButton(confirm, (dialogInterface, i) -> {
-            if (listener != null) {
-                listener.onConfirmClicked();
-            }
-        });
-        builder.setNegativeButton(cancel, (dialog, which) -> {
-            if (listener != null) {
-                listener.onCancelClicked();
-            }
-        });
-        builder.create().show();
     }
 
     public static boolean isURL(String url) {
@@ -220,41 +187,6 @@ public class AppUtils {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    public static String convertKeyToString(String keyNamePolicy) {
-        String result = "";
-        switch (keyNamePolicy) {
-            case "ci_sum_assured":
-                return "Critical Illness";
-            case "tpd_sum_assured":
-                return "Total Permanent Disability Sum Assured";
-            case "early_ci_sum_assured":
-                return "Early Critical Illness";
-            case "insured_relation":
-                return "Relationship";
-            case "insured_dob":
-                return "Date of Birth";
-            case "first_name":
-                return "First Name";
-            case "last_name":
-                return "Last Name";
-            case "annual_premium_amount":
-                return "Annual Premium Amount";
-            case "accident_death_sa":
-                return "Accidental Death S.A";
-            case "tcm_benfit":
-                return "TCM Benfit";
-            case "singe_premium":
-                return "Single Premium";
-            case "annual_payment_amt":
-                return "Annual Payment AMT";
-        }
-        if (TextUtils.isEmpty(result)) {
-            result = keyNamePolicy.replaceAll("_", " ");
-            result = UppercaseFirstLetters(result);
-        }
-        return result;
-    }
-
     public static String UppercaseFirstLetters(String str) {
         boolean prevWasWhiteSp = true;
         char[] chars = str.toCharArray();
@@ -270,7 +202,6 @@ public class AppUtils {
         }
         return new String(chars);
     }
-
 
     public static void showPickTime(Context context, final EditText tvDate, boolean isCheck) {
         Calendar calendar = Calendar.getInstance();
@@ -312,6 +243,18 @@ public class AppUtils {
         return true;
     }
 
+    public static String formatMoney(double money) {
+        NumberFormat dutchFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        String twoDecimals = dutchFormat.format(money);
+        if (twoDecimals.matches(".*[.]...[,]00$")) {
+            return twoDecimals.substring(0, twoDecimals.length() - 3);
+        }
+        if (twoDecimals.endsWith(".00")) {
+            return String.format("$ %.0f", money);
+        } else {
+            return twoDecimals;
+        }
+    }
 
     private static String toConveMonth(int month) {
         if (month < 10)
@@ -437,4 +380,23 @@ public class AppUtils {
         long timeDistance = currentDate().getTime() - time;
         return Math.round((Math.abs(timeDistance) / 1000) / 60);
     }
+
+    public static String parseDate(String time) {
+        String inputPattern = "yyyy-MM-dd HH:mm";
+        String outputPattern = "HH:mm dd/MM/yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        Date date;
+        String str = null;
+
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
 }

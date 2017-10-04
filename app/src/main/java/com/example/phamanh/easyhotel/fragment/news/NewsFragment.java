@@ -18,6 +18,7 @@ import com.example.phamanh.easyhotel.adapter.NewsAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.NewsModel;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 
 import org.jsoup.Jsoup;
@@ -43,13 +44,12 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
     RecyclerView rvNew;
     @BindView(R.id.fragNews_srlRefresh)
     SwipeRefreshLayout srlRefresh;
-    List<NewsModel> mData;
-    NewsAdapter mAdapter;
-    String mImage, mDescription, mTitle, mDate, mLink = "";
-    int page = 1;
+    private List<NewsModel> mData = new ArrayList<>();
+    private NewsAdapter mAdapter;
+    private String mImage, mDescription, mTitle, mDate, mLink = "";
     private boolean isLoading = true;
     private int visibleThreshold = 5, visibleItemCount, firstVisibleItem, totalItemCount;
-    private int previousTotal = 0;
+    private int previousTotal = 0, page = 1;
 
     @Nullable
     @Override
@@ -65,7 +65,6 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
     }
 
     private void init() {
-        mData = new ArrayList<>();
         mAdapter = new NewsAdapter(mData);
         mAdapter.setClickLister(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -84,14 +83,12 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
                         isLoading = false;
                         previousTotal = totalItemCount;
                     }
-
                 }
                 if (!isLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
                     page++;
                     getData();
                     isLoading = true;
                 }
-
             }
         });
     }
@@ -114,7 +111,7 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
                     }
                     Element time = news.getElementsByTag("time").first();
                     if (time != null) {
-                        mDate = time.attr("datetime");
+                        mDate = AppUtils.parseDate(time.attr("datetime"));
                     }
                     Element descriptionShort = news.select("p.summary").first();
                     if (descriptionShort != null) {
@@ -131,7 +128,6 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
                     item.setLinkImage(mImage);
                     mData.add(item);
                 }
-
             }
             mAdapter.notifyDataSetChanged();
             srlRefresh.setRefreshing(false);
@@ -149,12 +145,17 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
     public void onRefresh() {
         mData.clear();
         mAdapter.notifyDataSetChanged();
-        page = 0;
+        isLoading = false;
         getData();
     }
 
     @Override
     public void onItemClicked(int pos) {
         addFragment(NewDetailFragment.newInstance("https://news.zing.vn" + mData.get(pos).getLink()), true);
+    }
+
+    private String toChangeTime(String time) {
+        String[] arrSecond = time.substring(0,time.length()-5).split(" ");
+        return arrSecond[1] + " " + arrSecond[0];
     }
 }

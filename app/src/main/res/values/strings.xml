@@ -6,11 +6,6 @@
     <string name="font_Helvetica">fonts/Helvetica.ttf</string>
     <string name="Helvetica_light">fonts/Helvetica-Light.ttf</string>
     <string name="Helvetica_bold">fonts/Helvetica-Bold.ttf</string>
-    <string name="font_roman">fonts/FrutigerLTStd-Roman.otf</string>
-    <string name="font_black">fonts/FrutigerLTStd-Black.otf</string>
-    <string name="font_sftext_regular">fonts/SFText-Regular.otf</string>
-    <string name="font_sftext_semiBoldItalic">fonts/SFText-SemiboldItalic.otf</string>
-    <string name="font_sftext_semibold">fonts/SFText-Semibold.ttf</string>
     <string name="accept">Submit</string>
     <string name="new_member">New member ? </string>
     <string name="sign_up">Sign Up</string>

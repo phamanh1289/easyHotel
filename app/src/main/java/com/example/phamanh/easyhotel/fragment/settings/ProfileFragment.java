@@ -12,8 +12,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -73,8 +71,6 @@ public class ProfileFragment extends BaseFragment {
     RoundedImageView ivBanner;
     @BindView(R.id.item_avLoading)
     AVLoadingIndicatorView avLoading;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout mCoordinatorLayout;
 
     public final int RQ_SELECT_PHOTO = 1;
     public final int MY_PERMISSIONS_REQUEST_READ_STORE = 2;
@@ -290,13 +286,7 @@ public class ProfileFragment extends BaseFragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     pickImage();
                 } else {
-                    Snackbar.make(mCoordinatorLayout,
-                            "Permission is required for getting list of files", Snackbar.LENGTH_LONG)
-                            .setAction("CLOSE", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                }
-                            }).show();
+                    AppUtils.showAlert(getContext(),"Permission is required for getting list of files.",null);
                 }
             }
         }

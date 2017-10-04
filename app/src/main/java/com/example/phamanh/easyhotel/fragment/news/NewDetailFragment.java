@@ -43,6 +43,7 @@ public class NewDetailFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_new_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
         setActionBar(view, "News Detail");
+        setVisibilityTabBottom(View.GONE);
         init();
         getBundle();
         return view;
@@ -69,7 +70,7 @@ public class NewDetailFragment extends BaseFragment {
                 public void onFinish() {
                     dismissLoading();
                 }
-            };
+            }.start();
             wvNew.loadUrl(mLink);
         }
     }

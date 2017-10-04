@@ -189,7 +189,6 @@ public class HomeFragment extends BaseFragment {
         }
     };
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

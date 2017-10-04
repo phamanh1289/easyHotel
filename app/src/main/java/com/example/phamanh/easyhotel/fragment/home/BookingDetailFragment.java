@@ -74,7 +74,8 @@ public class BookingDetailFragment extends BaseFragment {
     private boolean isCheckRoom;
     private InfomationModel mInfomationModel;
     private BookingModel mBookingModel;
-    private int countRoom, numberRoom = 1, countPrice;
+    private int countRoom, numberRoom = 1;
+    private double countPrice;
 
     public static BookingDetailFragment newInstance(InfomationModel title, String service, int room, boolean check, int count) {
 
@@ -106,10 +107,10 @@ public class BookingDetailFragment extends BaseFragment {
             mDataRoom.addAll(DataHardCode.getListRoom(isCheckRoom));
             tvRoomName.setText(isCheckRoom ? "Single" : "Double");
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.TITLE_INTRO);
-            countPrice = Integer.parseInt(mInfomationModel.getPrice());
+            countPrice = Double.parseDouble(mInfomationModel.getPrice());
             countRoom = bundle.getInt(Constant.COMMENT);
         }
-        tvPrice.setText(String.valueOf(countPrice));
+        tvPrice.setText(AppUtils.formatMoney(countPrice));
         tvHotelName.setText(mInfomationModel.getName());
         tvStartDate.setText(dateFormat.format(mDate));
         tvDueDate.setText(dateFormat.format(mDate));
@@ -231,6 +232,7 @@ public class BookingDetailFragment extends BaseFragment {
                                 refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_BOOKING + mInfomationModel.getName(), System.currentTimeMillis())));
                                 AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
                                 mInfomationModel = null;
+                                EventBus.getDefault().postSticky(new EventBusBooking("pause"));
                             }
                             dismissLoading();
                         }
@@ -244,14 +246,14 @@ public class BookingDetailFragment extends BaseFragment {
                 if (numberRoom < countRoom) {
                     numberRoom++;
                     tvNumber.setText(String.valueOf(numberRoom + " room"));
-                    tvPrice.setText(String.valueOf(numberRoom * countPrice));
+                    tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
                 } else AppUtils.showAlert(getContext(), "Full room in the hotel.", null);
                 break;
             case R.id.fragBookingDetail_ivSub:
                 if (numberRoom > 1) {
                     numberRoom--;
                     tvNumber.setText(String.valueOf(numberRoom + " room"));
-                    tvPrice.setText(String.valueOf(numberRoom * countPrice));
+                    tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
                 } else AppUtils.showAlert(getContext(), "Rooms are not empty.", null);
                 break;
         }
@@ -318,7 +320,7 @@ public class BookingDetailFragment extends BaseFragment {
                 });
                 numberRoom = countRoom;
                 tvNumber.setText(String.valueOf(numberRoom + " room"));
-                tvPrice.setText(String.valueOf(numberRoom * countPrice));
+                tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
             }
         }
         dismissLoading();

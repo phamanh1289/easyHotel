@@ -302,6 +302,5 @@
                 android:textSize="17sp"/>
         </FrameLayout>
 
-        <include layout="@layout/base_coordinator"/>
     </LinearLayout>
 </LinearLayout>

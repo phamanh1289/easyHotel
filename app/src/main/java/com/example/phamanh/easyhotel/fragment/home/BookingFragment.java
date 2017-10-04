@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class BookingFragment extends BaseFragment {
     private String service, mKey;
     private ServiceDetailModel mServiceDetailModel;
     private List<String> mDataService;
+    private boolean isCheckRoom;
     Unbinder unbinder;
 
 
@@ -74,7 +77,8 @@ public class BookingFragment extends BaseFragment {
                     } else
                         singleAdapter.notifyDataSetChanged();
                     tvNoDataSingle.setVisibility(mRoomModel.single != 0 ? View.GONE : View.VISIBLE);
-                    EventBus.getDefault().postSticky(new EventBusBooking("single", String.valueOf(mRoomModel.single)));
+                    if (!isCheckRoom)
+                        EventBus.getDefault().postSticky(new EventBusBooking("single", String.valueOf(mRoomModel.single)));
 
                     mRoomModel._double = Integer.parseInt(dataSnapshot.child("double").getValue().toString());
                     if (rvDouble != null) {
@@ -82,7 +86,8 @@ public class BookingFragment extends BaseFragment {
                     } else
                         doubleAdapter.notifyDataSetChanged();
                     tvNoDataDouble.setVisibility(mRoomModel._double != 0 ? View.GONE : View.VISIBLE);
-                    EventBus.getDefault().postSticky(new EventBusBooking("double", String.valueOf(mRoomModel._double)));
+                    if (!isCheckRoom)
+                        EventBus.getDefault().postSticky(new EventBusBooking("double", String.valueOf(mRoomModel._double)));
                 }
             }
 
@@ -107,6 +112,7 @@ public class BookingFragment extends BaseFragment {
         super.onStop();
         mInfomationModel = null;
         mKey = "";
+        EventBus.getDefault().unregister(this);
     }
 
     ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(mInfomationModel, service, pos, true, mRoomModel.single), true);
@@ -118,6 +124,21 @@ public class BookingFragment extends BaseFragment {
         adapter.setListener(toClick);
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusBooking event) {
+        if (event.getAction().equals("pause")) {
+            isCheckRoom = true;
+        }
+        dismissLoading();
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override

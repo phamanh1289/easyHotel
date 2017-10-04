@@ -20,7 +20,7 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath(getString(R.string.font_roman))
+                .setDefaultFontPath(getString(R.string.font_Helvetica))
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

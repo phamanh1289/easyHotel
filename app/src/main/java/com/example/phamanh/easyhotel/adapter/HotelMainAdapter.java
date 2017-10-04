@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.InfomationModel;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,7 +59,7 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         InfomationModel model = mData.get(position);
         holder.tvAddress.setText(model.getAddress());
         holder.tvTitle.setText(model.getName());
-        holder.tvPrice.setText(String.valueOf(model.getPrice()));
+        holder.tvPrice.setText(AppUtils.formatMoney(Double.parseDouble(model.getPrice())));
         refStorage = FirebaseStorage.getInstance().getReferenceFromUrl(model.getLogo());
         refStorage.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
             mData.get(position).setBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
@@ -75,10 +76,8 @@ public class HotelMainAdapter extends RecyclerView.Adapter<HotelMainAdapter.Hote
         FirebaseDatabase.getInstance().getReference("hotel").child(Constant.LIKE).child(model.getId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.child(mKey).getValue() != null) {
                 holder.tvLike.setImageResource(dataSnapshot.child(mKey).getValue() != null ? R.drawable.ic_like_main : R.drawable.ic_no_lick_main);
                 model.isLike = dataSnapshot.child(mKey).getValue() != null;
-//                }
             }
 
             @Override
