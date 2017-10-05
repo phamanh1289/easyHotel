@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.activity.MainActivity;
 import com.example.phamanh.easyhotel.model.UserModel;
+import com.example.phamanh.easyhotel.other.enums.RoleEnum;
 import com.example.phamanh.easyhotel.other.view.LodingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 
@@ -109,6 +110,11 @@ public class BaseActivity extends AppCompatActivity {
             return application.getUser();
         } else
             return new UserModel();
+    }
+
+    public RoleEnum getRole() {
+        BaseApplication application = (BaseApplication) this.getApplication();
+        return application.getRole();
     }
 
     @Override

@@ -297,8 +297,11 @@ public class LoginFragment extends BaseFragment {
                         UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
                         BaseApplication application = (BaseApplication) getActivity().getApplication();
                         application.setCustomer(userModel);
-                        if (mUser.getEmail().equals(Constant.MAIL_ADMIN))
+                        if (mUser.getEmail().equals(Constant.MAIL_ADMIN)) {
                             application.setRole(RoleEnum.ADMIN);
+                            StartActivityUtils.toMain(getActivity(), null);
+                            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Final Easy Hotel.iml" filepath="$PROJECT_DIR$/Final Easy Hotel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aclibrary/aclibrary.iml" filepath="$PROJECT_DIR$/aclibrary/aclibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
