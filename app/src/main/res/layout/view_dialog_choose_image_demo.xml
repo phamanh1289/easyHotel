@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_300sdp"
+    android:layout_height="wrap_content"
+    android:background="@color/whiteThree"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:paddingLeft="@dimen/_16sdp"
+    android:paddingRight="@dimen/_16sdp">
+
+    <TextView
+        android:id="@+id/viewDialogChooseImage_tvTake"
+        fontPath="@string/Helvetica_bold"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:text="@string/take_a_photo"
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingBottom="@dimen/_16sdp"
+        android:textColor="@color/denimBlueTwo"
+        android:textSize="20sp"/>
+
+    <include layout="@layout/base_line"/>
+
+    <TextView
+        android:id="@+id/viewDialogChooseImage_tvIamge"
+        fontPath="@string/Helvetica_bold"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingBottom="@dimen/_16sdp"
+        android:layout_height="wrap_content"
+        android:text="@string/choice_photo"
+        android:textColor="@color/denimBlueTwo"
+        android:textSize="20sp"/>
+</LinearLayout>

@@ -27,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -73,12 +74,7 @@ public class AllHotelFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    ACRecyclerView.OnItemListener toClick = new ACRecyclerView.OnItemListener() {
-        @Override
-        public void onItemClicked(View view, int position) {
-            Toast.makeText(getActivity(), mDataInfo.get(position).getName(), Toast.LENGTH_SHORT).show();
-        }
-    };
+    ACRecyclerView.OnItemListener toClick = (view, position) -> Toast.makeText(getActivity(), mDataInfo.get(position).getName(), Toast.LENGTH_SHORT).show();
 
 
     private void toGetDataProfile() {
@@ -151,6 +147,18 @@ public class AllHotelFragment extends BaseFragment {
             if (item.getName().matches(".*" + name + ".*")) {
                 mDataSearch.add(item);
             }
+        }
+    }
+
+    @OnClick({R.id.fragAllHotel_tvAdd, R.id.baseSearch_ivSearch})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fragAllHotel_tvAdd:
+                addFragment(new AddUserFragment(), true);
+                break;
+            case R.id.baseSearch_ivSearch:
+                etSearch.setText("");
+                break;
         }
     }
 }

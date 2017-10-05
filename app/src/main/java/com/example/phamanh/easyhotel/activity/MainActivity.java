@@ -63,10 +63,6 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
     private void init() {
         tabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
         if (getRole() == RoleEnum.ADMIN) {
-//            addFragment(new AllUserFragment(), true);
-            addFragment(new AllHotelFragment(), true);
-//            addFragment(new AllBookingFragment(), true);
-//            addFragment(new AllServiceFragment(), true);
             tabHost.addTab(createTabSpec(USER), AllUserFragment.class, null);
             tabHost.addTab(createTabSpec(HOTEL), AllHotelFragment.class, null);
             tabHost.addTab(createTabSpec(SERVICE), AllServiceAdapter.class, null);

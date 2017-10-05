@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/_100sdp"
+    android:layout_height="@dimen/_80sdp"
+    android:layout_margin="@dimen/_8sdp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardElevation="@dimen/_6sdp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/itemChooser_ivMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:scaleType="centerCrop"/>
+
+        <ImageView
+            android:id="@+id/itemChooser_ivDelete"
+            android:layout_width="@dimen/_17sdp"
+            android:layout_height="@dimen/_17sdp"
+            android:layout_gravity="right"/>
+    </FrameLayout>
+
+</android.support.v7.widget.CardView>
