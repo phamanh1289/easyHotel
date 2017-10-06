@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/whiteThree">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/whiteThree"
+              android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/base_action_bar_home"/>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include layout="@layout/base_action_bar_home"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -126,48 +126,57 @@
                         <LinearLayout
                             android:id="@+id/fragAddHotel_llSingle"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="@dimen/_20sdp"
+                            android:gravity="bottom"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/fragAddHotel_ivMale"
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/selector_male"/>
+                                android:src="@drawable/selector_single"/>
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/fragAddHotel_tvMale"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_8sdp"
+                                android:background="@null"
+                                android:focusable="false"
                                 android:gravity="bottom"
-                                android:text="@string/single"
-                                android:textColor="@drawable/selector_text"
+                                android:hint="@string/single"
+                                android:textColor="@color/denimBlue"
+                                android:textColorHint="@color/denimBlue"
                                 android:textSize="@dimen/_9sdp"/>
                         </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/fragAddHotel_llDouble"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
+
+                            android:gravity="bottom"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/fragAddHotel_ivFemale"
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/selector_female"/>
+                                android:src="@drawable/selector_double"/>
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/fragAddHotel_tvFemale"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_8sdp"
+                                android:background="@null"
+                                android:focusable="false"
                                 android:gravity="bottom"
-                                android:text="@string/_double"
-                                android:textColor="@drawable/selector_text"
+                                android:hint="@string/_double"
+                                android:textColor="@color/denimBlue"
+                                android:textColorHint="@color/denimBlue"
                                 android:textSize="@dimen/_9sdp"/>
                         </LinearLayout>
 
@@ -187,7 +196,7 @@
                         app:fletPaddingBottom="@dimen/_8sdp"
                         app:fletTextAppearance="@color/greyishBrownThree">
 
-                        <EditText
+                        <AutoCompleteTextView
                             android:id="@+id/fragAddHotel_tvAddress"
                             fontPath="@string/Helvetica_light"
                             android:layout_width="match_parent"
@@ -242,6 +251,7 @@
 
 
                     <TextView
+                        android:id="@+id/fragAddHotel_tvAddPhoto"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_16sdp"
@@ -255,8 +265,7 @@
                         android:id="@+id/fragAddHotel_rvMain"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:nestedScrollingEnabled="false">
+                        android:layout_marginTop="@dimen/_8sdp">
 
                     </android.support.v7.widget.RecyclerView>
 
@@ -319,5 +328,7 @@
             </FrameLayout>
 
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+
+    </ScrollView>
+
+</LinearLayout>

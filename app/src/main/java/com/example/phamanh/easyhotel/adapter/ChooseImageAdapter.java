@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 
@@ -42,10 +39,6 @@ public class ChooseImageAdapter extends RecyclerView.Adapter<ChooseImageAdapter.
     public void onBindViewHolder(ChooseIamgeHolder holder, int position) {
         holder.ivMain.setImageBitmap(mData.get(position));
 
-        Glide.with(holder.itemView.getContext())
-                .load(R.drawable.ic_serach_round)
-                .apply(new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
-                .into(holder.ivDelete);
     }
 
     @Override
@@ -57,8 +50,6 @@ public class ChooseImageAdapter extends RecyclerView.Adapter<ChooseImageAdapter.
 
         @BindView(R.id.itemChooser_ivMain)
         ImageView ivMain;
-        @BindView(R.id.itemChooser_ivDelete)
-        ImageView ivDelete;
 
         ChooseIamgeHolder(View itemView) {
             super(itemView);

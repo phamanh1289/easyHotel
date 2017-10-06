@@ -154,7 +154,7 @@ public class AllHotelFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragAllHotel_tvAdd:
-                addFragment(new AddUserFragment(), true);
+                addFragment(new AddHotelFragment(), true);
                 break;
             case R.id.baseSearch_ivSearch:
                 etSearch.setText("");

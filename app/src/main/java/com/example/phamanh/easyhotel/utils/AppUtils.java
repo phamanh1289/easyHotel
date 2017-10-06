@@ -24,9 +24,16 @@ import android.widget.TextView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.PlaceAutocomplete;
 import com.example.phamanh.easyhotel.other.view.ConfirmDialog;
 import com.example.phamanh.easyhotel.other.view.ConfirmListenerDialog;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.AutocompletePredictionBuffer;
+import com.google.android.gms.location.places.Places;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,12 +47,15 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class AppUtils {
     private static String service;
@@ -399,4 +409,27 @@ public class AppUtils {
         return str;
     }
 
+    public static ArrayList<PlaceAutocomplete> getPredictions(GoogleApiClient mGoogleApiClient, CharSequence constraint) {
+        if (mGoogleApiClient != null) {
+            PendingResult<AutocompletePredictionBuffer> results =
+                    Places.GeoDataApi
+                            .getAutocompletePredictions(mGoogleApiClient, constraint.toString(),
+                                    Constant.BOUNDS_AUSTRALIA, null);
+            AutocompletePredictionBuffer autocompletePredictions = results
+                    .await(60, TimeUnit.SECONDS);
+            final Status status = autocompletePredictions.getStatus();
+            if (!status.isSuccess())
+                return null;
+            Iterator<AutocompletePrediction> iterator = autocompletePredictions.iterator();
+            ArrayList resultList = new ArrayList<>(autocompletePredictions.getCount());
+            while (iterator.hasNext()) {
+                AutocompletePrediction prediction = iterator.next();
+                resultList.add(new PlaceAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(null),
+                        prediction.getFullText(null), prediction.getSecondaryText(null)));
+            }
+            autocompletePredictions.release();
+            return resultList;
+        }
+        return null;
+    }
 }

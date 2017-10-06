@@ -5,14 +5,14 @@ import com.example.phamanh.easyhotel.R;
 
 public enum TabsEnum {
 
-    HOME(1,"Home", R.drawable.selector_home),
+    HOME(1, "Home", R.drawable.selector_home),
     NEARBY(2, "Nearby", R.drawable.selector_plus),
     NEWS(3, "News", R.drawable.selector_share),
     SETTING(4, "Settings", R.drawable.selector_setting),
-    USER(1, "User", R.drawable.selector_setting),
-    HOTEL(2, "Hotel", R.drawable.selector_setting),
-    SERVICE(3, "Service", R.drawable.selector_setting),
-    BOOKING(4, "Booking", R.drawable.selector_setting),
+    USER(1, "User", R.drawable.selector_user),
+    HOTEL(2, "Hotel", R.drawable.selector_home),
+    SERVICE(3, "Service", R.drawable.selector_service),
+    BOOKING(4, "Booking", R.drawable.selector_booking),
     MANAGER(5, "Manager", R.drawable.selector_setting);
 
     private String title;

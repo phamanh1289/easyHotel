@@ -11,7 +11,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
-import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.interfaces.ChoiceImageListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,13 +26,13 @@ public class ChooseImageDialog extends Dialog {
     TextView tvImage;
     Unbinder unbinder;
 
-    private DialogListener mDialogListener;
+    private ChoiceImageListener mDialogListener;
 
     public ChooseImageDialog(@NonNull Context context) {
         super(context, android.R.style.Theme_Holo_Dialog);
     }
 
-    public void setDialogListener(DialogListener dialogListener) {
+    public void setDialogListener(ChoiceImageListener dialogListener) {
         mDialogListener = dialogListener;
     }
 
@@ -52,10 +52,10 @@ public class ChooseImageDialog extends Dialog {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.viewDialogChooseImage_tvTake:
-                mDialogListener.onConfirmClicked();
+                mDialogListener.onTakePhotoClicked();
                 break;
             case R.id.viewDialogChooseImage_tvIamge:
-                mDialogListener.onConfirmClicked();
+                mDialogListener.onChoicePhotoClicked();
                 break;
         }
     }

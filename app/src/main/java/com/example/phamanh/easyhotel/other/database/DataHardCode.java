@@ -29,4 +29,12 @@ public class DataHardCode {
         }
         return rs;
     }
+
+    public static List<String> getRoomHotel() {
+        List<String> rs = new ArrayList<>();
+        for (int i = 0; i < 50; i++) {
+            rs.add(String.valueOf(i));
+        }
+        return rs;
+    }
 }

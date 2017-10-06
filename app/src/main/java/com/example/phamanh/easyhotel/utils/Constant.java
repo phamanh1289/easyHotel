@@ -1,6 +1,9 @@
 package com.example.phamanh.easyhotel.utils;
 
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
 public class Constant {
 
     public static final String GOOGLE_API_URL = "https://maps.googleapis.com/maps/";
@@ -41,5 +44,8 @@ public class Constant {
     public static final String IMAGE_DEFAULT = "gs://easy-hotel-25f40.appspot.com/ic_no_image.png";
     public static final String ACTION_RELOAD_COMMENT = "reload_comment";
     public static final int SIZE_DEFAULT = 1024 * 1024;
+    public static final int GOOGLE_API_CLIENT_ID = 0;
     public static final String STORE = "gs://easy-hotel-25f40.appspot.com/";
+    public static final LatLngBounds BOUNDS_AUSTRALIA = new LatLngBounds(
+            new LatLng(-31.880374, 115.846007), new LatLng(-27.442818, 153.032977));
 }
