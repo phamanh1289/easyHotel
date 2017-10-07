@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:paddingLeft="@dimen/_10sdp"
+        android:hint="Input name for search..."
+        android:textColorHint="@color/blur_"
         android:background="@drawable/shape_boder_file_claim"
         android:textColor="@color/denimBlue"/>
 

@@ -31,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -48,6 +49,7 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
 
     private List<UserModel> mDataInfo = new ArrayList<>();
     private List<UserModel> mDataSearch = new ArrayList<>();
+    private int indexUser;
 
     @Nullable
     @Override
@@ -63,7 +65,7 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
 
     private void init() {
         rvMain.setAdapter(AllUserAdapter.class, mDataInfo);
-        rvMain.setOnItemListener(this, new Integer[]{R.id.itemViewUser_clLayout}, true);
+        rvMain.setOnItemListener(toClick, new Integer[]{R.id.itemViewUser_clLayout}, true);
         etSearch.addTextChangedListener(loadChangeText);
         showLoading();
         toGetDataProfile();
@@ -146,7 +148,8 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
     };
 
     ACRecyclerView.OnItemListener toClick = (view, position) -> {
-        toChangFragment(position);
+        indexUser = position;
+        toChangFragment();
     };
 
     private void toSearchHotel(String name, List<UserModel> mDataInfo) {
@@ -160,23 +163,31 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
     }
 
 
-    private void toChangFragment(int pos) {
-        AppUtils.showAlertACtion(getActivity(), "Do you want ?", new DialogListener() {
-            @Override
-            public void onConfirmClicked() {
-                addFragment(UserDetailFragment.newInstance(mDataInfo.get(pos)), true);
-            }
-
-            @Override
-            public void onCancelClicked() {
-                mDataInfo.get(pos).setStatus(!mDataInfo.get(pos).status);
-                refMember.child(mDataInfo.get(pos).getId()).setValue(new Gson().toJson(mDataInfo.get(pos)));
-                rvMain.notifyDataSetChanged();
-                AppUtils.showAlert(getActivity(), (mDataInfo.get(pos).status ? "Disable" : "Enable") + " user successful", null);
-            }
-        }, mDataInfo.get(pos).status ? "Enable" : "Disable", "Update");
-
+    private void toChangFragment() {
+        AppUtils.showAlertACtion(getActivity(), "Do you want ?", toChange, mDataInfo.get(indexUser).status ? "Enable" : "Disable", "Update");
     }
 
+    DialogListener toChange = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            addFragment(UserDetailFragment.newInstance(mDataInfo.get(indexUser)), true);
+        }
 
+        @Override
+        public void onCancelClicked() {
+            mDataInfo.get(indexUser).setStatus(!mDataInfo.get(indexUser).status);
+            refMember.child(mDataInfo.get(indexUser).getId()).setValue(new Gson().toJson(mDataInfo.get(indexUser)));
+            rvMain.notifyDataSetChanged();
+            AppUtils.showAlert(getActivity(), (mDataInfo.get(indexUser).status ? "Disable" : "Enable") + " user successful", null);
+        }
+    };
+
+    @OnClick({R.id.baseSearch_ivSearch})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.baseSearch_ivSearch:
+                etSearch.setText("");
+                break;
+        }
+    }
 }

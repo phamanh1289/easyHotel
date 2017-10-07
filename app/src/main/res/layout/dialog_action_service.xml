@@ -17,30 +17,29 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/dialogConfirmListener_tvContent"
+            android:id="@+id/dialogActionService_tvContent"
             fontPath="@string/Helvetica_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_21sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
             android:gravity="center"
-            android:text="Enter a name for this diary"
+            android:text="Do you want process item service ?"
             android:textColor="@color/greyishBrownThree"
             android:textSize="13sp"/>
 
         <EditText
-            android:id="@+id/dialogConfirmListener_etCode"
+            android:id="@+id/dialogActionService_etCode"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_28sdp"
             android:layout_marginBottom="@dimen/_11sdp"
             android:layout_marginLeft="@dimen/_16sdp"
             android:layout_marginRight="@dimen/_16sdp"
             android:background="@drawable/shape_boder_edit_text"
-            android:hint="Enter your active code here"
+            android:hint="Enter item service to update here"
             android:inputType="text"
             android:paddingLeft="@dimen/_5sdp"
             android:textColor="@color/greyishBrownThree"
-            android:textSize="13sp"
-            android:visibility="gone"/>
+            android:textSize="13sp"/>
     </LinearLayout>
 
     <FrameLayout
@@ -53,13 +52,13 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/dialogConfirmDiary_tvCancel"
+            android:id="@+id/dialogActionService_tvCancel"
             android:layout_width="0dp"
             android:layout_height="@dimen/_44sdp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:text="Cancel"
+            android:text="Delete"
             android:textColor="@color/bright_blue"
             android:textSize="17sp"/>
 
@@ -69,13 +68,13 @@
             android:background="@color/silver"/>
 
         <TextView
-            android:id="@+id/dialogConfirmDiary_tvSave"
+            android:id="@+id/dialogActionService_tvSave"
             android:layout_width="0dp"
             android:layout_height="@dimen/_44sdp"
             android:layout_weight="1"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:text="Save"
+            android:text="Update"
             android:textColor="@color/bright_blue"
             android:textSize="17sp"/>
     </LinearLayout>

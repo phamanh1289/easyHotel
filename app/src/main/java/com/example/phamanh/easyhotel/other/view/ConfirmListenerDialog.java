@@ -26,8 +26,6 @@ public class ConfirmListenerDialog extends Dialog {
   TextView tvCancel;
   @BindView(R.id.dialogConfirmDiary_tvSave)
   TextView tvSave;
-  @BindView(R.id.dialogConfirmListener_tvTitle)
-  TextView tvTitle;
   @BindView(R.id.dialogConfirmListener_tvContent)
   TextView tvContent;
   @BindView(R.id.dialogConfirmListener_etCode)
@@ -42,7 +40,6 @@ public class ConfirmListenerDialog extends Dialog {
   public ConfirmListenerDialog(Context context, String title, String content, String cancel,
                                String save) {
     super(context, android.R.style.Theme_Holo_Dialog);
-    this.title = title;
     this.content = content;
     this.cancel = cancel;
     this.save = save;
@@ -59,11 +56,6 @@ public class ConfirmListenerDialog extends Dialog {
     }
     setContentView(R.layout.dialog_confirm_listener);
     ButterKnife.bind(this);
-    if (!title.isEmpty()) {
-      tvTitle.setText(title);
-    } else {
-      tvTitle.setVisibility(View.GONE);
-    }
     if (!content.isEmpty()) {
       tvContent.setText(content);
     }

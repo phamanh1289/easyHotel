@@ -16,7 +16,7 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.admin.booking.AllBookingFragment;
 import com.example.phamanh.easyhotel.admin.hotel.AllHotelFragment;
 import com.example.phamanh.easyhotel.admin.manager.AdminManagerFragment;
-import com.example.phamanh.easyhotel.admin.service.AllServiceAdapter;
+import com.example.phamanh.easyhotel.admin.service.AllServiceFragment;
 import com.example.phamanh.easyhotel.admin.user.AllUserFragment;
 import com.example.phamanh.easyhotel.base.BaseActivity;
 import com.example.phamanh.easyhotel.fragment.home.HomeFragment;
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity implements View.OnTouchListener {
         if (getRole() == RoleEnum.ADMIN) {
             tabHost.addTab(createTabSpec(USER), AllUserFragment.class, null);
             tabHost.addTab(createTabSpec(HOTEL), AllHotelFragment.class, null);
-            tabHost.addTab(createTabSpec(SERVICE), AllServiceAdapter.class, null);
+            tabHost.addTab(createTabSpec(SERVICE), AllServiceFragment.class, null);
             tabHost.addTab(createTabSpec(BOOKING), AllBookingFragment.class, null);
             tabHost.addTab(createTabSpec(MANAGER), AdminManagerFragment.class, null);
         } else {
