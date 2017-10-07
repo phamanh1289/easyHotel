@@ -70,4 +70,5 @@
     <string name="location">Location</string>
     <string name="take_a_photo">Take a photo</string>
     <string name="choice_photo">Choice photo</string>
+    <string name="service">Service</string>
 </resources>

@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.places.Places;
 
 /**
  * A login screen that offers login via email/password.
@@ -33,6 +34,7 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
+                .addApi(Places.GEO_DATA_API)
                 .addApi(AppInvite.API)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();

@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 
 import com.example.phamanh.easyhotel.base.BaseModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class InfomationModel extends BaseModel {
+public class InfomationModel extends BaseModel implements Serializable{
     private String address, description, logo, name, price, id;
     public boolean isLike;
     private Bitmap bitmap;

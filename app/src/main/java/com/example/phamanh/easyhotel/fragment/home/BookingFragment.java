@@ -51,6 +51,7 @@ public class BookingFragment extends BaseFragment {
     private ServiceDetailModel mServiceDetailModel;
     private List<String> mDataService;
     private boolean isCheckRoom;
+    private int countSingle, countDouble;
     Unbinder unbinder;
 
 
@@ -71,23 +72,25 @@ public class BookingFragment extends BaseFragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!mKey.equals("")) {
-                    mRoomModel.single = Integer.parseInt(dataSnapshot.child("single").getValue().toString());
+                    mRoomModel.single = dataSnapshot.child("single").getValue().toString();
+                    countSingle = Integer.parseInt(mRoomModel.single);
                     if (rvSingle != null) {
-                        toSetUpUI(rvSingle, singleAdapter, toSingleClick, mRoomModel.single, true);
+                        toSetUpUI(rvSingle, singleAdapter, toSingleClick, countSingle, true);
                     } else
                         singleAdapter.notifyDataSetChanged();
-                    tvNoDataSingle.setVisibility(mRoomModel.single != 0 ? View.GONE : View.VISIBLE);
+                    tvNoDataSingle.setVisibility(countSingle != 0 ? View.GONE : View.VISIBLE);
                     if (!isCheckRoom)
                         EventBus.getDefault().postSticky(new EventBusBooking("single", String.valueOf(mRoomModel.single)));
 
-                    mRoomModel._double = Integer.parseInt(dataSnapshot.child("double").getValue().toString());
+                    mRoomModel._double = dataSnapshot.child("_double").getValue().toString();
+                    countDouble = Integer.parseInt(mRoomModel._double);
                     if (rvDouble != null) {
-                        toSetUpUI(rvDouble, doubleAdapter, toDoubleClick, mRoomModel._double, false);
+                        toSetUpUI(rvDouble, doubleAdapter, toDoubleClick, countDouble, false);
                     } else
                         doubleAdapter.notifyDataSetChanged();
-                    tvNoDataDouble.setVisibility(mRoomModel._double != 0 ? View.GONE : View.VISIBLE);
+                    tvNoDataDouble.setVisibility(countDouble != 0 ? View.GONE : View.VISIBLE);
                     if (!isCheckRoom)
-                        EventBus.getDefault().postSticky(new EventBusBooking("double", String.valueOf(mRoomModel._double)));
+                        EventBus.getDefault().postSticky(new EventBusBooking("_double", String.valueOf(mRoomModel._double)));
                 }
             }
 
@@ -115,8 +118,8 @@ public class BookingFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(mInfomationModel, service, pos, true, mRoomModel.single), true);
-    ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel, service, pos, false, mRoomModel._double), true);
+    ItemListener toSingleClick = pos -> addFragment(BookingDetailFragment.newInstance(mInfomationModel, service, pos, true, countSingle), true);
+    ItemListener toDoubleClick = pos -> addFragment(BookingDetailFragment.newInstance(((BookingCommentParrent) getParentFragment()).mInfomationModel, service, pos, false, countDouble), true);
 
     private void toSetUpUI(RecyclerView rvMain, RoomAdapter adapter, ItemListener toClick, int i, boolean isCheck) {
         adapter = new RoomAdapter(i);

@@ -285,6 +285,14 @@ public class AppUtils {
         singlePopup.showAsDropDown(view);
     }
 
+    public static String toAddString(String start, String insert) {
+        if (start.equals(""))
+            return insert;
+        else
+            start += ", " + insert;
+        return start;
+    }
+
     public static boolean toDoCheckDate(String start, String end) {
         if (start.isEmpty() && end.isEmpty()) {
             return true;
@@ -431,5 +439,13 @@ public class AppUtils {
             return resultList;
         }
         return null;
+    }
+
+    public static String toAddStringArray(List<String> mData) {
+        String result = "";
+        for (String a : mData) {
+            result += a + ", ";
+        }
+        return result.substring(0, result.length() - 2);
     }
 }

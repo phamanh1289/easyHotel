@@ -36,6 +36,9 @@ public class Constant {
     public static final String SERVICE = "service";
     public static final String ROOM = "room";
     public static final String LIKE = "like";
+    public static final String HOTEL_INFO = "hotel_info";
+    public static final String HOTEL_ROOM = "hotel_room";
+    public static final String HOTEL_SERVICE = "hotel_service";
     public static final String RATING = "rating";
     public static final String HISTORY = "history";
     public static final String COMMENT = "comment";

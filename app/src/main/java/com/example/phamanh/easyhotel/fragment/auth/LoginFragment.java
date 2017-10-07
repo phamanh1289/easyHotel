@@ -230,6 +230,8 @@ public class LoginFragment extends BaseFragment {
                             toGetDataProfile();
                             if (!mUser.getEmail().equals(Constant.MAIL_ADMIN))
                                 toAddReLogin(true);
+                            else
+                                SharedPrefUtils.setString(getActivity(), Constant.MAIL_ADMIN,Constant.MAIL_ADMIN);
                         } else {
                             dismissLoading();
                             AppUtils.showAlert(getContext(), "Email not activated", null);

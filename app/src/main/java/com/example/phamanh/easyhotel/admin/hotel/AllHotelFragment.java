@@ -10,17 +10,21 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.appscyclone.aclibrary.view.ACRecyclerView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.Location;
+import com.example.phamanh.easyhotel.model.RoomModel;
+import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +50,9 @@ public class AllHotelFragment extends BaseFragment {
 
     private List<InfomationModel> mDataInfo = new ArrayList<>();
     private List<InfomationModel> mDataSearch = new ArrayList<>();
-    private InfomationModel info;
+    private List<RoomModel> mDataRoom = new ArrayList<>();
+    private List<ServiceDetailModel> mDataService = new ArrayList<>();
+    private ServiceDetailModel mServiceDetailModel;
 
     @Nullable
     @Override
@@ -62,10 +68,18 @@ public class AllHotelFragment extends BaseFragment {
 
     private void init() {
         rvMain.setAdapter(AllHotelAdapter.class, mDataInfo);
-        rvMain.setOnItemListener(toClick, new Integer[]{R.id.itemViewHotel_clLayout}, true);
         etSearch.addTextChangedListener(loadChangeText);
         showLoading();
         toGetDataProfile();
+        rvMain.setOnItemListener(toClick, new Integer[]{R.id.itemViewHotel_clLayout}, true);
+    }
+
+    ACRecyclerView.OnItemListener toClick = (view, position) -> {
+       toChangFragment(position);
+    };
+
+    private void toChangFragment(int pos){
+        addFragment(AddHotelFragment.newInstance(mDataInfo.get(pos), mDataRoom.get(pos), mDataService.get(pos)), true);
     }
 
     @Override
@@ -74,46 +88,123 @@ public class AllHotelFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    ACRecyclerView.OnItemListener toClick = (view, position) -> Toast.makeText(getActivity(), mDataInfo.get(position).getName(), Toast.LENGTH_SHORT).show();
-
-
     private void toGetDataProfile() {
         if (mDataInfo.size() != 0)
             mDataInfo.clear();
-        refHotel.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                info = new InfomationModel();
-                info.setId(dataSnapshot.getKey());
-                info.setPrice(dataSnapshot.child("price").getValue().toString());
-                info.setName(dataSnapshot.child("name").getValue().toString());
-                info.setLogo(dataSnapshot.child("logo").getValue().toString());
-                info.setDescription(dataSnapshot.child("description").getValue().toString());
-                info.setAddress(dataSnapshot.child("address").getValue().toString());
-                info.setLocation(new Location(dataSnapshot.child("location").child("lat").getValue().toString(), dataSnapshot.child("location").child("lng").getValue().toString()));
-                info.setDataImage((List<String>) dataSnapshot.child("mDataImage").getValue());
-                mDataInfo.add(info);
-                rvMain.notifyItemInserted(mDataInfo.size());
-                dismissLoading();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        if (mDataRoom.size() != 0)
+            mDataRoom.clear();
+        if (mDataService.size() != 0)
+            mDataService.clear();
+        refHotel_room.addChildEventListener(toAddRoom);
+        refHotel_service.addChildEventListener(toAddService);
+        refHotel.addChildEventListener(toAddHotel);
     }
+
+
+    ChildEventListener toAddRoom = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot != null) {
+                RoomModel item = new RoomModel();
+                item.single = dataSnapshot.child("single").getValue().toString();
+                item._double = dataSnapshot.child("_double").getValue().toString();
+                mDataRoom.add(item);
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    ChildEventListener toAddService = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            if (dataSnapshot != null && !dataSnapshot.getKey().equals("data")) {
+                try {
+                    Gson gson = new Gson();
+                    JSONObject fJSONObject = new JSONObject(dataSnapshot.getValue().toString());
+                    mServiceDetailModel = gson.fromJson(fJSONObject.toString(), ServiceDetailModel.class);
+                    mDataService.add(mServiceDetailModel);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    ChildEventListener toAddHotel = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            InfomationModel info = new InfomationModel();
+            info.setId(dataSnapshot.getKey());
+            info.setPrice(dataSnapshot.child("price").getValue().toString());
+            info.setName(dataSnapshot.child("name").getValue().toString());
+            info.setLogo(dataSnapshot.child("logo").getValue().toString());
+            info.setDescription(dataSnapshot.child("description").getValue().toString());
+            info.setAddress(dataSnapshot.child("address").getValue().toString());
+            info.setLocation(new Location(dataSnapshot.child("location").child("lat").getValue().toString(), dataSnapshot.child("location").child("lng").getValue().toString()));
+            info.setDataImage((List<String>) dataSnapshot.child("mDataImage").getValue());
+            mDataInfo.add(info);
+            rvMain.notifyItemInserted(mDataInfo.size());
+            dismissLoading();
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     TextWatcher loadChangeText = new TextWatcher() {
         @Override
@@ -144,7 +235,7 @@ public class AllHotelFragment extends BaseFragment {
         if (mDataSearch.size() != 0)
             mDataSearch.clear();
         for (InfomationModel item : mDataInfo) {
-            if (item.getName().matches(".*" + name + ".*")) {
+            if (item.getName().toLowerCase().matches(".*" + name + ".*")) {
                 mDataSearch.add(item);
             }
         }

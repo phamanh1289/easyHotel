@@ -12,6 +12,8 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.activity.LoginActivity;
 import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
@@ -70,16 +72,19 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
             llChangePass.setVisibility(View.GONE);
     }
 
-    public void LogOutAndLoginHere() {
-        FirebaseAuth.getInstance().signOut();
-        SharedPrefUtils.removeLogout(getActivity());
-        BaseApplication application = (BaseApplication) getActivity().getApplication();
-        application.setCustomer(null);
-        dismissLoading();
-        StartActivityUtils.toLogin(getActivity());
-        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        getActivity().finish();
-    }
+    DialogListener toConfirmExit = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            showLoading();
+            logoutAccount();
+        }
+
+        @Override
+        public void onCancelClicked() {
+
+        }
+    };
+
 
     private void logoutAccount() {
         if (mGoogleApiClient.isConnected()) {
@@ -90,6 +95,14 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
         if (AccessToken.getCurrentAccessToken() != null) {
             LoginManager.getInstance().logOut();
         }
+        FirebaseAuth.getInstance().signOut();
+        SharedPrefUtils.removeLogout(getActivity());
+        BaseApplication application = (BaseApplication) getActivity().getApplication();
+        application.setCustomer(null);
+        dismissLoading();
+        StartActivityUtils.toLogin(getActivity());
+        getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        getActivity().finish();
     }
 
     @Override
@@ -113,9 +126,7 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
                 addFragment(new FAQFragment(), true);
                 break;
             case R.id.fragSetting_llLogout:
-                showLoading();
-                logoutAccount();
-                LogOutAndLoginHere();
+                AppUtils.showAlertConfirm(getActivity(),"Do you want exit EsayHotel ?",toConfirmExit);
                 break;
             case R.id.fragSetting_llChangePass:
                 addFragment(new ChangePasswordFragment(), true);

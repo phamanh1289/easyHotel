@@ -217,10 +217,14 @@ public class HomeFragment extends BaseFragment {
 //        mDataRating.add(new RatingModel("email_8", "8", System.currentTimeMillis()));
 //        mListRating.rating = mDataRating;
 
-//        List<String> mdata = new ArrayList<>();
-//        mdata.add("spa");
-//        mdata.add("eat");
-//        service.setService(mdata);
+        List<String> mdata = new ArrayList<>();
+        mdata.add("Spa");
+        mdata.add("Eat");
+        mdata.add("Swim");
+        mdata.add("Gym");
+        mdata.add("Coffee");
+        mdata.add("Restaurant");
+        service.setService(mdata);
 //        info.setAddress("123/123");
 //        info.setDescription("demo add");
 //        info.setLogo("demo logo");
@@ -243,7 +247,7 @@ public class HomeFragment extends BaseFragment {
 //        refHotel_comment.child(mKey).setValue(new Gson().toJson(mListComment));
 //        refHotel_service.child("1506252747351").setValue(new Gson().toJson(service));
 //        refHotel_service.child("1506252754506").setValue(new Gson().toJson(service));
-//        refHotel_service.child(mKey).setValue(new Gson().toJson(mListService));
+        refHotel_service.child("data").setValue(new Gson().toJson(service));
 //        refHotel.child(mKey).setValue(new Gson().toJson(info));
 //        refHotel_room.child(mKey).setValue(new Gson().toJson(new RoomModel(12, 8)));
     }

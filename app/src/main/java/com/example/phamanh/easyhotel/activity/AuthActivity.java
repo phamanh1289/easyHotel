@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseActivity;
+import com.example.phamanh.easyhotel.base.BaseApplication;
+import com.example.phamanh.easyhotel.other.enums.RoleEnum;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
@@ -37,7 +39,13 @@ public class AuthActivity extends BaseActivity {
         if (SharedPrefUtils.getString(this, Constant.TYPE_LOGIN).equals(Constant.LOGIN_NORMAL) || SharedPrefUtils.getString(this, Constant.TYPE_LOGIN).equals(Constant.LOGIN_SOCIAL)) {
             StartActivityUtils.toMain(this, null);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        } else {
+        }else if (SharedPrefUtils.getString(this,Constant.MAIL_ADMIN).equals(Constant.MAIL_ADMIN)){
+            BaseApplication application = (BaseApplication) this.getApplication();
+            application.setRole(RoleEnum.ADMIN);
+            StartActivityUtils.toMain(this, null);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
+        else {
             StartActivityUtils.toIntro(this);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
