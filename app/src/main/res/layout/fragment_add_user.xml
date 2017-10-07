@@ -287,7 +287,6 @@
                                     android:background="@null"
                                     android:focusable="false"
                                     android:hint="@string/service"
-                                    android:lines="1"
                                     android:textColor="@color/denimBlue"
                                     android:textColorHint="@color/denimBlue"
                                     android:textSize="13.5sp"

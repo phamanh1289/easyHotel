@@ -130,8 +130,8 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
     private SelectSinglePopup popupSingle, popupService;
     private List<String> mDataSingle = new ArrayList<>(), mDataService = new ArrayList<>();
     private ServiceDetailModel mServiceDetailModel = new ServiceDetailModel();
-    private static ServiceDetailModel mAddService = new ServiceDetailModel();
-    private InfomationModel info = new InfomationModel();
+    private ServiceDetailModel mAddService = new ServiceDetailModel();
+    private InfomationModel info;
     private RoomModel mRoomModel = new RoomModel();
 
     Unbinder unbinder;
@@ -152,7 +152,7 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_user, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setActionBar(view, "Register Hotel");
+        setActionBar(view, "Detail Hotel");
         KeyboardUtils.setupUI(view, getActivity());
         init();
         getBundle();
@@ -182,6 +182,8 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
             mDataSingle.addAll(DataHardCode.getRoomHotel());
         toGetDataService();
         id = "hotel_" + String.valueOf(System.currentTimeMillis());
+        tvAddress.setOnLongClickListener(toLongAddress);
+        tvService.setOnLongClickListener(toLongService);
     }
 
     private void toGetDataService() {
@@ -328,7 +330,7 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         }
     }
 
-    public static void toAddDataService(Context context, View view, SelectSinglePopup singlePopup, List<String> mData, TextView textView) {
+    private void toAddDataService(Context context, View view, SelectSinglePopup singlePopup, List<String> mData, TextView textView) {
         if (singlePopup == null) {
             singlePopup = new SelectSinglePopup(context, mData, false);
         }
@@ -336,9 +338,11 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         SelectSinglePopup finalSinglePopup = singlePopup;
         singlePopup.setOnItemListener(pos -> {
             result[0] = mData.get(pos);
-            mAddService.getService().add(result[0]);
-            textView.setText(AppUtils.toAddString(textView.getText().toString(), result[0]));
-            textView.setTextColor(ContextCompat.getColor(context, R.color.denimBlue));
+            if (toCheckDataService(tvService.getText().toString(), result[0])){
+                mAddService.getService().add(result[0]);
+                textView.setText(AppUtils.toAddString(textView.getText().toString(), result[0]));
+                textView.setTextColor(ContextCompat.getColor(context, R.color.denimBlue));
+            }
             finalSinglePopup.dismiss();
         });
         singlePopup.showAsDropDown(view);
@@ -501,31 +505,33 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
 
     private void toAddNewHotel() {
         showLoading();
-        info = new InfomationModel();
+        if (info == null) {
+            info = new InfomationModel();
+            info.setId(id);
+        }
         info.setAddress(tvAddress.getText().toString());
         info.setDescription(tvDescription.getText().toString());
         info.setName(tvName.getText().toString());
-        if (info.getId() == null)
-            info.setId(id);
         info.setPrice(tvPrice.getText().toString());
         info.setLocation(mLocation);
         toUploadImage(getPathImage);
     }
 
     private void toUploadImage(Bitmap bitmap) {
-        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(info.getLogo() != null ? info.getLogo() : STORE + id);
+        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(info.getLogo() != null ? info.getLogo() : STORE + info.getId());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] dataImage = baos.toByteArray();
         UploadTask uploadTask = baseStore.putBytes(dataImage);
         uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
             info.setLogo(Constant.STORE + baseStore.getName());
+            info.setDataImage(new ArrayList<>());
             toUploadArrayImage(mDataImage);
         });
     }
 
     private void toUploadArrayImage(List<Bitmap> bitmap) {
-        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(STORE + id + "_" + startImage);
+        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(STORE + info.getId() + "_" + startImage);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.get(startImage).compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] dataImage = baos.toByteArray();
@@ -533,10 +539,10 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
             info.getDataImage().add(Constant.STORE + baseStore.getName());
             if (info.getDataImage().size() == bitmap.size()) {
-                refHotel.child(id).setValue(info);
+                refHotel.child(info.getId()).setValue(info);
                 mRoomModel = new RoomModel(tvMale.getText().toString(), tvFemale.getText().toString());
-                refHotel_room.child(id).setValue(mRoomModel);
-                refHotel_service.child(id).setValue(new Gson().toJson(mAddService));
+                refHotel_room.child(info.getId()).setValue(mRoomModel);
+                refHotel_service.child(info.getId()).setValue(new Gson().toJson(mAddService.getService().size() != 0 ? mAddService : toChangeService(tvService.getText().toString())));
                 dismissLoading();
                 AppUtils.showAlert(getActivity(), "Add hotel successful.", null);
                 toResetData();
@@ -561,7 +567,8 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
     private void toLoadImage(String path) {
         baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(path);
         baseStore.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
-            ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            getPathImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            ivBanner.setImageBitmap(getPathImage);
         }).addOnFailureListener(exception -> {
             ivBanner.setImageResource(R.drawable.ic_no_image);
         });
@@ -581,18 +588,26 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         }
     }
 
+    private ServiceDetailModel toChangeService(String s) {
+        String[] result = s.split(",");
+        for (String itm : result) {
+            mAddService.getService().add(itm);
+        }
+        return mAddService;
+    }
 
     private void toLoadData() {
         showLoading();
-        toLoadImage(info.getLogo());
         tvName.setText(info.getName());
         tvPrice.setText(info.getPrice());
         tvAddress.setText(info.getAddress());
-        tvLocation.setText(info.getLocation().getLat() + ", " + info.getLocation().getLng());
+        mLocation = info.getLocation();
+        tvLocation.setText(mLocation.getLat() + ", " + mLocation.getLng());
         tvDescription.setText(info.getDescription());
         tvMale.setText(mRoomModel.single);
         tvFemale.setText(mRoomModel._double);
         tvService.setText(AppUtils.toAddStringArray(mServiceDetailModel.getService()));
+        toLoadImage(info.getLogo());
         toLoadImageArray(info.getDataImage());
     }
 
@@ -608,5 +623,33 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         tvMale.setText("");
         tvService.setText("");
         tvFemale.setText("");
+    }
+
+    View.OnLongClickListener toLongAddress = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            tvAddress.setText("");
+            tvLocation.setText("");
+            return false;
+        }
+    };
+
+    View.OnLongClickListener toLongService = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            tvService.setText("");
+            return false;
+        }
+    };
+
+    private boolean toCheckDataService(String s, String s2) {
+        String[] result = s.split(",");
+        for (String ss : result) {
+            if (ss.trim().equals(s2)){
+                AppUtils.showAlert(getActivity(), "Service already exists", null);
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -75,10 +75,10 @@ public class AllHotelFragment extends BaseFragment {
     }
 
     ACRecyclerView.OnItemListener toClick = (view, position) -> {
-       toChangFragment(position);
+        toChangFragment(position);
     };
 
-    private void toChangFragment(int pos){
+    private void toChangFragment(int pos) {
         addFragment(AddHotelFragment.newInstance(mDataInfo.get(pos), mDataRoom.get(pos), mDataService.get(pos)), true);
     }
 
@@ -98,8 +98,9 @@ public class AllHotelFragment extends BaseFragment {
         refHotel_room.addChildEventListener(toAddRoom);
         refHotel_service.addChildEventListener(toAddService);
         refHotel.addChildEventListener(toAddHotel);
+        if (mDataRoom.size() == 0)
+            dismissLoading();
     }
-
 
     ChildEventListener toAddRoom = new ChildEventListener() {
         @Override
