@@ -13,6 +13,7 @@ import com.example.phamanh.easyhotel.activity.LoginActivity;
 import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.EventBusLogin;
 import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
@@ -40,6 +41,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -204,10 +208,17 @@ public class SignUpFragment extends BaseFragment {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusLogin data) {
+        toAddReLogin();
+    }
+
+
     @Override
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        EventBus.getDefault().register(this);
     }
 
 
@@ -257,7 +268,6 @@ public class SignUpFragment extends BaseFragment {
                     if (task.isSuccessful()) {
                         mUser = FirebaseAuth.getInstance().getCurrentUser();
                         toGetDataProfile();
-                        toAddReLogin();
                     } else {
                         AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
@@ -273,7 +283,6 @@ public class SignUpFragment extends BaseFragment {
                     if (task.isSuccessful()) {
                         mUser = FirebaseAuth.getInstance().getCurrentUser();
                         toGetDataProfile();
-                        toAddReLogin();
                     } else {
                         AppUtils.showAlert(getContext(), task.getException().getMessage(), null);
                         dismissLoading();
@@ -283,7 +292,7 @@ public class SignUpFragment extends BaseFragment {
 
     private void toAddReLogin() {
         if (getUser() == null)
-            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
+            refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getUid(),mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
         SharedPrefUtils.saveLoginSocial(getActivity(), FirebaseAuth.getInstance().getCurrentUser().getUid());
         dismissLoading();
         StartActivityUtils.toMain(getActivity(), null);
@@ -301,12 +310,16 @@ public class SignUpFragment extends BaseFragment {
                         UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
                         BaseApplication application = (BaseApplication) getActivity().getApplication();
                         application.setCustomer(userModel);
+                        if (userModel.status) {
+                            AppUtils.showAlert(getActivity(), "You have locked your account!", toExit);
+                        } else
+                            EventBus.getDefault().post(new EventBusLogin(false));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 if (getUser() == null)
-                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
+                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getUid(),mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
             }
 
             @Override
@@ -330,4 +343,33 @@ public class SignUpFragment extends BaseFragment {
         });
     }
 
+    DialogListener toExit = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            if (loginActivity.mGoogleApiClient.isConnected()) {
+                loginActivity.mGoogleApiClient.clearDefaultAccountAndReconnect();
+            } else {
+                loginActivity.mGoogleApiClient.connect();
+            }
+            if (AccessToken.getCurrentAccessToken() != null) {
+                LoginManager.getInstance().logOut();
+            }
+            FirebaseAuth.getInstance().signOut();
+            SharedPrefUtils.removeLogout(getActivity());
+            BaseApplication application = (BaseApplication) getActivity().getApplication();
+            application.setCustomer(null);
+            dismissLoading();
+        }
+
+        @Override
+        public void onCancelClicked() {
+
+        }
+    };
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 }

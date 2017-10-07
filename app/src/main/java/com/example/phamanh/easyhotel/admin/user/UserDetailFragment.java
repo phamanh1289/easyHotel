@@ -1,4 +1,4 @@
-package com.example.phamanh.easyhotel.fragment.settings;
+package com.example.phamanh.easyhotel.admin.user;
 
 import android.Manifest;
 import android.content.Intent;
@@ -45,29 +45,28 @@ import butterknife.Unbinder;
 
 import static com.example.phamanh.easyhotel.utils.AppUtils.calculateInSampleSize;
 
+public class UserDetailFragment extends BaseFragment {
 
-public class ProfileFragment extends BaseFragment {
-
-    @BindView(R.id.fragProfile_tvUserName)
+    @BindView(R.id.fragUserDetail_tvUserName)
     EditText tvUserName;
-    @BindView(R.id.fragProfile_tvDOB)
+    @BindView(R.id.fragUserDetail_tvDOB)
     EditText tvDOB;
-    @BindView(R.id.fragProfile_tvEmail)
+    @BindView(R.id.fragUserDetail_tvEmail)
     EditText tvEmail;
-    @BindView(R.id.fragProfile_tvMale)
+    @BindView(R.id.fragUserDetail_tvMale)
     TextView tvMale;
-    @BindView(R.id.fragProfile_tvFemale)
+    @BindView(R.id.fragUserDetail_tvFemale)
     TextView tvFemale;
-    @BindView(R.id.fragProfile_tvAddress)
+    @BindView(R.id.fragUserDetail_tvAddress)
     EditText tvAddress;
-    @BindView(R.id.fragProfile_tvMobilePhone)
+    @BindView(R.id.fragUserDetail_tvMobilePhone)
     EditText tvMobilePhone;
     Unbinder unbinder;
-    @BindView(R.id.fragProfile_ivMale)
+    @BindView(R.id.fragUserDetail_ivMale)
     ImageView ivMale;
-    @BindView(R.id.fragProfile_ivFemale)
+    @BindView(R.id.fragUserDetail_ivFemale)
     ImageView ivFemale;
-    @BindView(R.id.fragProfile_ivBanner)
+    @BindView(R.id.fragUserDetail_ivBanner)
     RoundedImageView ivBanner;
     @BindView(R.id.item_avLoading)
     AVLoadingIndicatorView avLoading;
@@ -75,12 +74,23 @@ public class ProfileFragment extends BaseFragment {
     public final int RQ_SELECT_PHOTO = 1;
     public final int MY_PERMISSIONS_REQUEST_READ_STORE = 2;
     private Bitmap bitmapChoice;
+    private UserModel model;
+
+
+    public static UserDetailFragment newInstance(UserModel item) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(Constant.BASE_MODEL, item);
+        UserDetailFragment fragment = new UserDetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        setActionBar(view, getString(R.string.my_profile));
+        View view = inflater.inflate(R.layout.fragment_user_detail, container, false);
+        setActionBar(view, "User Detail");
         setVisibilityTabBottom(View.GONE);
         KeyboardUtils.setupUI(view, getActivity());
         unbinder = ButterKnife.bind(this, view);
@@ -91,7 +101,27 @@ public class ProfileFragment extends BaseFragment {
     private void init() {
         showLoading();
         handleSexSelected(true);
-        toGetProfile();
+        getBundle();
+    }
+
+    private void getBundle() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            model = (UserModel) bundle.getSerializable(Constant.BASE_MODEL);
+            tvEmail.setText(model.getEmail());
+            tvUserName.setText(model.getFullName());
+            tvDOB.setText(model.getDob());
+            tvAddress.setText(model.getAddress());
+            tvMobilePhone.setText(model.getPhone());
+            baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(model.getAvatar());
+            baseStore.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
+                ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            }).addOnFailureListener(exception -> {
+                ivBanner.setImageResource(R.drawable.ic_no_image);
+            });
+            handleSexSelected(model.getGender().equals(getString(R.string.male)));
+            dismissLoading();
+        }
     }
 
     private void handleSexSelected(boolean isMale) {
@@ -107,22 +137,6 @@ public class ProfileFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-
-    private void toGetProfile() {
-        tvEmail.setText(getUser().getEmail());
-        tvUserName.setText(getUser().getFullName());
-        tvDOB.setText(getUser().getDob());
-        tvAddress.setText(getUser().getAddress());
-        tvMobilePhone.setText(getUser().getPhone());
-        baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(getUser().getAvatar().equals(Constant.IMAGE_DEFAULT) ? Constant.STORE + "member_" + mUser.getUid(): getUser().getAvatar());
-        baseStore.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
-            ivBanner.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-        }).addOnFailureListener(exception -> {
-            ivBanner.setImageResource(R.drawable.ic_no_image);
-        });
-        handleSexSelected(getUser().getGender().equals(getString(R.string.male)));
-        dismissLoading();
-    }
 
     public boolean isValidate() {
         boolean isCheck = true;
@@ -164,7 +178,7 @@ public class ProfileFragment extends BaseFragment {
         if (TextUtils.isEmpty(strError))
             return true;
         else {
-            AppUtils.showAlert(getActivity(),  strError, null);
+            AppUtils.showAlert(getActivity(), strError, null);
             return false;
         }
     }
@@ -203,14 +217,14 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void toPostUpdateImage() {
-        UserModel user = new UserModel(getUser().getId(),tvEmail.getText().toString(), tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(),
+        UserModel user = new UserModel(model.getId(),tvEmail.getText().toString(), tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(),
                 tvDOB.getText().toString(), tvAddress.getText().toString(), tvMobilePhone.getText().toString(), getUser().getAvatar());
         if (bitmapChoice != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmapChoice.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] dataImage = baos.toByteArray();
             UploadTask uploadTask = baseStore.putBytes(dataImage);
-            uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(),  "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
+            uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 user.setAvatar(Constant.STORE + baseStore.getName());
                 refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
@@ -240,39 +254,41 @@ public class ProfileFragment extends BaseFragment {
         return !tvEmail.getText().toString().equals(getUser().getFullName()) || !tvDOB.getText().toString().equals(getUser().getDob()) || !tvMobilePhone.getText().toString().equals(getUser().getPhone()) || !tvAddress.getText().toString().equals(getUser().getAddress()) || !s.equals(getUser().getGender()) || bitmapChoice != null;
     }
 
-    @OnClick({R.id.fragProfile_llMale, R.id.fragProfile_llFemale, R.id.fragProfile_tvSubmit, R.id.fragProfile_tvDOB, R.id.fragProfile_ivBanner})
+    @OnClick({R.id.fragUserDetail_llMale, R.id.fragUserDetail_llFemale, R.id.fragUserDetail_tvSubmit, R.id.fragUserDetail_tvDOB, R.id.fragUserDetail_ivBanner})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.fragProfile_llMale:
+            case R.id.fragUserDetail_llMale:
                 handleSexSelected(true);
                 break;
-            case R.id.fragProfile_llFemale:
+            case R.id.fragUserDetail_llFemale:
                 handleSexSelected(false);
                 break;
-            case R.id.fragProfile_tvSubmit:
+            case R.id.fragUserDetail_tvSubmit:
                 if (isValidate()) {
                     showLoading();
-                    new CountDownTimer(2000, 1000) {
+                    new CountDownTimer(1000, 1000) {
                         @Override
                         public void onTick(long l) {
                         }
 
                         @Override
                         public void onFinish() {
-                            if (toCheckChangeText())
-                                toPostUpdateImage();
-                            else {
-                                AppUtils.showAlert(getContext(),  "Profile not change data !", null);
-                                dismissLoading();
+                            if (AppUtils.isNetworkAvailable(getActivity())) {
+                                if (toCheckChangeText())
+                                    toPostUpdateImage();
+                                else {
+                                    AppUtils.showAlert(getContext(), "UserDetail not change data !", null);
+                                    dismissLoading();
+                                }
                             }
                         }
                     }.start();
                 } else checkValidInput();
                 break;
-            case R.id.fragProfile_tvDOB:
+            case R.id.fragUserDetail_tvDOB:
                 AppUtils.showPickTime(getContext(), tvDOB, false);
                 break;
-            case R.id.fragProfile_ivBanner:
+            case R.id.fragUserDetail_ivBanner:
                 pickImage();
                 break;
         }
@@ -286,7 +302,7 @@ public class ProfileFragment extends BaseFragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     pickImage();
                 } else {
-                    AppUtils.showAlert(getContext(),"Permission is required for getting list of files.",null);
+                    AppUtils.showAlert(getContext(), "Permission is required for getting list of files.", null);
                 }
             }
         }

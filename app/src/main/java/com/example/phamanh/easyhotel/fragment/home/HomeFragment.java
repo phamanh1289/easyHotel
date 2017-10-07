@@ -1,6 +1,7 @@
 package com.example.phamanh.easyhotel.fragment.home;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.example.phamanh.easyhotel.R;
+import com.example.phamanh.easyhotel.activity.LoginActivity;
 import com.example.phamanh.easyhotel.adapter.HotelMainAdapter;
 import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.base.BaseFragment;
-import com.example.phamanh.easyhotel.fragment.settings.ProfileFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.CommentModel;
@@ -25,7 +26,18 @@ import com.example.phamanh.easyhotel.model.Location;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.example.phamanh.easyhotel.model.UserModel;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
+import com.example.phamanh.easyhotel.utils.SharedPrefUtils;
+import com.example.phamanh.easyhotel.utils.StartActivityUtils;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,7 +54,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.actionbar_imgBack)
     FrameLayout ivBack;
@@ -60,6 +72,8 @@ public class HomeFragment extends BaseFragment {
     private ServiceDetailModel service = new ServiceDetailModel();
     private InfomationModel info = new InfomationModel();
     private List<String> mDataImage = new ArrayList<>();
+    private GoogleApiClient mGoogleApiClient;
+    private LoginActivity loginActivity;
 
     @Nullable
     @Override
@@ -75,6 +89,16 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void init() {
+        if (mGoogleApiClient == null) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .enableAutoManage(getActivity(), this)
+                    .addApi(AppInvite.API)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
         adapter = new HotelMainAdapter(mDataInfomation);
         adapter.setItemListener(toClickItem);
         rvMain.setAdapter(adapter);
@@ -87,6 +111,11 @@ public class HomeFragment extends BaseFragment {
 //        toAddDataDemo();
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
     private void toGetDataProfile() {
         refMember.addChildEventListener(new ChildEventListener() {
             @Override
@@ -96,8 +125,12 @@ public class HomeFragment extends BaseFragment {
                         Gson gson = new Gson();
                         JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
                         UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
-                        BaseApplication application = (BaseApplication) getActivity().getApplication();
-                        application.setCustomer(userModel);
+                        if (userModel.status) {
+                            AppUtils.showAlert(getActivity(), "You have locked your account!", toExit);
+                        } else {
+                            BaseApplication application = (BaseApplication) getActivity().getApplication();
+                            application.setCustomer(userModel);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -122,10 +155,24 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    DialogListener toUpdateProfile = new DialogListener() {
+    DialogListener toExit = new DialogListener() {
         @Override
         public void onConfirmClicked() {
-            addFragment(new ProfileFragment(), true);
+            if (mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.clearDefaultAccountAndReconnect();
+            } else {
+                mGoogleApiClient.connect();
+            }
+            if (AccessToken.getCurrentAccessToken() != null) {
+                LoginManager.getInstance().logOut();
+            }
+            FirebaseAuth.getInstance().signOut();
+            SharedPrefUtils.removeLogout(getActivity());
+            BaseApplication application = (BaseApplication) getActivity().getApplication();
+            application.setCustomer(null);
+            dismissLoading();
+            StartActivityUtils.toLogin(getActivity());
+            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
 
         @Override
@@ -192,63 +239,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
         unbinder.unbind();
-    }
-
-    private void toAddDataDemo() {
-
-//        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("1")));
-//        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("2")));
-//        refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel("3")));
-
-//        String mKeyHotel = String.valueOf(System.currentTimeMillis());
-
-//        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_1", "nice", ""));
-//        mDataComment.add(new CommentModel(System.currentTimeMillis(), "email_2", "bad", ""));
-//        mListComment.comment = mDataComment;
-//
-//        mDataRating.add(new RatingModel("email_1", "1", System.currentTimeMillis()));
-//        mDataRating.add(new RatingModel("email_2", "2", System.currentTimeMillis()));
-//        mDataRating.add(new RatingModel("email_3", "3", System.currentTimeMillis()));
-//        mDataRating.add(new RatingModel("email_4", "4", System.currentTimeMillis()));
-//        mDataRating.add(new RatingModel("email_5", "5", System.currentTimeMillis()));
-//        mDataRating.add(new RatingModel("email_6", "6", System.currentTimeMillis()));
-//        mDataRating.add(new RatingModel("email_7", "7", System.currentTimeMillis()));
-//        mDataRating.add(new RatingModel("email_8", "8", System.currentTimeMillis()));
-//        mListRating.rating = mDataRating;
-
-        List<String> mdata = new ArrayList<>();
-        mdata.add("Spa");
-        mdata.add("Eat");
-        mdata.add("Swim");
-        mdata.add("Gym");
-        mdata.add("Coffee");
-        mdata.add("Restaurant");
-        service.setService(mdata);
-//        info.setAddress("123/123");
-//        info.setDescription("demo add");
-//        info.setLogo("demo logo");
-//        info.setName("De Nhat Demo");
-//        info.setPrice("1200");
-//        info.setLocation(new Location("10.786968", "106.666520"));
-//        mDataImage.add("image_1");
-//        mDataImage.add("image_2");
-//        info.setDataImage(mDataImage);
-//        hotel.setRoom(new RoomModel(12, 8));
-
-
-//        hotel.setDataComment(mDataComment);
-//        hotel.setDataRating(mDataRating);
-//        hotel.service = mDataServiceDetail;
-
-//        hotel.setInfomation(info);
-//        refHotel.child(String.valueOf(System.currentTimeMillis())).setValue(new Gson().toJson(hotel));
-
-//        refHotel_comment.child(mKey).setValue(new Gson().toJson(mListComment));
-//        refHotel_service.child("1506252747351").setValue(new Gson().toJson(service));
-//        refHotel_service.child("1506252754506").setValue(new Gson().toJson(service));
-        refHotel_service.child("data").setValue(new Gson().toJson(service));
-//        refHotel.child(mKey).setValue(new Gson().toJson(info));
-//        refHotel_room.child(mKey).setValue(new Gson().toJson(new RoomModel(12, 8)));
     }
 }

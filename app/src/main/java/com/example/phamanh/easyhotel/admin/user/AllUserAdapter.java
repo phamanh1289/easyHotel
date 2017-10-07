@@ -4,6 +4,7 @@ package com.example.phamanh.easyhotel.admin.user;
 import android.graphics.BitmapFactory;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ public class AllUserAdapter extends ACRecyclerView.ACBaseViewHolder<UserModel> {
     TextView tvTitle;
     @BindView(R.id.itemNewViewUser_tvDiscription)
     TextView tvDiscription;
+    @BindView(R.id.itemViewUser_clLayout)
+    ConstraintLayout clLayout;
     @BindView(R.id.item_avLoading)
     AVLoadingIndicatorView avLoading;
     public StorageReference refStorage;
@@ -53,6 +56,7 @@ public class AllUserAdapter extends ACRecyclerView.ACBaseViewHolder<UserModel> {
                 avLoading.setVisibility(View.GONE);
             }
         });
+        clLayout.setBackgroundResource(!data.status ? R.drawable.shape_boder_file_claim : R.drawable.shape_boder_delete_user);
     }
 
     @Override

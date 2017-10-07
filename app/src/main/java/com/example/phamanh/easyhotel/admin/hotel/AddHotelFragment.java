@@ -115,14 +115,12 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
     @BindView(R.id.fragAddHotel_ivBanner)
     RoundedImageView ivBanner;
 
-    private Bitmap bitmapChoice;
     private List<Bitmap> mDataImage = new ArrayList<>();
     private ChooseImageAdapter mAdapter;
     private ChooseImageDialog mImageDialog;
     private boolean isCheckLoadPhoto, isCheckChangePhoto;
     private GoogleApiClient mGoogleApiClient;
     private PlaceAdapter mPlaceAdapter;
-    private double lat, lng;
     private Location mLocation;
     private String id, imgImage;
     private Bitmap getPathImage;
@@ -153,6 +151,7 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         View view = inflater.inflate(R.layout.fragment_add_user, container, false);
         unbinder = ButterKnife.bind(this, view);
         setActionBar(view, "Detail Hotel");
+        setVisibilityTabBottom(View.GONE);
         KeyboardUtils.setupUI(view, getActivity());
         init();
         getBundle();
@@ -338,7 +337,7 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         SelectSinglePopup finalSinglePopup = singlePopup;
         singlePopup.setOnItemListener(pos -> {
             result[0] = mData.get(pos);
-            if (toCheckDataService(tvService.getText().toString(), result[0])){
+            if (toCheckDataService(tvService.getText().toString(), result[0])) {
                 mAddService.getService().add(result[0]);
                 textView.setText(AppUtils.toAddString(textView.getText().toString(), result[0]));
                 textView.setTextColor(ContextCompat.getColor(context, R.color.denimBlue));
@@ -472,10 +471,8 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         }
         final Place place = places.get(0);
         LatLng location = place.getLatLng();
-        lat = location.latitude;
-        lng = location.longitude;
-        tvLocation.setText(String.valueOf(lat) + " , " + String.valueOf(lng));
-        mLocation = new Location(String.valueOf(lat), String.valueOf(lng));
+        tvLocation.setText(String.valueOf(location.latitude) + " , " + String.valueOf(location.longitude));
+        mLocation = new Location(String.valueOf(location.latitude), String.valueOf(location.longitude));
     };
     private AdapterView.OnItemClickListener mAutocompleteClickListener
             = new AdapterView.OnItemClickListener() {
@@ -645,7 +642,7 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
     private boolean toCheckDataService(String s, String s2) {
         String[] result = s.split(",");
         for (String ss : result) {
-            if (ss.trim().equals(s2)){
+            if (ss.trim().equals(s2)) {
                 AppUtils.showAlert(getActivity(), "Service already exists", null);
                 return false;
             }

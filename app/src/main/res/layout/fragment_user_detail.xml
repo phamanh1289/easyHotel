@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/whiteThree"
+              android:orientation="vertical">
+
+    <include layout="@layout/base_action_bar_home"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_16sdp"
+            android:paddingRight="@dimen/_16sdp">
+
+            <FrameLayout
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp">
+
+                <include layout="@layout/view_loading_image"/>
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/fragUserDetail_ivBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:riv_corner_radius="@dimen/_90sdp"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+
+                        android:id="@+id/fragUserDetail_tvEmail"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+                        android:focusable="false"
+                        android:hint="@string/email"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/_16sdp"
+            android:paddingRight="@dimen/_16sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:fletPaddingBottom="@dimen/_8sdp"
+                        app:fletTextAppearance="@color/greyishBrownThree">
+
+                        <EditText
+                            android:id="@+id/fragUserDetail_tvUserName"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:hint="@string/full_name"
+                            android:inputType="textCapWords"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <include layout="@layout/base_line"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:fletPaddingBottom="@dimen/_8sdp"
+                        app:fletTextAppearance="@color/greyishBrownThree">
+
+                        <EditText
+                            android:id="@+id/fragUserDetail_tvDOB"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:focusable="false"
+                            android:hint="@string/dob"
+                            android:inputType="date"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <include layout="@layout/base_line"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:fletPaddingBottom="@dimen/_8sdp"
+                        app:fletTextAppearance="@color/greyishBrownThree">
+
+                        <EditText
+                            android:id="@+id/fragUserDetail_tvMobilePhone"
+                            fontPath="@string/Helvetica_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:background="@null"
+                            android:hint="@string/mobi_phone"
+                            android:inputType="number"
+                            android:textColor="@color/denimBlue"
+                            android:textColorHint="@color/denimBlue"
+                            android:textSize="13.5sp"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                    <include layout="@layout/base_line"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_weight="1"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/fragUserDetail_llMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_20sdp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/fragUserDetail_ivMale"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/selector_male"/>
+
+                        <TextView
+                            android:id="@+id/fragUserDetail_tvMale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:gravity="bottom"
+                            android:text="@string/male"
+                            android:textColor="@drawable/selector_text"
+                            android:textSize="@dimen/_9sdp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fragUserDetail_llFemale"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/fragUserDetail_ivFemale"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/selector_female"/>
+
+                        <TextView
+                            android:id="@+id/fragUserDetail_tvFemale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:gravity="bottom"
+                            android:text="@string/female"
+                            android:textColor="@drawable/selector_text"
+                            android:textSize="@dimen/_9sdp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="vertical">
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:fletPaddingBottom="@dimen/_8sdp"
+                    app:fletTextAppearance="@color/greyishBrownThree">
+
+                    <EditText
+                        android:id="@+id/fragUserDetail_tvAddress"
+                        fontPath="@string/Helvetica_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:background="@null"
+
+                        android:hint="@string/address"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/denimBlue"
+                        android:textColorHint="@color/denimBlue"
+                        android:textSize="13.5sp"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <include layout="@layout/base_line"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/fragUserDetail_tvSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginBottom="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_40sdp"
+                android:layout_marginRight="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_24sdp"
+                android:background="@drawable/selector_text_view_red"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/submit"
+                android:textColor="@color/whiteThree"
+                android:textSize="17sp"/>
+        </FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>

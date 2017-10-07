@@ -73,6 +73,7 @@ public class ConfirmListenerDialog extends Dialog {
     if (!cancel.isEmpty()) {
       tvCancel.setText(cancel);
     }
+    setCanceledOnTouchOutside(false);
   }
 
   public String getEditText() {

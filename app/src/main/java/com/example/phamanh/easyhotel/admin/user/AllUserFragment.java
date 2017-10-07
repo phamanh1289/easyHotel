@@ -10,12 +10,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.appscyclone.aclibrary.view.ACRecyclerView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.UserModel;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +47,7 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
     ImageView ivSearch;
 
     private List<UserModel> mDataInfo = new ArrayList<>();
+    private List<UserModel> mDataSearch = new ArrayList<>();
 
     @Nullable
     @Override
@@ -75,7 +77,11 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
 
     @Override
     public void onItemClicked(View view, int position) {
-        Toast.makeText(getActivity(), mDataInfo.get(position).getEmail(), Toast.LENGTH_SHORT).show();
+        toMovePosition(position);
+    }
+
+    private void toMovePosition(int pos) {
+        addFragment(UserDetailFragment.newInstance(mDataInfo.get(pos)), true);
     }
 
     private void toGetDataProfile() {
@@ -123,10 +129,15 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (etSearch.getText().length() == 0) {
                 ivSearch.setVisibility(View.GONE);
+                rvMain.setAdapter(AllUserAdapter.class, mDataInfo);
+                rvMain.notifyDataSetChanged();
             } else {
                 ivSearch.setVisibility(View.VISIBLE);
-                toSearchHotel(etSearch.getText().toString());
+                toSearchHotel(etSearch.getText().toString(), mDataInfo);
+                rvMain.setAdapter(AllUserAdapter.class, mDataSearch);
+                rvMain.notifyDataSetChanged();
             }
+            rvMain.setOnItemListener(toClick, new Integer[]{R.id.itemViewHotel_clLayout}, true);
         }
 
         @Override
@@ -134,8 +145,38 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
         }
     };
 
+    ACRecyclerView.OnItemListener toClick = (view, position) -> {
+        toChangFragment(position);
+    };
 
-    private void toSearchHotel(String name) {
+    private void toSearchHotel(String name, List<UserModel> mDataInfo) {
+        if (mDataSearch.size() != 0)
+            mDataSearch.clear();
+        for (UserModel item : mDataInfo) {
+            if (item.getFullName().toLowerCase().matches(".*" + name + ".*")) {
+                mDataSearch.add(item);
+            }
+        }
+    }
+
+
+    private void toChangFragment(int pos) {
+        AppUtils.showAlertACtion(getActivity(), "Do you want ?", new DialogListener() {
+            @Override
+            public void onConfirmClicked() {
+                addFragment(UserDetailFragment.newInstance(mDataInfo.get(pos)), true);
+            }
+
+            @Override
+            public void onCancelClicked() {
+                mDataInfo.get(pos).setStatus(!mDataInfo.get(pos).status);
+                refMember.child(mDataInfo.get(pos).getId()).setValue(new Gson().toJson(mDataInfo.get(pos)));
+                rvMain.notifyDataSetChanged();
+                AppUtils.showAlert(getActivity(), (mDataInfo.get(pos).status ? "Disable" : "Enable") + " user successful", null);
+            }
+        }, mDataInfo.get(pos).status ? "Enable" : "Disable", "Update");
 
     }
+
+
 }

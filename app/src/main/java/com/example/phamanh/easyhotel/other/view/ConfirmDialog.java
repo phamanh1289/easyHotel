@@ -57,6 +57,7 @@ public class ConfirmDialog extends Dialog {
         if (!title.isEmpty()) {
             tvTitle.setText(getSpannedText(title));
         }
+        setCanceledOnTouchOutside(false);
     }
     private Spanned getSpannedText(String text) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

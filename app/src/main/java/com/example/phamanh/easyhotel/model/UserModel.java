@@ -4,7 +4,24 @@ import com.example.phamanh.easyhotel.base.BaseModel;
 
 
 public class UserModel extends BaseModel {
-    String email, gender, fullName, dob, address, phone, avatar;
+    String email, gender, fullName, dob, address, phone, avatar,id;
+    public boolean status;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -30,7 +47,8 @@ public class UserModel extends BaseModel {
         this.phone = phone;
     }
 
-    public UserModel(String email, String gender, String fullName, String dob, String address, String phone, String avatar) {
+    public UserModel(String id,String email, String gender, String fullName, String dob, String address, String phone, String avatar) {
+        this.id = id;
         this.email = email;
         this.gender = gender;
         this.fullName = fullName;

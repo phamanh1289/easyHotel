@@ -113,6 +113,11 @@ public class AppUtils {
         dialog.setOnItemClickListener(clickListener);
         dialog.show();
     }
+    public static void showAlertACtion(Context context, String title, DialogListener clickListener, String action, String action2) {
+        ConfirmListenerDialog dialog = new ConfirmListenerDialog(context, "", title, action, action2);
+        dialog.setOnItemClickListener(clickListener);
+        dialog.show();
+    }
 
     public static boolean isURL(String url) {
         return Patterns.WEB_URL.matcher(url).matches();

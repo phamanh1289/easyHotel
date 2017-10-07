@@ -14,10 +14,12 @@ import android.widget.ImageView;
 import com.appscyclone.aclibrary.view.ACRecyclerView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.Location;
 import com.example.phamanh.easyhotel.model.RoomModel;
 import com.example.phamanh.easyhotel.model.ServiceDetailModel;
+import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -79,7 +81,23 @@ public class AllHotelFragment extends BaseFragment {
     };
 
     private void toChangFragment(int pos) {
-        addFragment(AddHotelFragment.newInstance(mDataInfo.get(pos), mDataRoom.get(pos), mDataService.get(pos)), true);
+        AppUtils.showAlertACtion(getActivity(), "Do you want ?", new DialogListener() {
+            @Override
+            public void onConfirmClicked() {
+                addFragment(AddHotelFragment.newInstance(mDataInfo.get(pos), mDataRoom.get(pos), mDataService.get(pos)), true);
+            }
+
+            @Override
+            public void onCancelClicked() {
+                refHotel.child(mDataInfo.get(pos).getId()).removeValue();
+                refHotel_room.child(mDataInfo.get(pos).getId()).removeValue();
+                refHotel_service.child(mDataInfo.get(pos).getId()).removeValue();
+                mDataInfo.remove(pos);
+                rvMain.notifyItemRemoved(pos);
+                AppUtils.showAlert(getActivity(), "Delete successful", null);
+            }
+        }, "Delete", "Update");
+
     }
 
     @Override
