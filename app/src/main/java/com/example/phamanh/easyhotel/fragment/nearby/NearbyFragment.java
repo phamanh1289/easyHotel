@@ -1,7 +1,6 @@
 package com.example.phamanh.easyhotel.fragment.nearby;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,6 +35,7 @@ import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.NearPlacesModel;
 import com.example.phamanh.easyhotel.network.GoogleApi;
 import com.example.phamanh.easyhotel.other.database.DataHardCode;
@@ -166,27 +165,24 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
         String s = "";
         switch (index) {
             case 0:
-                s = "lodging";
-                break;
-            case 1:
                 s = "movie_theater";
                 break;
-            case 2:
+            case 1:
                 s = "cafe";
                 break;
-            case 3:
+            case 2:
                 s = "hospital";
                 break;
-            case 4:
+            case 3:
                 s = "restaurant";
                 break;
-            case 5:
+            case 4:
                 s = "police";
                 break;
-            case 6:
+            case 5:
                 s = "atm";
                 break;
-            case 7:
+            case 6:
                 s = "bank";
                 break;
         }
@@ -348,35 +344,6 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
     }
 
 
-    private void showDialog(final String title, final LatLng latLng) {
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.item_popup_maker);
-        Button itemPopupMaker_btnSave = dialog.findViewById(R.id.itemPopupMaker_btnSave);
-        Button itemPopupMaker_btnFind = dialog.findViewById(R.id.itemPopupMaker_btnFind);
-        TextView itemPopupMaker_tvPosition = dialog.findViewById(R.id.itemPopupMaker_tvPosition);
-        TextView itemPopupMaker_tvTitle = dialog.findViewById(R.id.itemPopupMaker_tvTitle);
-        itemPopupMaker_tvPosition.setText(latLng.toString());
-        itemPopupMaker_tvTitle.setText(title);
-        dialog.show();
-        itemPopupMaker_btnSave.setOnClickListener(view -> {
-            Toast.makeText(getActivity(), "Save position successful", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
-        });
-
-        itemPopupMaker_btnFind.setOnClickListener(view -> {
-            LatLng currentLatLng1 = new LatLng(latitude, longitude);
-            if (!currentLatLng1.equals(latLng)) {
-                GoogleDirection.withServerKey(getString(R.string.google_maps_key))
-                        .from(new LatLng(latitude, longitude))
-                        .to(latLng)
-                        .avoid(AvoidType.FERRIES)
-                        .avoid(AvoidType.HIGHWAYS)
-                        .execute(NearbyFragment.this);
-            }
-            dialog.dismiss();
-        });
-    }
-
     private void locationUpdate() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -468,7 +435,25 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        showDialog(marker.getTitle(), marker.getPosition());
+        AppUtils.showAlertMap(getContext(), marker.getTitle(), new DialogListener() {
+            @Override
+            public void onConfirmClicked() {
+                LatLng currentLatLng1 = new LatLng(latitude, longitude);
+                if (!currentLatLng1.equals(marker.getPosition())) {
+                    GoogleDirection.withServerKey(getString(R.string.google_maps_key))
+                            .from(new LatLng(latitude, longitude))
+                            .to(marker.getPosition())
+                            .avoid(AvoidType.FERRIES)
+                            .avoid(AvoidType.HIGHWAYS)
+                            .execute(NearbyFragment.this);
+                }
+            }
+
+            @Override
+            public void onCancelClicked() {
+
+            }
+        });
     }
 
     @Override

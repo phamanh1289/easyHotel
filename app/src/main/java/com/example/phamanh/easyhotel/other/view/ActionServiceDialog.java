@@ -5,11 +5,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
@@ -23,14 +23,25 @@ public class ActionServiceDialog extends Dialog {
 
     @BindView(R.id.dialogActionService_etCode)
     EditText etCode;
+    @BindView(R.id.dialogActionService_tvContent)
+    TextView tvContent;
+    @BindView(R.id.dialogActionService_tvCancel)
+    TextView tvCancel;
+    @BindView(R.id.dialogActionService_tvSave)
+    TextView tvSave;
     private DialogListener clickListener;
+    private String content, cancel, save = "";
 
     public void setOnItemClickListener(DialogListener listener) {
         this.clickListener = listener;
     }
 
-    public ActionServiceDialog(Context context) {
+    public ActionServiceDialog(Context context, String content, String cancel,
+                                 String save) {
         super(context, android.R.style.Theme_Holo_Dialog);
+        this.content = content;
+        this.cancel = cancel;
+        this.save = save;
     }
 
     @Override
@@ -44,11 +55,20 @@ public class ActionServiceDialog extends Dialog {
         }
         setContentView(R.layout.dialog_action_service);
         ButterKnife.bind(this);
+        if (!content.isEmpty()) {
+            tvContent.setText(content);
+        }
+        if (!save.isEmpty()) {
+            tvSave.setText(save);
+        }
+        if (!cancel.isEmpty()) {
+            tvCancel.setText(cancel);
+        }
         setCanceledOnTouchOutside(false);
     }
 
     public String getEditText() {
-        if (TextUtils.isEmpty(etCode.getText().toString())) {
+        if (!etCode.getText().toString().trim().isEmpty()) {
             return etCode.getText().toString();
         }
         return "";
@@ -60,12 +80,14 @@ public class ActionServiceDialog extends Dialog {
             case R.id.dialogActionService_tvCancel:
                 if (clickListener != null) {
                     clickListener.onCancelClicked();
+                    etCode.setText("");
                 }
                 dismiss();
                 break;
             case R.id.dialogActionService_tvSave:
                 if (clickListener != null) {
                     clickListener.onConfirmClicked();
+                    etCode.setText("");
                 }
                 dismiss();
                 break;

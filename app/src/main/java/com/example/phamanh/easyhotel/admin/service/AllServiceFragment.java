@@ -5,6 +5,8 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.appscyclone.aclibrary.view.ACRecyclerView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.ServiceDetailModel;
 import com.example.phamanh.easyhotel.other.view.ActionServiceDialog;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
@@ -48,9 +50,10 @@ public class AllServiceFragment extends BaseFragment {
     @BindView(R.id.fragAllService_rvMain)
     RecyclerView rvMain;
     Unbinder unbinder;
-    private ActionServiceDialog dialog;
+    private ActionServiceDialog dialog, dialogAdd;
     private ServiceDetailModel mServiceDetailModel = new ServiceDetailModel();
     private List<String> mDataService = new ArrayList<>();
+    private List<String> mDataSearch = new ArrayList<>();
     private AllServiceAdapter adapter;
 
     @Nullable
@@ -66,10 +69,12 @@ public class AllServiceFragment extends BaseFragment {
 
     private void init() {
         adapter = new AllServiceAdapter(mDataService);
-        adapter.setItemListener(toDialogClick);
+        adapter.setItemListener(toClick);
         rvMain.setAdapter(adapter);
-        rvMain.setLayoutManager(new GridLayoutManager(getContext(),2));
-        dialog = new ActionServiceDialog(getActivity());
+        etSearch.addTextChangedListener(loadChangeText);
+        rvMain.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        if (mDataService.size() != 0)
+            mDataService.clear();
         toGetDataService();
     }
 
@@ -113,19 +118,6 @@ public class AllServiceFragment extends BaseFragment {
         }
     };
 
-    DialogListener toDialogClick = new DialogListener() {
-        @Override
-        public void onConfirmClicked() {
-            if (dialog.getEditText().isEmpty()) {
-
-            }
-        }
-
-        @Override
-        public void onCancelClicked() {
-
-        }
-    };
 
     @Override
     public void onDestroyView() {
@@ -133,16 +125,96 @@ public class AllServiceFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    ACRecyclerView.OnItemListener toClick = (view, position) -> {
-        toChangFragment(position);
+    ItemListener toClick = new ItemListener() {
+        @Override
+        public void onItemClicked(int pos) {
+            if (dialog == null)
+                dialog = new ActionServiceDialog(getActivity(), "Do you want process item service ?", "Delete", "Update");
+            dialog.show();
+            dialog.setOnItemClickListener(new DialogListener() {
+                @Override
+                public void onConfirmClicked() {
+                    if (!dialog.getEditText().trim().isEmpty()) {
+                        mDataService.remove(pos);
+                        mDataService.add(pos, dialog.getEditText());
+                        adapter.notifyItemChanged(pos);
+                        mServiceDetailModel.setService(mDataService);
+                        refHotel_service.child("data").setValue(new Gson().toJson(mServiceDetailModel));
+                    }
+                }
+
+                @Override
+                public void onCancelClicked() {
+                    mDataService.remove(pos);
+                    adapter.notifyItemRemoved(pos);
+                    mServiceDetailModel.setService(mDataService);
+                    refHotel_service.child("data").setValue(new Gson().toJson(mServiceDetailModel));
+                }
+            });
+        }
     };
 
-    private void toChangFragment(int pos) {
-        dialog.setOnItemClickListener(toDialogClick);
+    @OnClick({R.id.baseSearch_ivSearch, R.id.fragAllService_tvAdd})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.fragAllService_tvAdd:
+                if (dialogAdd == null)
+                    dialogAdd = new ActionServiceDialog(getContext(), "Please input new service", "Cancel", "Submit");
+                dialogAdd.show();
+                dialogAdd.setOnItemClickListener(new DialogListener() {
+                    @Override
+                    public void onConfirmClicked() {
+                        if (!dialogAdd.getEditText().trim().isEmpty()) {
+                            mDataService.add(dialogAdd.getEditText().trim());
+                            mServiceDetailModel.setService(mDataService);
+                            refHotel_service.child("data").setValue(new Gson().toJson(mServiceDetailModel));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelClicked() {
+
+                    }
+                });
+                break;
+            case R.id.baseSearch_ivSearch:
+                etSearch.setText("");
+                break;
+        }
     }
 
-    @OnClick(R.id.baseSearch_ivSearch)
-    public void onViewClicked() {
-        etSearch.setText("");
+    TextWatcher loadChangeText = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (etSearch.getText().length() == 0) {
+                ivSearch.setVisibility(View.GONE);
+                adapter = new AllServiceAdapter(mDataService);
+            } else {
+                ivSearch.setVisibility(View.VISIBLE);
+                toSearchHotel(etSearch.getText().toString(), mDataService);
+                adapter = new AllServiceAdapter(mDataSearch);
+            }
+            rvMain.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            adapter.setItemListener(toClick);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    private void toSearchHotel(String name, List<String> mDataInfo) {
+        if (mDataSearch.size() != 0)
+            mDataSearch.clear();
+        for (String item : mDataInfo) {
+            if (item.toLowerCase().matches(".*" + name + ".*")) {
+                mDataSearch.add(item);
+            }
+        }
     }
 }

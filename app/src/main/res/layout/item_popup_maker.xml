@@ -1,49 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:ignore="RtlCompat">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="@dimen/_270sdp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:background="@drawable/shape_radius_dialog_white_90"
+              android:gravity="center"
+              android:orientation="vertical"
+              tools:ignore="MissingPrefix">
 
-    <TextView
-        android:id="@+id/itemPopupMaker_tvTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_21sdp"
         android:gravity="center"
-        android:text="Sai Gon"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/itemPopupMaker_tvPosition"
+        <TextView
+            android:id="@+id/itemPopupMaker_tvTitle"
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_21sdp"
+            android:gravity="center"
+            android:text="Enter a name for this diary"
+            android:textColor="@color/greyishBrownThree"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/itemPopupMaker_tvPosition"
+            fontPath="@string/Helvetica_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_21sdp"
+            android:gravity="center"
+            android:text="Enter a name for this diary"
+            android:textColor="@color/greyishBrownThree"
+            android:textSize="13sp"/>
+
+        <EditText
+            android:id="@+id/dialogConfirmListener_etCode"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginBottom="@dimen/_11sdp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
+            android:background="@drawable/shape_boder_edit_text"
+            android:hint="Enter your active code here"
+            android:inputType="text"
+            android:paddingLeft="@dimen/_5sdp"
+            android:textColor="@color/greyishBrownThree"
+            android:textSize="13sp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Sai Gon" />
+        android:layout_height="0.5dp"
+        android:background="@color/silver"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <TextView
             android:id="@+id/itemPopupMaker_btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:background="@color/denimBlue"/>
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textColor="@color/bright_blue"
+            android:textSize="17sp"/>
 
-        <Button
+        <FrameLayout
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:background="@color/silver"/>
+
+        <TextView
             android:id="@+id/itemPopupMaker_btnFind"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Find"
-            android:layout_alignParentEnd="true"
-            android:background="@color/red_two"/>
-
-    </RelativeLayout>
-
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="To go"
+            android:textColor="@color/bright_blue"
+            android:textSize="17sp"/>
+    </LinearLayout>
 </LinearLayout>
+
+

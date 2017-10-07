@@ -86,8 +86,8 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
                 }
                 if (!isLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
                     page++;
-                    getData();
                     isLoading = true;
+                    getData();
                 }
             }
         });
@@ -145,7 +145,9 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
     public void onRefresh() {
         mData.clear();
         mAdapter.notifyDataSetChanged();
-        isLoading = false;
+        isLoading = true;
+        page = 1;
+        previousTotal = 0;
         getData();
     }
 
@@ -155,7 +157,7 @@ public class NewsFragment extends BaseFragment implements ItemListener, SwipeRef
     }
 
     private String toChangeTime(String time) {
-        String[] arrSecond = time.substring(0,time.length()-5).split(" ");
+        String[] arrSecond = time.substring(0, time.length() - 5).split(" ");
         return arrSecond[1] + " " + arrSecond[0];
     }
 }

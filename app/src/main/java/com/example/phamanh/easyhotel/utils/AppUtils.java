@@ -113,6 +113,12 @@ public class AppUtils {
         dialog.setOnItemClickListener(clickListener);
         dialog.show();
     }
+
+    public static void showAlertMap(Context context, String title, DialogListener clickListener) {
+        ConfirmListenerDialog dialog = new ConfirmListenerDialog(context, "", title, "Cancel", "To go");
+        dialog.setOnItemClickListener(clickListener);
+        dialog.show();
+    }
     public static void showAlertACtion(Context context, String title, DialogListener clickListener, String action, String action2) {
         ConfirmListenerDialog dialog = new ConfirmListenerDialog(context, "", title, action, action2);
         dialog.setOnItemClickListener(clickListener);

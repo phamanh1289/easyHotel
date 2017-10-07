@@ -8,7 +8,6 @@ public class DataHardCode {
 
     public static List<String> getListNearby() {
         List<String> rs = new ArrayList<>();
-        rs.add("Hotel");
         rs.add("Cinema");
         rs.add("Cafe");
         rs.add("Hospital");

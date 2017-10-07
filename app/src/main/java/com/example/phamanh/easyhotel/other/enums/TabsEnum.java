@@ -13,7 +13,7 @@ public enum TabsEnum {
     HOTEL(2, "Hotel", R.drawable.selector_home),
     SERVICE(3, "Service", R.drawable.selector_service),
     BOOKING(4, "Booking", R.drawable.selector_booking),
-    MANAGER(5, "Manager", R.drawable.selector_setting);
+    MANAGER(5, "Settings", R.drawable.selector_setting);
 
     private String title;
     private int idIcon;

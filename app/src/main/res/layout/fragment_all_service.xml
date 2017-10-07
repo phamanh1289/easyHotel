@@ -7,7 +7,25 @@
               android:clickable="true"
               android:orientation="vertical">
 
-    <include layout="@layout/base_action_bar_home"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/base_action_bar_home"/>
+
+        <TextView
+            android:id="@+id/fragAllService_tvAdd"
+            fontPath="@string/Helvetica_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|right"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingLeft="@dimen/_16sdp"
+            android:paddingRight="@dimen/_16sdp"
+            android:text="Add"
+            android:textColor="@color/whiteThree"
+            android:textSize="@dimen/_12sdp"/>
+    </FrameLayout>
 
     <include layout="@layout/base_search"/>
 

@@ -36,7 +36,7 @@
             android:layout_marginRight="@dimen/_16sdp"
             android:background="@drawable/shape_boder_edit_text"
             android:hint="Enter item service to update here"
-            android:inputType="text"
+            android:inputType="textCapWords"
             android:paddingLeft="@dimen/_5sdp"
             android:textColor="@color/greyishBrownThree"
             android:textSize="13sp"/>

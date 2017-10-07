@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.HistoryAdapter;
@@ -34,8 +33,6 @@ public class HistoryFragment extends BaseFragment {
 
     @BindView(R.id.fragHistory_rvMain)
     RecyclerView rvMain;
-    @BindView(R.id.fragHistory_tvNoData)
-    TextView tvNoData;
     Unbinder unbinder;
     private List<HistoryModel> mData = new ArrayList<>();
     private HistoryAdapter adapter;
@@ -60,11 +57,7 @@ public class HistoryFragment extends BaseFragment {
         rvMain.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (mData.size() != 0)
             mData.clear();
-
         refMember_history.child(mUser.getUid()).addChildEventListener(toAddHistory);
-
-        tvNoData.setVisibility(mData.size() == 0 ? View.VISIBLE : View.GONE);
-
     }
 
     @Override
@@ -95,8 +88,7 @@ public class HistoryFragment extends BaseFragment {
                     JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
                     if (jsonObject != null) {
                         mHistoryModel = gson.fromJson(jsonObject.toString(), HistoryModel.class);
-                        mData.add(0,mHistoryModel);
-                        tvNoData.setVisibility(mData.size() == 0 ? View.VISIBLE : View.GONE);
+                        mData.add(0, mHistoryModel);
                     }
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {

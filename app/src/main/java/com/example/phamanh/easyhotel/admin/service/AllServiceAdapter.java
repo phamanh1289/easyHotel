@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
-import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.interfaces.ItemListener;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ import butterknife.ButterKnife;
 public class AllServiceAdapter extends RecyclerView.Adapter<AllServiceAdapter.ServiceHolder> {
 
     private List<String> mData;
-    private DialogListener mItemListener;
+    private ItemListener mItemListener;
 
     public AllServiceAdapter(List<String> data) {
         mData = data;
     }
 
-    public void setItemListener(DialogListener itemListener) {
+    public void setItemListener(ItemListener itemListener) {
         mItemListener = itemListener;
     }
 
@@ -52,8 +52,7 @@ public class AllServiceAdapter extends RecyclerView.Adapter<AllServiceAdapter.Se
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(view -> {
-                mItemListener.onConfirmClicked();
-                mItemListener.onCancelClicked();
+                mItemListener.onItemClicked(getAdapterPosition());
             });
         }
     }
