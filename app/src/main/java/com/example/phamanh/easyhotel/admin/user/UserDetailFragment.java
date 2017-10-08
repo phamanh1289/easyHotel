@@ -217,8 +217,8 @@ public class UserDetailFragment extends BaseFragment {
     }
 
     private void toPostUpdateImage() {
-        UserModel user = new UserModel(model.getId(),tvEmail.getText().toString(), tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(),
-                tvDOB.getText().toString(), tvAddress.getText().toString(), tvMobilePhone.getText().toString(), getUser().getAvatar());
+        UserModel user = new UserModel(model.getId(), model.getEmail(), tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female), tvUserName.getText().toString(),
+                tvDOB.getText().toString(), tvAddress.getText().toString(), tvMobilePhone.getText().toString(), model.getAvatar());
         if (bitmapChoice != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmapChoice.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -227,31 +227,21 @@ public class UserDetailFragment extends BaseFragment {
             uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 user.setAvatar(Constant.STORE + baseStore.getName());
-                refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
-                toSetNewUser(getUser(), user);
+                refMember.child(model.getId()).setValue(new Gson().toJson(user));
                 AppUtils.showAlert(getContext(), "Update successfully.", null);
                 dismissLoading();
             });
         } else {
-            refMember.child(mUser.getUid()).setValue(new Gson().toJson(user));
-            toSetNewUser(getUser(), user);
+            refMember.child(model.getId()).setValue(new Gson().toJson(user));
             AppUtils.showAlert(getContext(), "Update successfully.", null);
             dismissLoading();
         }
-    }
-
-    private void toSetNewUser(UserModel oldModel, UserModel newModel) {
-        oldModel.setFullName(newModel.getFullName());
-        oldModel.setAvatar(newModel.getAvatar());
-        oldModel.setAddress(newModel.getAddress());
-        oldModel.setDob(newModel.getDob());
-        oldModel.setGender(newModel.getGender());
-        oldModel.setPhone(newModel.getPhone());
+        getActivity().onBackPressed();
     }
 
     private boolean toCheckChangeText() {
         String s = tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female);
-        return !tvEmail.getText().toString().equals(getUser().getFullName()) || !tvDOB.getText().toString().equals(getUser().getDob()) || !tvMobilePhone.getText().toString().equals(getUser().getPhone()) || !tvAddress.getText().toString().equals(getUser().getAddress()) || !s.equals(getUser().getGender()) || bitmapChoice != null;
+        return !tvDOB.getText().toString().equals(model.getDob()) || !tvMobilePhone.getText().toString().equals(model.getPhone()) || !tvAddress.getText().toString().equals(model.getAddress()) || !s.equals(model.getGender()) || bitmapChoice != null;
     }
 
     @OnClick({R.id.fragUserDetail_llMale, R.id.fragUserDetail_llFemale, R.id.fragUserDetail_tvSubmit, R.id.fragUserDetail_tvDOB, R.id.fragUserDetail_ivBanner})
