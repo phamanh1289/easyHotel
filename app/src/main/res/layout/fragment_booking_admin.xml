@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/whiteThree"
@@ -7,6 +8,70 @@
               android:orientation="vertical">
 
     <include layout="@layout/base_action_bar_home"/>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_6sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="@dimen/_6sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ground_main"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/fragBookingAdmin_tvAll"
+                fontPath="@string/Helvetica_bold"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@drawable/selector_text_booking"
+                android:gravity="center"
+                android:focusable="false"
+                android:padding="@dimen/_8sdp"
+                android:text="All"
+                android:textColor="@color/whiteThree"
+                android:textSize="17sp"/>
+
+            <EditText
+                android:id="@+id/fragBookingAdmin_tvEnable"
+                fontPath="@string/Helvetica_bold"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:background="@drawable/selector_text_booking"
+                android:gravity="center"
+                android:padding="@dimen/_8sdp"
+                android:text="Enable"
+                android:textColor="@color/whiteThree"
+                android:textSize="17sp"/>
+
+            <EditText
+                android:id="@+id/fragBookingAdmin_tvDisable"
+                fontPath="@string/Helvetica_bold"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:background="@drawable/selector_text_booking"
+                android:gravity="center"
+                android:padding="@dimen/_8sdp"
+                android:text="Disable"
+                android:textColor="@color/whiteThree"
+                android:textSize="17sp"/>
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragBookingAdmin_rvMain"

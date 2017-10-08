@@ -87,43 +87,58 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
         addFragment(UserDetailFragment.newInstance(mDataInfo.get(pos)), true);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            refMember.removeEventListener(toAddUser);
+        } catch (Exception ignored) {
+        }
+    }
+
     private void toGetDataProfile() {
         if (mDataInfo.size() != 0)
             mDataInfo.clear();
-        refMember.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                try {
-                    Gson gson = new Gson();
-                    JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
-                    UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
-                    if (!userModel.getEmail().equals(Constant.MAIL_ADMIN)) {
-                        mDataInfo.add(userModel);
-                        rvMain.notifyDataSetChanged();
-                    }
-                    dismissLoading();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        refMember.addChildEventListener(toAddUser);
     }
+
+    ChildEventListener toAddUser = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            try {
+                Gson gson = new Gson();
+                JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
+                UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
+                if (!userModel.getEmail().equals(Constant.MAIL_ADMIN)) {
+                    mDataInfo.add(userModel);
+                }
+                rvMain.notifyDataSetChanged();
+                dismissLoading();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     TextWatcher loadChangeText = new TextWatcher() {
         @Override
@@ -173,7 +188,7 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
     DialogListener toChange = new DialogListener() {
         @Override
         public void onConfirmClicked() {
-            addFragment(UserDetailFragment.newInstance(mDataInfo.get(indexUser)), true);
+            replaceFragment(UserDetailFragment.newInstance(mDataInfo.get(indexUser)), true);
         }
 
         @Override

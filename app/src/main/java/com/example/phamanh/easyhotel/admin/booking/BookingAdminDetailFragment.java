@@ -79,7 +79,8 @@ public class BookingAdminDetailFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_booking_admin_detail, container, false);
         unbinder = ButterKnife.bind(this, view);
-        setActionBar(view, "Detail notification");
+        setActionBar(view, "Detail Booking");
+        setVisibilityTabBottom(View.GONE);
         init();
         return view;
     }

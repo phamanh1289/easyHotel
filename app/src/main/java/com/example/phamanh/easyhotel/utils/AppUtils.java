@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseApplication;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.EventBusDateModel;
 import com.example.phamanh.easyhotel.model.PlaceAutocomplete;
 import com.example.phamanh.easyhotel.other.view.ConfirmDialog;
 import com.example.phamanh.easyhotel.other.view.ConfirmListenerDialog;
@@ -34,6 +35,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Places;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,7 +53,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -119,6 +121,7 @@ public class AppUtils {
         dialog.setOnItemClickListener(clickListener);
         dialog.show();
     }
+
     public static void showAlertACtion(Context context, String title, DialogListener clickListener, String action, String action2) {
         ConfirmListenerDialog dialog = new ConfirmListenerDialog(context, "", title, action, action2);
         dialog.setOnItemClickListener(clickListener);
@@ -234,8 +237,10 @@ public class AppUtils {
                     showAlert(context, "You must 18 year old.", null);
                 else
                     tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
-            } else
+            } else {
                 tvDate.setText(toConveMonth(dayOfMonth) + "-" + (toConveMonth(month + 1)) + "-" + year);
+                EventBus.getDefault().postSticky(new EventBusDateModel(true));
+            }
         }, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
@@ -250,19 +255,43 @@ public class AppUtils {
         else
             datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
-
     }
 
-    public static boolean toCheck18YearOld(Context context, int year, int month, int day) {
-        Calendar userAge = new GregorianCalendar(year, month, day);
-        Calendar minAdultAge = new GregorianCalendar();
-        minAdultAge.add(Calendar.YEAR, -18);
-        if (minAdultAge.before(userAge)) {
-            showAlert(context, "You must 18 year old.", null);
-            return false;
+    public static void toCheckDate(Context context, TextView tv1, TextView tv2) {
+        String date1 = tv1.getText().toString();
+        String date2 = tv2.getText().toString();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        int count = toCountDay(date1, date2);
+        Calendar c = Calendar.getInstance();
+        try {
+            if (count == 0) {
+                c.setTime(formatter.parse(date2));
+                c.add(Calendar.DATE, 1);
+                tv2.setText(formatter.format(c.getTime()));
+                showAlert(context, "Start date & Due date same day. Due date auto increased 1 day.", null);
+            } else if (count < 0) {
+                c.setTime(formatter.parse(date1));
+                c.add(Calendar.DATE, 1);
+                tv2.setText(formatter.format(c.getTime()));
+                showAlert(context, "Error : Start date > Due date. Due date auto greater 1 day than start day .", null);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        return true;
     }
+
+    public static String toInsertOneDay(String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(formatter.parse(date));
+            c.add(Calendar.DATE, 1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formatter.format(c.getTime());
+    }
+
 
     public static String formatMoney(double money) {
         NumberFormat dutchFormat = NumberFormat.getCurrencyInstance(Locale.US);
@@ -316,6 +345,16 @@ public class AppUtils {
             }
         }
         return false;
+    }
+
+    public static int toCountDay(String start, String due) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            return formatter.parse(due).getDate() - formatter.parse(start).getDate();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static Bitmap getBitmapFromURL(String src) {

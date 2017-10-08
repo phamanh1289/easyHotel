@@ -15,6 +15,7 @@ import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.BookingModel;
 import com.example.phamanh.easyhotel.model.EventBusBooking;
+import com.example.phamanh.easyhotel.model.EventBusDateModel;
 import com.example.phamanh.easyhotel.model.HistoryModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.other.database.DataHardCode;
@@ -77,7 +78,7 @@ public class BookingDetailFragment extends BaseFragment {
     private boolean isCheckRoom;
     private InfomationModel mInfomationModel;
     private BookingModel mBookingModel;
-    private int countRoom, numberRoom = 1;
+    private int countRoom, numberRoom = 1, countDate;
     private double countPrice;
 
     public static BookingDetailFragment newInstance(InfomationModel title, String service, int room, boolean check, int count) {
@@ -117,11 +118,12 @@ public class BookingDetailFragment extends BaseFragment {
         tvPrice.setText(AppUtils.formatMoney(countPrice));
         tvHotelName.setText(mInfomationModel.getName());
         tvStartDate.setText(dateFormat.format(mDate));
-        tvDueDate.setText(dateFormat.format(mDate));
+        tvDueDate.setText(AppUtils.toInsertOneDay(tvStartDate.getText().toString()));
         tvEmail.setText(getUser().getEmail());
         tvFullName.setText(getUser().getFullName());
         tvPhone.setText(getUser().getPhone());
         tvService.setText(getArguments().getString(Constant.SERVICE));
+        countDate = AppUtils.toCountDay(tvStartDate.getText().toString(), tvDueDate.getText().toString());
     }
 
     @Override
@@ -149,9 +151,6 @@ public class BookingDetailFragment extends BaseFragment {
             tvDueDate.setHintTextColor(Color.RED);
             check = false;
         }
-        if (!AppUtils.toDoCheckDate(tvStartDate.getText().toString(), tvDueDate.getText().toString())) {
-            check = false;
-        }
         if (tvPersonal.getText().toString().trim().isEmpty()) {
             tvPersonal.setHintTextColor(Color.RED);
             check = false;
@@ -174,12 +173,6 @@ public class BookingDetailFragment extends BaseFragment {
             s = "Please input hotel name";
         } else if (tvRoomName.getText().toString().trim().isEmpty()) {
             s = "Please input room name";
-        } else if (tvStartDate.getText().toString().trim().isEmpty()) {
-            s = "Please choice start date";
-        } else if (tvDueDate.getText().toString().trim().isEmpty()) {
-            s = "Please choice due date";
-        } else if (tvDueDate.getText().toString().trim().isEmpty()) {
-            s = "Error start date and due date";
         } else if (tvPersonal.getText().toString().trim().isEmpty()) {
             s = "Please input personal";
         } else if (tvFullName.getText().toString().trim().isEmpty()) {
@@ -257,14 +250,14 @@ public class BookingDetailFragment extends BaseFragment {
                 if (numberRoom < countRoom) {
                     numberRoom++;
                     tvNumber.setText(String.valueOf(numberRoom + (numberRoom == 1 ? " room" : " rooms")));
-                    tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
+                    tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice * countDate));
                 } else AppUtils.showAlert(getContext(), "Full room in the hotel.", null);
                 break;
             case R.id.fragBookingDetail_ivSub:
                 if (numberRoom > 1) {
                     numberRoom--;
                     tvNumber.setText(String.valueOf(numberRoom + (numberRoom == 1 ? " room" : " rooms")));
-                    tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
+                    tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice * countDate));
                 } else AppUtils.showAlert(getContext(), "Rooms are not empty.", null);
                 break;
         }
@@ -320,10 +313,18 @@ public class BookingDetailFragment extends BaseFragment {
                 });
                 numberRoom = countRoom;
                 tvNumber.setText(String.valueOf(numberRoom + " room"));
-                tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
+                tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice * countDate));
             }
         }
         dismissLoading();
+        EventBus.getDefault().removeStickyEvent(event);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusDateModel event) {
+        AppUtils.toCheckDate(getContext(), tvStartDate, tvDueDate);
+        countDate = AppUtils.toCountDay(tvStartDate.getText().toString(), tvDueDate.getText().toString());
+        tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice * countDate));
         EventBus.getDefault().removeStickyEvent(event);
     }
 

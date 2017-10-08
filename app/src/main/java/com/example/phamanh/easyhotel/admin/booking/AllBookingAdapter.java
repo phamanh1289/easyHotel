@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
@@ -44,6 +45,7 @@ public class AllBookingAdapter extends RecyclerView.Adapter<AllBookingAdapter.Bo
         holder.tvStart.setText(model.getStartDate());
         holder.tvDue.setText(model.getDueDate());
         holder.ivBanner.setImageResource(model.getTypeRoom().toLowerCase().equals("single") ? R.drawable.ic_signle_room_ok : R.drawable.ic_double_room_ok);
+        holder.llMain.setBackgroundResource(model.isCheckAction ? R.color.blur_background : R.color.whiteThree);
     }
 
     @Override
@@ -62,6 +64,8 @@ public class AllBookingAdapter extends RecyclerView.Adapter<AllBookingAdapter.Bo
         EditText tvDue;
         @BindView(R.id.fragBookingAdmin_ivBanner)
         ImageView ivBanner;
+        @BindView(R.id.fragBookingAdmin_llMain)
+        LinearLayout llMain;
 
         public BookingHolder(View itemView) {
             super(itemView);
