@@ -149,7 +149,7 @@ public class CommentFragment extends BaseFragment {
     public void onViewClicked() {
         if (toValidate()) {
             refHotel_comment.child(mKey).push().setValue(new Gson().toJson(new CommentModel(System.currentTimeMillis(), getUser().getEmail(), etContent.getText().toString().trim(), getUser().getAvatar())));
-            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_COMMENT + mInfomationModel.getName(), System.currentTimeMillis())));
+            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_COMMENT + mInfomationModel.getName(), System.currentTimeMillis(),mInfomationModel.getId())));
             etContent.setText("");
         }
     }

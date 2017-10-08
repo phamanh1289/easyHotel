@@ -1,6 +1,7 @@
 package com.example.phamanh.easyhotel.fragment.home;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -62,7 +63,19 @@ public class BookingCommentParrent extends BaseFragment {
         setVisibilityTabBottom(View.GONE);
         KeyboardUtils.setupUI(view, getActivity());
         unbinder = ButterKnife.bind(this, view);
-        init();
+        showLoading();
+        new CountDownTimer(1000, 1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                dismissLoading();
+                init();
+            }
+        }.start();
         return view;
     }
 

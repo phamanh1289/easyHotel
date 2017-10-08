@@ -220,7 +220,7 @@ public class HomeDetailFragment extends BaseFragment {
                     mDataRating.add(i, mRatingModel);
                 }
             }
-            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_RATING + mInfomationModel.getName(), System.currentTimeMillis())));
+            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_RATING + mInfomationModel.getName(), System.currentTimeMillis(),mInfomationModel.getId())));
             tvScore.setText(toCountScore(mDataRating));
             tvSubmitRating.setVisibility(View.GONE);
         }
@@ -261,11 +261,11 @@ public class HomeDetailFragment extends BaseFragment {
                 if (!mInfomationModel.isLike) {
                     refHotel_like.child(mKey).child(mUser.getUid()).setValue(mUser.getUid());
                     refMember_like.child(mUser.getUid()).child(mKey).setValue(new Gson().toJson(new LikeMemberModel(mKey)));
-                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_LIKE + mInfomationModel.getName(), System.currentTimeMillis())));
+                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_LIKE + mInfomationModel.getName(), System.currentTimeMillis(),mInfomationModel.getId())));
                 } else {
                     refHotel_like.child(mKey).child(mUser.getUid()).removeValue();
                     refMember_like.child(mUser.getUid()).child(mKey).removeValue();
-                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_DISLIKE + mInfomationModel.getName(), System.currentTimeMillis())));
+                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_DISLIKE + mInfomationModel.getName(), System.currentTimeMillis(),mInfomationModel.getId())));
                 }
                 mInfomationModel.isLike = !mInfomationModel.isLike;
                 ivLike.setImageResource(mInfomationModel.isLike ? R.drawable.ic_like_main : R.drawable.ic_no_lick_main);

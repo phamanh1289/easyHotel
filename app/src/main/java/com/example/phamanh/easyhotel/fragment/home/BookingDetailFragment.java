@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
@@ -65,6 +66,8 @@ public class BookingDetailFragment extends BaseFragment {
     EditText tvNumber;
     @BindView(R.id.fragBookingDetail_tvPrice)
     EditText tvPrice;
+    @BindView(R.id.fragBookingDetail_tvNote)
+    TextView tvNote;
 
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Date mDate = new Date();
@@ -106,8 +109,9 @@ public class BookingDetailFragment extends BaseFragment {
             isCheckRoom = bundle.getBoolean(Constant.KEY);
             mDataRoom.addAll(DataHardCode.getListRoom(isCheckRoom));
             tvRoomName.setText(isCheckRoom ? "Single" : "Double");
+            tvNote.setVisibility(isCheckRoom ? View.GONE : View.VISIBLE);
             mInfomationModel = (InfomationModel) bundle.getSerializable(Constant.TITLE_INTRO);
-            countPrice = Double.parseDouble(mInfomationModel.getPrice());
+            countPrice = isCheckRoom ? Double.parseDouble(mInfomationModel.getPrice()) : (1.5 * Double.parseDouble(mInfomationModel.getPrice()));
             countRoom = bundle.getInt(Constant.COMMENT);
         }
         tvPrice.setText(AppUtils.formatMoney(countPrice));
@@ -146,7 +150,6 @@ public class BookingDetailFragment extends BaseFragment {
             check = false;
         }
         if (!AppUtils.toDoCheckDate(tvStartDate.getText().toString(), tvDueDate.getText().toString())) {
-            AppUtils.showAlert(getContext(), "Error date.", toClickDialogCheckDate);
             check = false;
         }
         if (tvPersonal.getText().toString().trim().isEmpty()) {
@@ -175,6 +178,8 @@ public class BookingDetailFragment extends BaseFragment {
             s = "Please choice start date";
         } else if (tvDueDate.getText().toString().trim().isEmpty()) {
             s = "Please choice due date";
+        } else if (tvDueDate.getText().toString().trim().isEmpty()) {
+            s = "Error start date and due date";
         } else if (tvPersonal.getText().toString().trim().isEmpty()) {
             s = "Please input personal";
         } else if (tvFullName.getText().toString().trim().isEmpty()) {
@@ -188,15 +193,20 @@ public class BookingDetailFragment extends BaseFragment {
 
     private void toGetDataToPost() {
         mBookingModel = new BookingModel();
+        mBookingModel.setIdBooking(String.valueOf(System.currentTimeMillis()));
         mBookingModel.setHotelName(tvHotelName.getText().toString());
-        mBookingModel.setRoomName(tvRoomName.getText().toString());
         mBookingModel.setStartDate(tvStartDate.getText().toString());
         mBookingModel.setDueDate(tvDueDate.getText().toString());
         mBookingModel.setPersonal(tvPersonal.getText().toString());
         mBookingModel.setService(tvService.getText().toString());
         mBookingModel.setFullName(tvFullName.getText().toString());
         mBookingModel.setPhone(tvPhone.getText().toString());
+        mBookingModel.setPersonal(tvPersonal.getText().toString());
+        mBookingModel.setNumberRoom(String.valueOf(numberRoom));
         mBookingModel.setEmail(tvEmail.getText().toString());
+        mBookingModel.setPrice(String.valueOf(numberRoom * countPrice));
+        mBookingModel.setTypeRoom(tvRoomName.getText().toString());
+        mBookingModel.setIdHotel(mInfomationModel.getId());
     }
 
     private void toShowSnack(String title) {
@@ -227,9 +237,10 @@ public class BookingDetailFragment extends BaseFragment {
                         public void onFinish() {
                             if (toCheckRoom()) {
                                 toGetDataToPost();
-                                refMember_booking.child(mUser.getUid()).push().setValue(new Gson().toJson(mBookingModel));
-                                refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "double").setValue(countRoom - numberRoom);
-                                refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_BOOKING + mInfomationModel.getName(), System.currentTimeMillis())));
+                                refMember_booking.child(mUser.getUid()).child(mBookingModel.getIdBooking()).setValue(new Gson().toJson(mBookingModel));
+                                refHotel_booking.child(mInfomationModel.getId()).child(mBookingModel.getIdBooking()).setValue(new Gson().toJson(mBookingModel));
+                                refHotel_room.child(mInfomationModel.getId()).child(isCheckRoom ? "single" : "_double").setValue(countRoom - numberRoom);
+                                refMember_history.child(mUser.getUid()).child(mBookingModel.getIdBooking()).setValue(new Gson().toJson(new HistoryModel(Constant.MESS_BOOKING + mInfomationModel.getName(), System.currentTimeMillis(), mBookingModel)));
                                 AppUtils.showAlert(getContext(), "Booking successful.", toChangeHome);
                                 mInfomationModel = null;
                                 EventBus.getDefault().postSticky(new EventBusBooking("pause"));
@@ -245,14 +256,14 @@ public class BookingDetailFragment extends BaseFragment {
             case R.id.fragBookingDetail_ivAdd:
                 if (numberRoom < countRoom) {
                     numberRoom++;
-                    tvNumber.setText(String.valueOf(numberRoom + " room"));
+                    tvNumber.setText(String.valueOf(numberRoom + (numberRoom == 1 ? " room" : " rooms")));
                     tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
                 } else AppUtils.showAlert(getContext(), "Full room in the hotel.", null);
                 break;
             case R.id.fragBookingDetail_ivSub:
                 if (numberRoom > 1) {
                     numberRoom--;
-                    tvNumber.setText(String.valueOf(numberRoom + " room"));
+                    tvNumber.setText(String.valueOf(numberRoom + (numberRoom == 1 ? " room" : " rooms")));
                     tvPrice.setText(AppUtils.formatMoney(numberRoom * countPrice));
                 } else AppUtils.showAlert(getContext(), "Rooms are not empty.", null);
                 break;
@@ -277,17 +288,6 @@ public class BookingDetailFragment extends BaseFragment {
         return true;
     }
 
-    DialogListener toClickDialogCheckDate = new DialogListener() {
-        @Override
-        public void onConfirmClicked() {
-            AppUtils.showPickTime(getContext(), tvStartDate, true);
-        }
-
-        @Override
-        public void onCancelClicked() {
-
-        }
-    };
     DialogListener toChangeHome = new DialogListener() {
         @Override
         public void onConfirmClicked() {
@@ -303,7 +303,7 @@ public class BookingDetailFragment extends BaseFragment {
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(EventBusBooking event) {
-        if (event.getAction().equals(isCheckRoom ? "single" : "double")) {
+        if (event.getAction().equals(isCheckRoom ? "single" : "_double")) {
             countRoom = Integer.parseInt(event.getValue());
             if (numberRoom > countRoom) {
                 AppUtils.showAlert(getContext(), countRoom != 0 ? "Now, maximum " + countRoom + " rooms in the hotel." : "Out room.", new DialogListener() {

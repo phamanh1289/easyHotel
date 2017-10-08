@@ -17,6 +17,7 @@ import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -96,8 +97,10 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
                     Gson gson = new Gson();
                     JSONObject jsonObject = new JSONObject(dataSnapshot.getValue().toString());
                     UserModel userModel = gson.fromJson(jsonObject.toString(), UserModel.class);
-                    mDataInfo.add(userModel);
-                    rvMain.notifyDataSetChanged();
+                    if (!userModel.getEmail().equals(Constant.MAIL_ADMIN)) {
+                        mDataInfo.add(userModel);
+                        rvMain.notifyDataSetChanged();
+                    }
                     dismissLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();

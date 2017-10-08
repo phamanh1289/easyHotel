@@ -126,7 +126,7 @@ public class SettingFragment extends BaseFragment implements GoogleApiClient.OnC
                 addFragment(new FAQFragment(), true);
                 break;
             case R.id.fragSetting_llLogout:
-                AppUtils.showAlertConfirm(getActivity(),"Do you want exit EsayHotel ?",toConfirmExit);
+                AppUtils.showAlertConfirm(getActivity(),"Do you want exit EasyHotel ?",toConfirmExit);
                 break;
             case R.id.fragSetting_llChangePass:
                 addFragment(new ChangePasswordFragment(), true);

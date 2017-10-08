@@ -228,6 +228,7 @@ public class LoginFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventBusLogin data) {
+
         toAddReLogin(data.isCheck);
     }
 
@@ -239,9 +240,9 @@ public class LoginFragment extends BaseFragment {
                         if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified() || FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(Constant.MAIL_ADMIN)) {
                             mUser = FirebaseAuth.getInstance().getCurrentUser();
                             toGetDataProfile();
-                            if (!mUser.getEmail().equals(Constant.MAIL_ADMIN))
+                            if (!mUser.getEmail().equals(Constant.MAIL_ADMIN)) {
                                 EventBus.getDefault().post(new EventBusLogin(true));
-                            else
+                            } else
                                 SharedPrefUtils.setString(getActivity(), Constant.MAIL_ADMIN, Constant.MAIL_ADMIN);
                         } else {
                             dismissLoading();
@@ -309,20 +310,25 @@ public class LoginFragment extends BaseFragment {
                         BaseApplication application = (BaseApplication) getActivity().getApplication();
                         application.setCustomer(userModel);
                         if (mUser.getEmail().equals(Constant.MAIL_ADMIN)) {
+                            SharedPrefUtils.setString(getContext(), Constant.PASSWORD, etPassword.getText().toString());
                             application.setRole(RoleEnum.ADMIN);
                             StartActivityUtils.toMain(getActivity(), null);
                             getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        } else {
+                            if (userModel.status) {
+                                AppUtils.showAlert(getActivity(), "You have locked your account!", toExit);
+                            } else
+                                EventBus.getDefault().post(new EventBusLogin(false));
                         }
-                        if (userModel.status) {
-                            AppUtils.showAlert(getActivity(), "You have locked your account!", toExit);
-                        } else
-                            EventBus.getDefault().post(new EventBusLogin(false));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else if (getUser() == null){
+                    UserModel userModel = new UserModel(mUser.getUid(), mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid());
+                    BaseApplication application = (BaseApplication) getActivity().getApplication();
+                    application.setCustomer(userModel);
+                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(userModel));
                 }
-                if (getUser() == null)
-                    refMember.child(mUser.getUid()).setValue(new Gson().toJson(new UserModel(mUser.getUid(), mUser.getEmail(), "Male", "", "", "", "", Constant.STORE + "member_" + mUser.getUid())));
             }
 
             @Override
@@ -361,6 +367,7 @@ public class LoginFragment extends BaseFragment {
             SharedPrefUtils.removeLogout(getActivity());
             BaseApplication application = (BaseApplication) getActivity().getApplication();
             application.setCustomer(null);
+            application.setRole(null);
             dismissLoading();
         }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/_40sdp"
-    android:background="@color/red_two">
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/_40sdp"
+             android:background="@color/red_two">
 
     <TextView
         android:id="@+id/actionbar_tvTitle"
@@ -10,8 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
+        android:textAllCaps="true"
         android:textColor="@color/whiteThree"
-        android:textSize="15sp" />
+        android:textSize="15sp"/>
 
     <FrameLayout
         android:id="@+id/actionbar_imgBack"
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="@dimen/_10sdp"
-            android:src="@drawable/ic_arrow_left" />
+            android:src="@drawable/ic_arrow_left"/>
     </FrameLayout>
 
 </FrameLayout>

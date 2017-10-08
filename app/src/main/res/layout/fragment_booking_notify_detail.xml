@@ -33,13 +33,14 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvHotelName"
+                        android:id="@+id/fragBookingNotifyDetail_tvHotelName"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:background="@null"
+                        android:focusable="false"
                         android:hint="Hotel name"
                         android:inputType="textCapWords"
                         android:textColor="@color/denimBlue"
@@ -57,13 +58,14 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvRoomName"
+                        android:id="@+id/fragBookingNotifyDetail_tvRoomName"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:background="@null"
+                        android:focusable="false"
                         android:hint="Type room"
                         android:inputType="textCapWords"
                         android:textColor="@color/denimBlue"
@@ -81,7 +83,7 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvStartDate"
+                        android:id="@+id/fragBookingNotifyDetail_tvStartDate"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -105,7 +107,7 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvDueDate"
+                        android:id="@+id/fragBookingNotifyDetail_tvDueDate"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -129,7 +131,7 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvPersonal"
+                        android:id="@+id/fragBookingNotifyDetail_tvPersonal"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -154,7 +156,7 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvService"
+                        android:id="@+id/fragBookingNotifyDetail_tvService"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -180,13 +182,14 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvFullName"
+                        android:id="@+id/fragBookingNotifyDetail_tvFullName"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:background="@null"
+                        android:focusable="false"
                         android:hint="Full name"
                         android:inputType="textCapWords"
                         android:textColor="@color/denimBlue"
@@ -204,13 +207,14 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvPhone"
+                        android:id="@+id/fragBookingNotifyDetail_tvPhone"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginTop="@dimen/_16sdp"
                         android:background="@null"
+                        android:focusable="false"
                         android:hint="Mobile phone"
                         android:inputType="number"
                         android:textColor="@color/denimBlue"
@@ -228,7 +232,7 @@
                     app:fletTextAppearance="@color/greyishBrownThree">
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvEmail"
+                        android:id="@+id/fragBookingNotifyDetail_tvEmail"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -254,14 +258,9 @@
                     android:layout_marginTop="@dimen/_16sdp"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/fragBookingDetail_ivSub"
-                        android:layout_width="@dimen/_40sdp"
-                        android:layout_height="@dimen/_40sdp"
-                        android:src="@drawable/ic_sub"/>
 
                     <EditText
-                        android:id="@+id/fragBookingDetail_tvNumber"
+                        android:id="@+id/fragBookingNotifyDetail_tvNumber"
                         fontPath="@string/Helvetica_light"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -277,11 +276,6 @@
                         android:textColorHint="@color/denimBlue"
                         android:textSize="17sp"/>
 
-                    <ImageView
-                        android:id="@+id/fragBookingDetail_ivAdd"
-                        android:layout_width="@dimen/_40sdp"
-                        android:layout_height="@dimen/_40sdp"
-                        android:src="@drawable/ic_add_circle_black_48dp"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -292,10 +286,11 @@
                 android:orientation="vertical">
 
                 <EditText
-                    android:id="@+id/fragBookingDetail_tvPrice"
+                    android:id="@+id/fragBookingNotifyDetail_tvPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:focusable="false"
                     android:gravity="center_horizontal"
                     android:padding="@dimen/_4sdp"
                     android:text="10.000"
@@ -303,22 +298,7 @@
                     android:textSize="@dimen/_15sdp"/>
 
                 <TextView
-                    android:id="@+id/fragBookingDetail_tvNote"
-                    fontPath="@string/Helvetica_bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:background="@null"
-                    android:text="Note : price double room\n= 1,5 x price single room."
-                    android:gravity="center_horizontal"
-                    android:textAllCaps="true"
-                    android:visibility="gone"
-                    android:textColor="@color/red_two"
-                    android:textSize="13.5sp"/>
-
-                <TextView
-                    android:id="@+id/fragBookingDetail_tvSubmit"
+                    android:id="@+id/fragBookingNotifyDetail_tvSubmit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_40sdp"
@@ -326,8 +306,7 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:paddingBottom="@dimen/_10sdp"
                     android:paddingTop="@dimen/_10sdp"
-                    android:text="@string/submit"
-                    android:textSize="@dimen/_12sdp"
+                    android:text="Disable"
                     android:textColor="@color/whiteThree"/>
             </LinearLayout>
         </LinearLayout>

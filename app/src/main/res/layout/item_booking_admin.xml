@@ -12,22 +12,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/itemHistory_llMain"
+        android:layout_margin="@dimen/_2sdp"
+        android:orientation="horizontal"
         android:padding="@dimen/_8sdp">
 
         <TextView
-            android:id="@+id/itemHistory_tvTitle"
+            android:id="@+id/itemBookingAdmin_tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/denimBlue"
+            android:layout_weight="1"
+            android:text="anhbeo"
             android:textSize="@dimen/_13sdp"/>
-
         <TextView
-            android:id="@+id/itemHistory_tvTime"
+            android:id="@+id/itemBookingAdmin_tvTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="right"
             android:textColor="@color/blur_background"
             android:textSize="@dimen/_12sdp"/>

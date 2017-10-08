@@ -1,6 +1,7 @@
 package com.example.phamanh.easyhotel.fragment.settings;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.adapter.HistoryAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
+import com.example.phamanh.easyhotel.model.BookingModel;
 import com.example.phamanh.easyhotel.model.HistoryModel;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -50,13 +52,24 @@ public class HistoryFragment extends BaseFragment {
     }
 
     private void init() {
-
+        showLoading();
         adapter = new HistoryAdapter(mData);
         adapter.setItemListener(toClick);
         rvMain.setAdapter(adapter);
         rvMain.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (mData.size() != 0)
             mData.clear();
+        new CountDownTimer(2000, 1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                dismissLoading();
+            }
+        }.start();
         refMember_history.child(mUser.getUid()).addChildEventListener(toAddHistory);
     }
 
@@ -122,6 +135,9 @@ public class HistoryFragment extends BaseFragment {
         @Override
         public void onItemClicked(int pos) {
 
+            if (mData.get(pos).getDiscription() instanceof BookingModel) {
+                replaceFragment(NotificationDetailFragment.newInstance(mData.get(pos).getDiscription()), true);
+            }
         }
     };
 

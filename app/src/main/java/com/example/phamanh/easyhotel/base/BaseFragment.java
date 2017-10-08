@@ -31,6 +31,7 @@ public class BaseFragment extends Fragment {
     public DatabaseReference refMember_like = FirebaseDatabase.getInstance().getReference("member").child(Constant.LIKE);
     public DatabaseReference refHotel_like = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.LIKE);
     public DatabaseReference refHotel = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.INFOMATION);
+    public DatabaseReference refHotel_booking = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.BOOKING);
     public DatabaseReference refHotel_service = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.SERVICE);
     public DatabaseReference refHotel_room = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.ROOM);
     public DatabaseReference refHotel_comment = FirebaseDatabase.getInstance().getReference("hotel").child(Constant.COMMENT);

@@ -543,6 +543,7 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
                 dismissLoading();
                 AppUtils.showAlert(getActivity(), "Add hotel successful.", null);
                 toResetData();
+                getActivity().onBackPressed();
             } else
                 EventBus.getDefault().post(new EventBusUpload(true));
         });

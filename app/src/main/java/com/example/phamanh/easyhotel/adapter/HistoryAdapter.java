@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
@@ -41,6 +42,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
         HistoryModel item = mData.get(position);
         holder.tvTitle.setText(item.getTitle());
         holder.tvTime.setText((AppUtils.getTimeAgo(item.getTime())));
+        if (item.getDiscription() != null)
+            holder.llMain.setBackgroundResource(item.getDiscription().isCheckAction ? R.color.blur_background : R.color.whiteThree);
     }
 
     @Override
@@ -54,6 +57,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryH
         TextView tvTitle;
         @BindView(R.id.itemHistory_tvTime)
         TextView tvTime;
+        @BindView(R.id.itemHistory_llMain)
+        LinearLayout llMain;
 
         public HistoryHolder(View itemView) {
             super(itemView);

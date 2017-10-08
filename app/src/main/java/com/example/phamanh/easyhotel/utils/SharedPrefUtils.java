@@ -77,6 +77,7 @@ public class SharedPrefUtils {
                 .edit();
         edit.putString(Constant.TYPE_LOGIN, "");
         edit.putString(Constant.DEVICE_TOKEN, "");
+        edit.putString(Constant.MAIL_ADMIN, "");
         edit.apply();
     }
 }

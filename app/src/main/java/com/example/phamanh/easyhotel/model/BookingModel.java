@@ -5,7 +5,50 @@ import com.example.phamanh.easyhotel.base.BaseModel;
 
 public class BookingModel extends BaseModel {
 
-    private String hotelName, typeRoom, startDate, dueDate, personal, service, fullName, phone, email;
+    private String hotelName, typeRoom, startDate, dueDate, personal, service, fullName, phone, email, price, idHotel, idBooking, numberRoom;
+
+    public boolean isCheckAction;
+
+    public String getIdHotel() {
+        return idHotel;
+    }
+
+    public void setIdHotel(String idHotel) {
+        this.idHotel = idHotel;
+    }
+
+    public String getIdBooking() {
+        return idBooking;
+    }
+
+    public void setIdBooking(String idBooking) {
+        this.idBooking = idBooking;
+    }
+
+    public String getNumberRoom() {
+        return numberRoom;
+    }
+
+    public void setNumberRoom(String numberRoom) {
+        this.numberRoom = numberRoom;
+    }
+
+    public String getTypeRoom() {
+        return typeRoom;
+    }
+
+    public void setTypeRoom(String typeRoom) {
+        this.typeRoom = typeRoom;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
 
     public String getHotelName() {
         return hotelName;
@@ -15,13 +58,6 @@ public class BookingModel extends BaseModel {
         this.hotelName = hotelName;
     }
 
-    public String getRoomName() {
-        return typeRoom;
-    }
-
-    public void setRoomName(String typeRoom) {
-        this.typeRoom = typeRoom;
-    }
 
     public String getStartDate() {
         return startDate;

@@ -28,7 +28,8 @@ public class Constant {
     public static final String MESS_RATING = "You rated hotel ";
     public static final String MESS_DISLIKE = "You disliked hotel ";
     public static final String MESS_COMMENT = "You commented hotel ";
-    public static final String MESS_BOOKING = "You have booked a room in the hotel ";
+    public static final String MESS_BOOKING = "You booked a room in the hotel ";
+    public static final String MESS_BOOKING_DISABLE = "You disabled a room in the hotel ";
     public static final String SIGNUP_EMAIL = "signup_email";
     public static final String SIGNUP_PASSWORD = "signup_password";
     public static final String INFOMATION = "infomation";
