@@ -84,7 +84,7 @@ public class AllHotelFragment extends BaseFragment {
         AppUtils.showAlertACtion(getActivity(), "Do you want ?", new DialogListener() {
             @Override
             public void onConfirmClicked() {
-                addFragment(AddHotelFragment.newInstance(mDataInfo.get(pos), mDataRoom.get(pos), mDataService.get(pos)), true);
+                replaceFragment(AddHotelFragment.newInstance(mDataInfo.get(pos), mDataRoom.get(pos), mDataService.get(pos)), true);
             }
 
             @Override

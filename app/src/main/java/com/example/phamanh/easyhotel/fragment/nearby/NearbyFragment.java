@@ -35,12 +35,15 @@ import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.base.BaseModel;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
+import com.example.phamanh.easyhotel.model.EventBusLocationModel;
 import com.example.phamanh.easyhotel.model.NearPlacesModel;
 import com.example.phamanh.easyhotel.network.GoogleApi;
 import com.example.phamanh.easyhotel.other.database.DataHardCode;
 import com.example.phamanh.easyhotel.other.view.SelectSinglePopup;
 import com.example.phamanh.easyhotel.utils.AppUtils;
+import com.example.phamanh.easyhotel.utils.Constant;
 import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,6 +57,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,7 +98,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
     private LocationManager locationManager;
     private SupportMapFragment mapFragment;
     private Marker mCurrLocationMarker;
-    private double latitude, longitude;
+    private double latitude, longitude, lat, lng;
     private Polyline polyline;
     private GoogleMap googleMap;
     private LatLng mLatLngForm;
@@ -106,6 +112,15 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
     private View view;
 
     Unbinder unbinder;
+
+    public static NearbyFragment newInstance(BaseModel model) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(Constant.BASE_MODEL, model);
+        NearbyFragment fragment = new NearbyFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
@@ -126,6 +141,26 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
         if (mapFragment.isHidden())
             getFragmentManager().beginTransaction().show(mapFragment).commit();
         toSetUpMap();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(EventBusLocationModel data) {
+        if (data != null) {
+            lat = data.lat;
+            lng = data.lng;
+        }
     }
 
     @Override
@@ -343,7 +378,6 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
         }
     }
 
-
     private void locationUpdate() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -388,6 +422,17 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
             setupLocationMarkerButton();
             googleMap.setOnInfoWindowClickListener(this);
             googleMap.setOnMyLocationChangeListener(onMyLocation);
+            if (lat != 0 && lng != 0) {
+                LatLng currentLatLng1 = new LatLng(lat, lng);
+                if (!currentLatLng1.equals(googleMap.addMarker(new MarkerOptions().position(currentLatLng1)))) {
+                    GoogleDirection.withServerKey(getString(R.string.google_maps_key))
+                            .from(new LatLng(lat, lng))
+                            .to(googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng))).getPosition())
+                            .avoid(AvoidType.FERRIES)
+                            .avoid(AvoidType.HIGHWAYS)
+                            .execute(NearbyFragment.this);
+                }
+            }
         } else requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         try {
             getBundle();

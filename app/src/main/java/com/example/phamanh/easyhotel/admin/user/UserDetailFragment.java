@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.UserModel;
 import com.example.phamanh.easyhotel.utils.AppUtils;
 import com.example.phamanh.easyhotel.utils.Constant;
@@ -228,16 +229,28 @@ public class UserDetailFragment extends BaseFragment {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 user.setAvatar(Constant.STORE + baseStore.getName());
                 refMember.child(model.getId()).setValue(new Gson().toJson(user));
-                AppUtils.showAlert(getContext(), "Update successfully.", null);
+                AppUtils.showAlert(getContext(), "Update successfully.", toBack);
                 dismissLoading();
             });
         } else {
             refMember.child(model.getId()).setValue(new Gson().toJson(user));
-            AppUtils.showAlert(getContext(), "Update successfully.", null);
+            AppUtils.showAlert(getContext(), "Update successfully.", toBack);
             dismissLoading();
         }
         getActivity().onBackPressed();
     }
+
+    DialogListener toBack = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            getActivity().onBackPressed();
+        }
+
+        @Override
+        public void onCancelClicked() {
+
+        }
+    };
 
     private boolean toCheckChangeText() {
         String s = tvMale.isSelected() ? getString(R.string.male) : getString(R.string.female);

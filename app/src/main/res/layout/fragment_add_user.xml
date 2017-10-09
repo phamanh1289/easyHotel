@@ -321,6 +321,13 @@
                         app:fletPaddingBottom="@dimen/_8sdp"
                         app:fletTextAppearance="@color/greyishBrownThree">
 
+                        <TextView
+                            android:id="@+id/fragAddHotel_tvCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:text="123/500"/>
+
                         <EditText
                             android:id="@+id/fragAddHotel_tvDescription"
                             fontPath="@string/Helvetica_light"
@@ -330,8 +337,9 @@
                             android:background="@drawable/shape_boder_edit_text"
                             android:gravity="top"
                             android:hint="@string/description"
-                            android:lines="7"
-                            android:padding="@dimen/_4sdp"
+                            android:inputType="textMultiLine"
+                            android:maxLength="1000"
+                            android:padding="@dimen/_8sdp"
                             android:textColor="@color/denimBlue"
                             android:textColorHint="@color/denimBlue"
                             android:textSize="13.5sp"/>

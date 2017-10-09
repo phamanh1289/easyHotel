@@ -1,7 +1,10 @@
 package com.example.phamanh.easyhotel.fragment.home;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +13,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.phamanh.easyhotel.R;
+import com.example.phamanh.easyhotel.adapter.ImageSearchPager;
 import com.example.phamanh.easyhotel.base.BaseFragment;
+import com.example.phamanh.easyhotel.fragment.nearby.NearbyFragment;
 import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.model.EventBusBooking;
+import com.example.phamanh.easyhotel.model.EventBusLocationModel;
 import com.example.phamanh.easyhotel.model.HistoryModel;
 import com.example.phamanh.easyhotel.model.InfomationModel;
 import com.example.phamanh.easyhotel.model.LikeMemberModel;
+import com.example.phamanh.easyhotel.model.Location;
 import com.example.phamanh.easyhotel.model.RatingModel;
 import com.example.phamanh.easyhotel.other.view.RatingDialog;
 import com.example.phamanh.easyhotel.utils.AppUtils;
@@ -24,6 +31,7 @@ import com.example.phamanh.easyhotel.utils.KeyboardUtils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.willy.ratingbar.RotationRatingBar;
@@ -47,7 +55,7 @@ public class HomeDetailFragment extends BaseFragment {
 
 
     @BindView(R.id.fragHomeDetail_ivBanner)
-    ImageView ivBanner;
+    ViewPager viewpager;
     @BindView(R.id.fragHomeDetail_tvTitle)
     TextView tvTitle;
     @BindView(R.id.fragHomeDetail_tvDescription)
@@ -68,14 +76,21 @@ public class HomeDetailFragment extends BaseFragment {
     ImageView ivLike;
     @BindView(R.id.fragHomeDetail_tvSubmitRating)
     TextView tvSubmitRating;
+    @BindView(R.id.fragHomeDetail_tvAddress)
+    TextView tvAddress;
+    @BindView(R.id.fragHomeDetail_tvGPS)
+    TextView tvGPS;
 
     private InfomationModel mInfomationModel;
     private int rating, countStart, countLike;
     public List<RatingModel> mDataRating = new ArrayList<>();
+    private List<Bitmap> mDataImage = new ArrayList<>();
+    private ImageSearchPager adapterImage;
     private String mKey;
     private RatingModel mRatingModel;
     private RatingDialog ratingDialog;
     private boolean isCheckNoData;
+    private Location mLocation;
     private View view;
 
     Unbinder unbinder;
@@ -105,8 +120,9 @@ public class HomeDetailFragment extends BaseFragment {
         avLoading.setVisibility(tvScore.getText().toString().length() != 0 ? View.GONE : View.VISIBLE);
         if (mInfomationModel != null) {
             tvTitle.setText(mInfomationModel.getName());
+            tvAddress.setText(mInfomationModel.getAddress());
             tvDescription.setText(mInfomationModel.getDescription());
-            ivBanner.setImageBitmap(mInfomationModel.getBitmap());
+            mLocation = mInfomationModel.getLocation();
         }
         ratingStar.setEmptyDrawableRes(R.drawable.ic_no_start);
         ratingStar.setFilledDrawableRes(R.drawable.ic_start);
@@ -125,6 +141,9 @@ public class HomeDetailFragment extends BaseFragment {
             tvSubmitRating.setVisibility(countStart != rating ? View.VISIBLE : View.GONE);
         });
         refHotel_like.child(mKey).addChildEventListener(toAddLike);
+        adapterImage = new ImageSearchPager(getContext(), mDataImage);
+        viewpager.setAdapter(adapterImage);
+        toLoadImageArray(mInfomationModel.getDataImage());
     }
 
     ChildEventListener toAddRating = new ChildEventListener() {
@@ -220,7 +239,7 @@ public class HomeDetailFragment extends BaseFragment {
                     mDataRating.add(i, mRatingModel);
                 }
             }
-            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_RATING + mInfomationModel.getName(), System.currentTimeMillis(),mInfomationModel.getId())));
+            refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_RATING + mInfomationModel.getName(), System.currentTimeMillis(), mInfomationModel.getId())));
             tvScore.setText(toCountScore(mDataRating));
             tvSubmitRating.setVisibility(View.GONE);
         }
@@ -248,7 +267,7 @@ public class HomeDetailFragment extends BaseFragment {
         return "0";
     }
 
-    @OnClick({R.id.fragHomeDetail_tvScore, R.id.fragHomeDetail_ivLike, R.id.fragHomeDetail_tvSubmitRating})
+    @OnClick({R.id.fragHomeDetail_tvScore, R.id.fragHomeDetail_ivLike, R.id.fragHomeDetail_tvSubmitRating, R.id.fragHomeDetail_tvGPS})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragHomeDetail_tvScore:
@@ -261,17 +280,22 @@ public class HomeDetailFragment extends BaseFragment {
                 if (!mInfomationModel.isLike) {
                     refHotel_like.child(mKey).child(mUser.getUid()).setValue(mUser.getUid());
                     refMember_like.child(mUser.getUid()).child(mKey).setValue(new Gson().toJson(new LikeMemberModel(mKey)));
-                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_LIKE + mInfomationModel.getName(), System.currentTimeMillis(),mInfomationModel.getId())));
+                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_LIKE + mInfomationModel.getName(), System.currentTimeMillis(), mInfomationModel.getId())));
                 } else {
                     refHotel_like.child(mKey).child(mUser.getUid()).removeValue();
                     refMember_like.child(mUser.getUid()).child(mKey).removeValue();
-                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_DISLIKE + mInfomationModel.getName(), System.currentTimeMillis(),mInfomationModel.getId())));
+                    refMember_history.child(mUser.getUid()).push().setValue(new Gson().toJson(new HistoryModel(Constant.MESS_DISLIKE + mInfomationModel.getName(), System.currentTimeMillis(), mInfomationModel.getId())));
                 }
                 mInfomationModel.isLike = !mInfomationModel.isLike;
                 ivLike.setImageResource(mInfomationModel.isLike ? R.drawable.ic_like_main : R.drawable.ic_no_lick_main);
                 break;
             case R.id.fragHomeDetail_tvSubmitRating:
                 AppUtils.showAlertConfirm(getContext(), "Would you like to rating  for the hotel ?", toRating);
+                break;
+            case R.id.fragHomeDetail_tvGPS:
+                mLocation = mInfomationModel.getLocation();
+                EventBus.getDefault().postSticky(new EventBusLocationModel(Double.parseDouble(mLocation.getLat()), Double.parseDouble(mLocation.getLng())));
+                addFragment(new NearbyFragment(),true);
                 break;
         }
     }
@@ -302,5 +326,20 @@ public class HomeDetailFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void toLoadImageArray(List<String> mData) {
+        for (String s : mData) {
+            baseStore = FirebaseStorage.getInstance().getReferenceFromUrl(s);
+            baseStore.getBytes(Constant.SIZE_DEFAULT).addOnSuccessListener(bytes -> {
+                mDataImage.add(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                if (mDataImage.size() == mData.size()) {
+                    mDataImage.add(0, mInfomationModel.getBitmap());
+                    dismissLoading();
+                }
+                adapterImage.notifyDataSetChanged();
+            }).addOnFailureListener(exception -> {
+            });
+        }
     }
 }

@@ -17,7 +17,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,7 @@ import com.example.phamanh.easyhotel.adapter.ChooseImageAdapter;
 import com.example.phamanh.easyhotel.adapter.PlaceAdapter;
 import com.example.phamanh.easyhotel.base.BaseFragment;
 import com.example.phamanh.easyhotel.interfaces.ChoiceImageListener;
+import com.example.phamanh.easyhotel.interfaces.DialogListener;
 import com.example.phamanh.easyhotel.interfaces.ItemListener;
 import com.example.phamanh.easyhotel.model.EventBusUpload;
 import com.example.phamanh.easyhotel.model.InfomationModel;
@@ -102,6 +105,8 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
     ImageView ivFemale;
     @BindView(R.id.fragAddHotel_tvFemale)
     TextView tvFemale;
+    @BindView(R.id.fragAddHotel_tvCount)
+    TextView tvCount;
     @BindView(R.id.fragAddHotel_tvAddress)
     AutoCompleteTextView tvAddress;
     @BindView(R.id.fragAddHotel_tvLocation)
@@ -183,6 +188,23 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         id = "hotel_" + String.valueOf(System.currentTimeMillis());
         tvAddress.setOnLongClickListener(toLongAddress);
         tvService.setOnLongClickListener(toLongService);
+        tvCount.setText(tvDescription.getText().toString().length() + "/1000");
+        tvDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                tvCount.setText(tvDescription.getText().toString().length() + "/1000");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void toGetDataService() {
@@ -320,8 +342,12 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
                     toAddNewHotel();
                 break;
             case R.id.fragAddHotel_tvAddPhoto:
-                isCheckLoadPhoto = true;
-                toOpenDialogImage();
+                if (mDataImage.size() == 5) {
+                    AppUtils.showAlert(getContext(), "Maximum 5 image/hotel", null);
+                } else {
+                    isCheckLoadPhoto = true;
+                    toOpenDialogImage();
+                }
                 break;
             case R.id.fragAddHotel_tvService:
                 toAddDataService(getActivity(), view, popupService, mDataService, tvService);
@@ -523,7 +549,8 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
         uploadTask.addOnFailureListener(exception -> AppUtils.showAlert(getContext(), "Update failed. Please try again !!", null)).addOnSuccessListener(taskSnapshot -> {
             info.setLogo(Constant.STORE + baseStore.getName());
             info.setDataImage(new ArrayList<>());
-            toUploadArrayImage(mDataImage);
+            if (mDataImage.size() != 0)
+                toUploadArrayImage(mDataImage);
         });
     }
 
@@ -541,13 +568,24 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
                 refHotel_room.child(info.getId()).setValue(mRoomModel);
                 refHotel_service.child(info.getId()).setValue(new Gson().toJson(mAddService.getService().size() != 0 ? mAddService : toChangeService(tvService.getText().toString())));
                 dismissLoading();
-                AppUtils.showAlert(getActivity(), "Add hotel successful.", null);
                 toResetData();
-                getActivity().onBackPressed();
+                AppUtils.showAlert(getActivity(), "Add hotel successful.", toBack);
             } else
                 EventBus.getDefault().post(new EventBusUpload(true));
         });
     }
+
+    DialogListener toBack = new DialogListener() {
+        @Override
+        public void onConfirmClicked() {
+            getActivity().onBackPressed();
+        }
+
+        @Override
+        public void onCancelClicked() {
+
+        }
+    };
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(EventBusUpload event) {
@@ -612,6 +650,7 @@ public class AddHotelFragment extends BaseFragment implements GoogleApiClient.On
     private void toResetData() {
         ivBanner.setImageResource(R.drawable.ic_no_image);
         mDataImage.clear();
+        info.setId(String.valueOf(System.currentTimeMillis()));
         mAdapter.notifyDataSetChanged();
         tvName.setText("");
         tvPrice.setText("");

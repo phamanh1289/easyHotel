@@ -180,7 +180,6 @@ public class AllUserFragment extends BaseFragment implements ACRecyclerView.OnIt
         }
     }
 
-
     private void toChangFragment() {
         AppUtils.showAlertACtion(getActivity(), "Do you want ?", toChange, mDataInfo.get(indexUser).status ? "Enable" : "Disable", "Update");
     }
