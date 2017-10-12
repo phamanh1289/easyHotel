@@ -194,7 +194,7 @@ public class HomeFragment extends BaseFragment implements GoogleApiClient.OnConn
         super.onStop();
         try {
             refHotel.removeEventListener(toGetHotel);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

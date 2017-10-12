@@ -161,6 +161,7 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
             lat = data.lat;
             lng = data.lng;
         }
+        EventBus.getDefault().removeStickyEvent(data);
     }
 
     @Override
@@ -255,6 +256,31 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
                         isCheckLocation = true;
                         latitude = mLatLngForm.latitude;
                         longitude = mLatLngForm.longitude;
+                        if (lat != 0 && lng != 0) {
+                            LatLng currentLatLng1 = new LatLng(lat, lng);
+                            List<Marker> mArr = new ArrayList<>();
+                            Marker marker = googleMap.addMarker(new MarkerOptions().position(currentLatLng1));
+                            mArr.add(googleMap.addMarker(new MarkerOptions().position(mLatLngForm)));
+                            mArr.add(marker);
+                            LatLngBounds mBoundHotel;
+                            if (!currentLatLng1.equals(mLatLngForm)) {
+                                GoogleDirection.withServerKey(getString(R.string.google_maps_key))
+                                        .from(mLatLngForm)
+                                        .to(currentLatLng1)
+                                        .avoid(AvoidType.FERRIES)
+                                        .avoid(AvoidType.HIGHWAYS)
+                                        .execute(NearbyFragment.this);
+                            }
+                            LatLngBounds.Builder fFBuilder = new LatLngBounds.Builder();
+                            for (Marker m : mArr) {
+                                fFBuilder.include(m.getPosition());
+                            }
+                            mBoundHotel = fFBuilder.build();
+                            googleMap.setOnMapLoadedCallback(() -> {
+                                googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mBoundHotel, 100));
+                                mArr.get(0).remove();
+                            });
+                        }
                         dismissLoading();
                     }
                 }.start();
@@ -422,17 +448,6 @@ public class NearbyFragment extends BaseFragment implements OnMapReadyCallback, 
             setupLocationMarkerButton();
             googleMap.setOnInfoWindowClickListener(this);
             googleMap.setOnMyLocationChangeListener(onMyLocation);
-            if (lat != 0 && lng != 0) {
-                LatLng currentLatLng1 = new LatLng(lat, lng);
-                if (!currentLatLng1.equals(googleMap.addMarker(new MarkerOptions().position(currentLatLng1)))) {
-                    GoogleDirection.withServerKey(getString(R.string.google_maps_key))
-                            .from(new LatLng(lat, lng))
-                            .to(googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng))).getPosition())
-                            .avoid(AvoidType.FERRIES)
-                            .avoid(AvoidType.HIGHWAYS)
-                            .execute(NearbyFragment.this);
-                }
-            }
         } else requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         try {
             getBundle();

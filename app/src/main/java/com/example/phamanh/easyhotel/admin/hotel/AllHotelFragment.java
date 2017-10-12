@@ -97,7 +97,6 @@ public class AllHotelFragment extends BaseFragment {
                 AppUtils.showAlert(getActivity(), "Delete successful", null);
             }
         }, "Delete", "Update");
-
     }
 
     @Override
